@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev
+  pid:
+    file: ./STools.pid
+  sql:
+    init:
+      data-locations:
+        - classpath:sql/*.sql
+      mode: always
+      continue-on-error: true
+server:
+  port: 8001
+  compression:
+    enabled: true
+springfox:
+  documentation:
+    swagger-ui:
+      base-url: /
+    swagger:
+      v2:
+        path: /swagger/v2/docs
