@@ -7,7 +7,7 @@ spring:
     init:
       data-locations:
         - classpath:sql/*.sql
-      mode: always
+      mode: NEVER
       continue-on-error: true
 server:
   port: 8001
