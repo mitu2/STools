@@ -12,3 +12,6 @@ spring:
     open-in-view: false
   devtools:
     add-properties: false
+vaadin:
+  servlet:
+    productionMode: true

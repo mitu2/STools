@@ -69,6 +69,15 @@ dependencyManagement {
         mavenBom("com.vaadin:vaadin-bom:${property("vaadinVersion")}")
     }
 }
+//
+//tasks.withType<GradleBuild> {
+//    setProperty("vaadin.productionMode", true)
+//}
+
+vaadin {
+    productionMode = true
+//    npmFolder = file("")
+}
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {

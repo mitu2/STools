@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.*
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
+import runstatic.stools.util.SecurityUtils
 import javax.sql.DataSource
 
 /**
@@ -66,22 +68,19 @@ class SecurityConfiguration @Autowired constructor(
             "/offline-page.html",
             "/frontend/**",
             "/webjars/**",
-            "/frontend-es5/**", "/frontend-es6/**");
+            "/frontend-es5/**", "/frontend-es6/**"
+        );
     }
 
     override fun configure(http: HttpSecurity): Unit = http.run {
 
-
         http.csrf().disable()
-            // Register our CustomRequestCache that saves unauthorized access attempts, so
-            // the user is redirected after login.
             .requestCache().requestCache(CustomRequestCache())
-            // Restrict access to our application.
-            .and().authorizeRequests() // Allow all flow internal requests.
-//            .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll() // (3)
-            // Allow all requests by logged in users.
+            .and().requestMatchers()
+            .and().authorizeRequests()
+            .antMatchers(HttpMethod.GET).permitAll()
+            .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
             .anyRequest().authenticated()
-            // Configure the login page.
 //            .and().formLogin().loginPage(LOGIN_URL).permitAll()
 //            .loginProcessingUrl(LOGIN_PROCESSING_URL)
 //            .failureUrl(LOGIN_FAILURE_URL) // Configure logout
