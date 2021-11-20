@@ -1,4 +1,4 @@
-package runstatic.stools.security
+package runstatic.stools.configuration.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -8,19 +8,15 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.*
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
-import java.util.concurrent.TimeUnit
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 import javax.sql.DataSource
 
 /**
@@ -60,55 +56,36 @@ class SecurityConfiguration @Autowired constructor(
     }
 
 
+    override fun configure(web: WebSecurity) {
+        web.ignoring().antMatchers(
+            "/VAADIN/**",
+            "/favicon.ico",
+            "/robots.txt",
+            "/manifest.webmanifest",
+            "/sw.js",
+            "/offline-page.html",
+            "/frontend/**",
+            "/webjars/**",
+            "/frontend-es5/**", "/frontend-es6/**");
+    }
+
     override fun configure(http: HttpSecurity): Unit = http.run {
 
-        val handler = fun(request: HttpServletRequest, response: HttpServletResponse, authentication: Authentication) {
-            val callback: String? = request.getParameter("callback")
-            if (callback.isNullOrBlank()) {
-                response.characterEncoding = "utf-8"
-                response.contentType = "application/json;charset=utf-8"
-                response.writer.print("{\"success\": true}")
-                return
-            }
-            response.sendRedirect(callback)
-        }
 
-        cors().disable()
-
-        logout { self ->
-            self.logoutUrl("/logout")
-                .addLogoutHandler(handler)
-                .permitAll()
-        }
-
-        formLogin { self ->
-            self
-                .loginPage("/login")
-                .loginProcessingUrl("/api/login")
-                .passwordParameter("password")
-                .usernameParameter("username")
-                .successHandler(handler)
-                .failureHandler { request: HttpServletRequest?, response: HttpServletResponse, exception: AuthenticationException? ->
-                    response.status = 400
-                    response.characterEncoding = "utf-8"
-                    response.contentType = "application/json;charset=utf-8"
-                    response.writer.print("{\"success\": false}")
-                }
-                .permitAll()
-        }
-
-
-        rememberMe { self ->
-            self.tokenValiditySeconds(TimeUnit.DAYS.toSeconds(5L).toInt())
-                .userDetailsService(userDetailsService)
-                .rememberMeParameter("remember-me")
-        }
-
-        authorizeRequests { self ->
-            self.antMatchers("/static/**", "/web-socket/**", "/api/**", "/webjars/**")
-                .permitAll()
-
-        }
+        http.csrf().disable()
+            // Register our CustomRequestCache that saves unauthorized access attempts, so
+            // the user is redirected after login.
+            .requestCache().requestCache(CustomRequestCache())
+            // Restrict access to our application.
+            .and().authorizeRequests() // Allow all flow internal requests.
+//            .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll() // (3)
+            // Allow all requests by logged in users.
+            .anyRequest().authenticated()
+            // Configure the login page.
+//            .and().formLogin().loginPage(LOGIN_URL).permitAll()
+//            .loginProcessingUrl(LOGIN_PROCESSING_URL)
+//            .failureUrl(LOGIN_FAILURE_URL) // Configure logout
+//            .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL)
 
     }
 

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import runstatic.stools.entity.table.ShortUrlTable
 import runstatic.stools.service.ShortUrlService
-import runstatic.stools.util.terminate
+import runstatic.stools.exception.support.terminate
 
 /**
  *

@@ -20,3 +20,6 @@ springfox:
     swagger:
       v2:
         path: /swagger/v2/docs
+vaadin:
+  pnpm-enabled: false
+

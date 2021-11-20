@@ -1,19 +1,16 @@
-package runstatic.stools.util
+package runstatic.stools.exception.support
 
 import org.springframework.http.HttpStatus
-import runstatic.stools.exception.support.TerminateExecutionException
-import runstatic.stools.exception.support.TerminateExecutionResult
 
 /**
  *
  * @author chenmoand
  */
-private val EMPTY_CALLBACK: TerminateExecutionResult.() -> Unit = {}
 
 @Throws(TerminateExecutionException::class)
 fun <R> terminate(
     status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
-    callback: TerminateExecutionResult.() -> Unit = EMPTY_CALLBACK
+    callback: TerminateExecutionResult.() -> Unit = {}
 ): R {
     val result = TerminateExecutionResult()
     callback(result)
