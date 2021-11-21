@@ -24,6 +24,5 @@ class SToolsApplicationTests {
     fun testPassword() {
         val encode = passwordEncoder.encode("user")
         logger.info(encode)
-
     }
 }

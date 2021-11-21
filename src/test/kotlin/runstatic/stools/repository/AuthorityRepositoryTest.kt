@@ -19,7 +19,7 @@ class AuthorityRepositoryTest {
     @Autowired
     lateinit var authorityRepository: AuthorityRepository
 
-    @Test
+//    @Test
     @Sql("/test-sql/user.sql", config = SqlConfig(errorMode = SqlConfig.ErrorMode.CONTINUE_ON_ERROR))
     fun onFindByUserId() {
         val result = authorityRepository.findByUserId(1)
