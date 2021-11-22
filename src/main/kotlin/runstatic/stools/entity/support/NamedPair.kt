@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
  *
  * @author chenmoand
  */
+@Suppress("UNCHECKED_CAST")
 abstract class NamedPair<K, V> protected constructor(
     @JsonIgnore
     val keyName: String,

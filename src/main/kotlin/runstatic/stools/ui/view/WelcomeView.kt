@@ -1,10 +1,11 @@
-package runstatic.stools.view
+package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
+import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 
 
@@ -20,7 +21,8 @@ import com.vaadin.flow.spring.annotation.UIScope
     ]
 )
 @PageTitle("沉默 - static.run")
-@CssImport("css/Welcome.css")
+@CssImport("./css/Welcome.css")
+@SpringComponent
 @UIScope
 class WelcomeView : KComposite() {
 

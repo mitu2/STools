@@ -3,10 +3,8 @@ package runstatic.stools.util
 import javax.servlet.http.HttpServletRequest
 import com.vaadin.flow.shared.ApplicationConstants
 import com.vaadin.flow.server.HandlerHelper
-import com.vaadin.flow.server.ServletHelper
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.authentication.AnonymousAuthenticationToken
-import java.util.stream.Stream
 
 object SecurityUtils {
 

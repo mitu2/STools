@@ -74,10 +74,15 @@ dependencyManagement {
 //    setProperty("vaadin.productionMode", true)
 //}
 
-vaadin {
-    productionMode = true
-//    npmFolder = file("")
+
+val env = System.getProperty("profile") ?: "dev"
+
+if (env == "prod") {
+    vaadin {
+        productionMode = true
+    }
 }
+
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
