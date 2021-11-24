@@ -31,7 +31,7 @@ class WelcomeView : KComposite() {
         div {
             setId("main")
             h3("你好, Hello World!")
-            image("http://blog.static.run/upload/2021/09/hai-af9830ec61494d388f95f0f0cdb31517.gif")
+            image("https://blog.static.run/upload/2021/09/hai-af9830ec61494d388f95f0f0cdb31517.gif")
             p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
             p("Github: ") {
                 anchor("https://github.com/mitu2") {
@@ -39,7 +39,7 @@ class WelcomeView : KComposite() {
                 }
             }
             p("Blog: ") {
-                anchor("http://blog.static.run") {
+                anchor("https://blog.static.run") {
                     setTarget("_blank")
                 }
             }
@@ -63,7 +63,7 @@ class WelcomeView : KComposite() {
                 div {
                     span {
                         className = "footer-item-inline"
-                        image("http://blog.static.run//upload/2021/11/gongan-a56bae00c42c4dccbc5eecdd5c2d0aee.png") {
+                        image("https://blog.static.run//upload/2021/11/gongan-a56bae00c42c4dccbc5eecdd5c2d0aee.png") {
                             className = "jinghui"
                         }
                         anchor("http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=13100202000682", "冀公网安备 13100202000682号") {
