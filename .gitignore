@@ -41,3 +41,4 @@ out/
 /node_modules/
 /package.json
 /target/
+/package-lock.json
