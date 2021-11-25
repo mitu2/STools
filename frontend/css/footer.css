@@ -1,0 +1,42 @@
+
+.footer {
+    font-size: 14px;
+    color: #999;
+    width: 100%;
+    min-height: 50px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.police-badge {
+    width: 15px;
+    height: 15px;
+}
+
+.footer-item-inline + .footer-item-inline {
+    margin-left: 15px;
+}
+
+a {
+    color: #555;
+    text-decoration: none;
+    outline: none;
+    border-bottom: 1px solid #999;
+    word-wrap: break-word;
+}
+
+a {
+    background-color: transparent;
+}
+
+/*a:-webkit-any-link {*/
+/*    color: -webkit-link;*/
+/*    cursor: pointer;*/
+/*    text-decoration: underline;*/
+/*}*/
+
+a:hover {
+    color: #222;
+    border-bottom-color: #222;
+    text-decoration: none;
+}

@@ -16,6 +16,7 @@ import com.vaadin.flow.server.StreamResource
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import okhttp3.internal.closeQuietly
+import runstatic.stools.ui.component.PageFooter
 import java.io.ByteArrayOutputStream
 
 
@@ -76,9 +77,10 @@ class BarcodeView : KComposite() {
                 }
             }
             result = image {
-
+                style["margin"] = "0 auto"
             }
             add(contentErr)
+            add(PageFooter())
         }
 
     }

@@ -7,6 +7,7 @@ import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
+import runstatic.stools.ui.component.PageFooter
 
 
 /**
@@ -48,36 +49,7 @@ class WelcomeView : KComposite() {
             }
             p("QQ Group: 558504614 欢迎来玩") {
             }
-
-            div("footer") {
-                div("copyright") {
-                    text("STATIC.RUN © 2021 沉默")
-                }
-                div {
-                    text("由")
-                    anchor("https://github.com/mitu2/STools", "STools") {
-                        setTarget("_blank")
-                    }
-                    text("强力驱动")
-                }
-                div {
-                    span {
-                        className = "footer-item-inline"
-                        image("https://blog.static.run//upload/2021/11/gongan-a56bae00c42c4dccbc5eecdd5c2d0aee.png") {
-                            className = "jinghui"
-                        }
-                        anchor("http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=13100202000682", "冀公网安备 13100202000682号") {
-                            setTarget("_blank")
-                        }
-                    }
-                    span {
-                        className = "footer-item-inline"
-                        anchor("http://beian.miit.gov.cn", "冀ICP备2021022987号") {
-                            setTarget("_blank")
-                        }
-                    }
-                }
-            }
+            add(PageFooter())
         }
     }
 
