@@ -21,7 +21,7 @@ import runstatic.stools.ui.component.PageFooter
         RouteAlias("index.html"),
     ]
 )
-@PageTitle("沉默 - static.run")
+@PageTitle("沉默的小玩意 - static.run")
 @CssImport("./css/Welcome.css")
 @SpringComponent
 @UIScope
@@ -29,28 +29,55 @@ class WelcomeView : KComposite() {
 
 
     private val root = ui {
-        div {
-            setId("main")
-            h3("你好, Hello World!")
-            image("https://blog.static.run/upload/2021/09/hai-af9830ec61494d388f95f0f0cdb31517.gif")
-            p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
-            p("Github: ") {
-                anchor("https://github.com/mitu2") {
-                    setTarget("_blank")
+        verticalLayout {
+            setId("app")
+            formLayout("main") {
+                h3("你好, Hello World!")
+//                image("/image/cat.gif")
+                p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
+                textField("Github") {
+                    value = "https://github.com/mitu2"
+                    isReadOnly = true
+                    button("OPEN") {
+                        style["cursor"] = "pointer"
+                        onLeftClick {
+                            open(this@textField.value)
+                        }
+                    }
                 }
-            }
-            p("Blog: ") {
-                anchor("https://blog.static.run") {
-                    setTarget("_blank")
+                textField("Blog") {
+                    value = "https://blog.static.run"
+                    isReadOnly = true
+                    button("OPEN") {
+                        style["cursor"] = "pointer"
+                        onLeftClick {
+                            open(this@textField.value)
+                        }
+                    }
+
                 }
-            }
-            p("Email: ") {
-                anchor("mailto:chenmoand@gmail.com", "chenmoand@gmail.com")
-            }
-            p("QQ Group: 558504614 欢迎来玩") {
+                textField("Email") {
+                    value = "chenmoand@gmail.com"
+                    isReadOnly = true
+                    button("OPEN") {
+                        style["cursor"] = "pointer"
+                        onLeftClick {
+                            open("mailto:${this@textField.value}")
+                        }
+                    }
+                }
+                textField("QQ Group") {
+                    value = "558504614"
+                    isReadOnly = true
+                }
+
             }
             add(PageFooter())
         }
+    }
+
+    fun open(url: String, type: String = "_self") {
+        root.element.executeJs("window.open(\$0, \$1)", url, type)
     }
 
 }

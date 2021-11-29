@@ -1,7 +1,6 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.addCloseButton
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.client.j2se.MatrixToImageWriter
@@ -86,7 +85,7 @@ class BarcodeView : KComposite() {
     }
 
     fun makeImage() {
-        if(content.isBlank()) {
+        if (content.isBlank()) {
             contentErr.open()
             return
         }
