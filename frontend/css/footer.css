@@ -8,6 +8,7 @@
     font-size: 14px;
     color: #999;
 }
+
 .footer-inner {
     box-sizing: border-box;
     margin: 20px auto;
@@ -50,4 +51,10 @@ a:hover {
 
 html, body {
     height: 100%;
+}
+
+@media (max-width: 767px) {
+    .footer-inner {
+        width: auto;
+    }
 }
