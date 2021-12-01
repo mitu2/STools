@@ -1,13 +1,17 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
+import com.vaadin.flow.theme.Theme
+import com.vaadin.flow.theme.material.Material
 import runstatic.stools.ui.component.PageFooter
+import runstatic.stools.util.pointer
 
 
 /**
@@ -25,6 +29,7 @@ import runstatic.stools.ui.component.PageFooter
 @CssImport("./css/Welcome.css")
 @SpringComponent
 @UIScope
+//@Theme(value = Material::class)
 class WelcomeView : KComposite() {
 
 
@@ -39,7 +44,8 @@ class WelcomeView : KComposite() {
                     value = "https://github.com/mitu2"
                     isReadOnly = true
                     button("OPEN") {
-                        style["cursor"] = "pointer"
+                        pointer()
+                        addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open(this@textField.value)
                         }
@@ -49,7 +55,8 @@ class WelcomeView : KComposite() {
                     value = "https://blog.static.run"
                     isReadOnly = true
                     button("OPEN") {
-                        style["cursor"] = "pointer"
+                        pointer()
+                        addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open(this@textField.value)
                         }
@@ -60,7 +67,8 @@ class WelcomeView : KComposite() {
                     value = "chenmoand@gmail.com"
                     isReadOnly = true
                     button("OPEN") {
-                        style["cursor"] = "pointer"
+                        pointer()
+                        addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open("mailto:${this@textField.value}")
                         }

@@ -1,6 +1,8 @@
 package runstatic.stools.entity.view
 
 import org.hibernate.validator.constraints.Range
+import runstatic.stools.constant.RegexpConsts.ACCOUNT_REGEXP
+import runstatic.stools.constant.RegexpConsts.PASSWORD_REGEXP
 import runstatic.stools.constant.ValidGroups
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
@@ -40,10 +42,4 @@ interface User {
         @Email(groups = [ValidGroups.First::class])
         get
 
-    companion object {
-
-        const val ACCOUNT_REGEXP = "^[a-zA-Z0-9_-]{5,20}\$"
-        const val PASSWORD_REGEXP = "^.*(?=.{6,})(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#\$%^&*? ]).*"
-
-    }
 }
