@@ -1,20 +1,20 @@
 package runstatic.stools.ui.view
 
-import com.github.mvysny.karibudsl.v10.KComposite
-import com.github.mvysny.karibudsl.v10.flexLayout
-import com.github.mvysny.karibudsl.v10.formLayout
-import com.github.mvysny.karibudsl.v10.textField
+import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
+import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
-import com.vaadin.flow.theme.Theme
-import com.vaadin.flow.theme.material.Material
 import runstatic.stools.constant.RegexpConsts
 import runstatic.stools.service.ShortUrlService
 import runstatic.stools.ui.component.PageFooter
+import runstatic.stools.util.VaadinProp
+import runstatic.stools.util.prop
 import kotlin.random.Random
 
 /**
@@ -25,15 +25,32 @@ import kotlin.random.Random
 @PageTitle("短网址一键生成 - static.run")
 @UIScope
 @SpringComponent
-//@Theme(value = Material::class)
+@CssImport("./css/shortUrl.css")
 class ShortUrlView(
     private val shortUrlService: ShortUrlService
 ) : KComposite() {
 
 
-    private val random = Random
+    private var urlField: TextField = TextField("网址").apply {
+        isRequired = true
+        placeholder = "请在此输入一个的网址"
+        pattern = RegexpConsts.URL_REGEXP
+        isClearButtonVisible = true
+        errorMessage = "您输入的网址不符合规则"
+        isAutoselect = true
+        prefixComponent = FlexLayout().apply {
+            @Suppress("HttpUrlsUsage")
+            val protocol = Select<String>().apply {
+                setItems("http://", "https://")
+                value = "http://"
+                addClassName("protocol")
+            }
+        }
+    }
 
-    private var url = ""
+
+    private var url by urlField.prop("")
+
 
     private val root = ui {
         flexLayout {
@@ -45,17 +62,10 @@ class ShortUrlView(
             formLayout {
                 width = "400px"
                 style["margin"] = "0 auto"
-                textField("网址") {
-                    value = url
-                    isRequired = true
-                    placeholder = "请输入一个正常的网址网址"
-                    pattern = RegexpConsts.URL_REGEXP
-                    addValueChangeListener { url = it.value }
-                }
+                add(urlField)
             }
             add(PageFooter())
         }
     }
-
 
 }

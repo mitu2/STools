@@ -8,10 +8,10 @@ import org.springframework.http.HttpStatus
  */
 
 @Throws(TerminateExecutionException::class)
-fun <R> terminate(
+fun terminate(
     status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
     callback: TerminateExecutionResult.() -> Unit = {}
-): R {
+): Nothing {
     val result = TerminateExecutionResult()
     callback(result)
     throw TerminateExecutionException(result, status)

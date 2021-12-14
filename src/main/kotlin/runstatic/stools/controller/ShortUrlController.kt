@@ -21,7 +21,7 @@ class ShortUrlController @Autowired constructor(
     @PutMapping()
     fun addShortUrl(shortUrlTable: ShortUrlTable): ShortUrlTable {
         if(shortUrlTable.id != null) {
-            return terminate {  }
+            terminate {  }
         }
         return shortUrlService.saveShortUrl(shortUrlTable)
     }
