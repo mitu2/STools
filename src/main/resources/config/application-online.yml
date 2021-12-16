@@ -13,6 +13,8 @@ spring:
     cache: true
   jpa:
     open-in-view: false
+    hibernate:
+      ddl-auto: update
   devtools:
     add-properties: false
 vaadin:
