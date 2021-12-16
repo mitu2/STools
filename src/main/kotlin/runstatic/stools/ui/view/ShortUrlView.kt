@@ -1,6 +1,7 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.selectAll
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dependency.CssImport
@@ -12,10 +13,11 @@ import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
+import org.springframework.beans.factory.annotation.Value
 import runstatic.stools.service.ShortUrlService
 import runstatic.stools.ui.component.PageFooter
+import runstatic.stools.util.VaadinProp
 import runstatic.stools.util.pointer
-import runstatic.stools.util.prop
 
 /**
  *
@@ -27,7 +29,9 @@ import runstatic.stools.util.prop
 @SpringComponent
 @CssImport("./css/shortUrl.css")
 class ShortUrlView(
-    private val shortUrlService: ShortUrlService
+    private val shortUrlService: ShortUrlService,
+    @Value("\${stools.base-url:'https://static.run'}")
+    private val baseUrl: String
 ) : KComposite() {
 
     // private val logger = useSlf4jLogger()
@@ -45,20 +49,33 @@ class ShortUrlView(
         prefixComponent = FlexLayout().apply {
             add(protocolSelect)
         }
+        addValueChangeListener {
+            for (_protocol in PROTOCOLS) {
+                val letUrl = it.value.lowercase()
+                if(letUrl.contains(_protocol)) {
+                    url = letUrl.replace(_protocol, "")
+                    break
+                }
+            }
+        }
     }
 
     private val resultField: TextField = TextField("结果").apply {
         isReadOnly = true
-        value = "https://example.org"
+        setId("result")
         suffixComponent = Button("复制").apply {
             pointer()
             addClassName("copy-button")
+            addClickListener {
+                copyToBrowser()
+            }
         }
     }
 
 
-    private var protocol by protocolSelect.prop(DEFAULT_PROTOCOL)
-    private var url by urlField.prop("")
+    private var protocol by VaadinProp(DEFAULT_PROTOCOL, protocolSelect)
+    private var url by VaadinProp("", urlField)
+    private var result by VaadinProp("", resultField)
 
     private val root = ui {
         flexLayout {
@@ -76,7 +93,7 @@ class ShortUrlView(
                     pointer()
                     addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                     onLeftClick {
-
+                        makeShotUrl()
                     }
                 }
             }
@@ -93,6 +110,17 @@ class ShortUrlView(
                 .style['padding'] = '0px'
             """.trimIndent()
         )
+    }
+
+    fun makeShotUrl() {
+        val httpUrl = protocol + url
+        val router = shortUrlService.randomShortUrl(httpUrl)
+        result = "${baseUrl}/s/$router"
+    }
+
+    fun copyToBrowser() {
+        resultField.selectAll()
+        resultField.element.executeJs("document.execCommand('copy');")
     }
 
     companion object {

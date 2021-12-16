@@ -10,9 +10,11 @@ import kotlin.jvm.Throws
  */
 interface ShortUrlService {
 
-    fun saveShortUrl(shortUrlTable: ShortUrlTable): ShortUrlTable
+    fun save(shortUrlTable: ShortUrlTable): ShortUrlTable
 
     @Throws(NotFountShortUrlException::class)
-    fun findShortUrlByRouter(router: String): ShortUrlTable
+    fun findShortUrlByRouter(router: String): ShortUrlTable?
+
+    fun randomShortUrl(url: String): String
 
 }

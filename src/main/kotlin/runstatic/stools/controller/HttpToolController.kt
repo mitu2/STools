@@ -42,18 +42,18 @@ class HttpToolController @Autowired constructor(
         }
     }
 
-    @ApiOperation(value = "短网址跳转接口", code = 302)
-    @GetMapping(path = ["redirect/{router}"])
-    @Suppress("SpringMVCViewInspection")
-    fun redirectShortUrl(@PathVariable router: String): ModelAndView = ModelAndView().apply {
-        viewName = try {
-            val shortUrl = shortUrlService.findShortUrlByRouter(router)
-            "redirect:${shortUrl.url}"
-        } catch (e: Exception) {
-            log.debug(e.message, e)
-            "redirect:404"
-        }
-    }
+    // @ApiOperation(value = "短网址跳转接口", code = 302)
+    // @GetMapping(path = ["redirect/{router}"])
+    // @Suppress("SpringMVCViewInspection")
+    // fun redirectShortUrl(@PathVariable router: String): ModelAndView = ModelAndView().apply {
+    //     viewName = try {
+    //         val shortUrl = shortUrlService.findShortUrlByRouter(router)
+    //         "redirect:${shortUrl.url}"
+    //     } catch (e: Exception) {
+    //         log.debug(e.message, e)
+    //         "redirect:404"
+    //     }
+    // }
 
 }
 

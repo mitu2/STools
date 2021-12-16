@@ -11,14 +11,17 @@ import javax.persistence.*
  * @author chenmoand
  */
 @MappedSuperclass
-abstract class BaseTable<ID : Serializable>(
+abstract class BaseTable<ID : Serializable> : Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: ID?,
+    val id: ID? = null
+
     @CreationTimestamp
     @Column(name = "create_time", nullable = false, updatable = false)
-    protected val createTime: LocalDateTime,
+    protected val createTime: LocalDateTime? = null
+
     @UpdateTimestamp
     @Column(name = "update_time", nullable = false)
-    protected var updateTime: LocalDateTime,
-) : Serializable
+    protected var updateTime: LocalDateTime? = null
+}

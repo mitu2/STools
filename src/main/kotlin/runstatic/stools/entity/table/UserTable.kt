@@ -16,7 +16,6 @@ import javax.persistence.Table
 @Entity
 @Table(name = "user", indexes = [Index(name = "account_index", columnList = "account", unique = true)])
 class UserTable(
-    id: Long?,
     @Column(name = "account", length = 20, nullable = false)
     @ColumnDefault("''")
     override var account: String,
@@ -30,8 +29,6 @@ class UserTable(
     override var password: String,
     @Column(name = "email")
     override var email: String?,
-    createTime: LocalDateTime = LocalDateTime.now(),
-    updateTime: LocalDateTime = LocalDateTime.now(),
-) : BaseTable<Long>(id, createTime, updateTime), User {
+) : BaseTable<Long>(), User {
 
 }
