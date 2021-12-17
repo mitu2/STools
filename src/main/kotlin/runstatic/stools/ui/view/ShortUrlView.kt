@@ -18,6 +18,7 @@ import runstatic.stools.service.ShortUrlService
 import runstatic.stools.ui.component.PageFooter
 import runstatic.stools.util.VaadinProp
 import runstatic.stools.util.pointer
+import java.net.URL
 
 /**
  *
@@ -41,7 +42,7 @@ class ShortUrlView(
         addClassName("protocol")
     }
 
-    private val urlField: TextField = TextField("网址").apply {
+    private val hostAndPathField: TextField = TextField("网址").apply {
         isRequired = true
         placeholder = "请在此输入一个的网址"
         isClearButtonVisible = true
@@ -50,13 +51,7 @@ class ShortUrlView(
             add(protocolSelect)
         }
         addValueChangeListener {
-            for (_protocol in PROTOCOLS) {
-                val letUrl = it.value.lowercase()
-                if(letUrl.contains(_protocol)) {
-                    url = letUrl.replace(_protocol, "")
-                    break
-                }
-            }
+            formatHostAndPath(it.value)
         }
     }
 
@@ -74,7 +69,7 @@ class ShortUrlView(
 
 
     private var protocol by VaadinProp(DEFAULT_PROTOCOL, protocolSelect)
-    private var url by VaadinProp("", urlField)
+    private var hostAndPath by VaadinProp("", hostAndPathField)
     private var result by VaadinProp("", resultField)
 
     private val root = ui {
@@ -87,7 +82,7 @@ class ShortUrlView(
             formLayout {
                 width = "400px"
                 style["margin"] = "0 auto"
-                add(urlField)
+                add(hostAndPathField)
                 add(resultField)
                 button("制作") {
                     pointer()
@@ -103,17 +98,33 @@ class ShortUrlView(
 
     init {
         // add select inner style
-        root.element.executeJs(
-            """document.querySelector('.protocol')
-                .shadowRoot
+        protocolSelect.element.executeJs(
+            """this.shadowRoot
                 .querySelector('vaadin-select-text-field')
                 .style['padding'] = '0px'
             """.trimIndent()
         )
     }
 
+    fun formatHostAndPath(value: String?) {
+
+        if(value.isNullOrBlank()) {
+            return
+        }
+
+        for (_protocol in PROTOCOLS) {
+            val letUrl = value.lowercase()
+            if (letUrl.startsWith(_protocol)) {
+                hostAndPath = letUrl.replaceFirst(_protocol, "")
+                protocol = _protocol
+                break
+            }
+        }
+
+    }
+
     fun makeShotUrl() {
-        val httpUrl = protocol + url
+        val httpUrl = protocol + hostAndPath
         val router = shortUrlService.randomShortUrl(httpUrl)
         result = "${baseUrl}/s/$router"
     }

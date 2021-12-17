@@ -28,10 +28,8 @@ class VaadinProp<T : Any>(
     }
 }
 
-fun <T : Any> HasValue<*, T>.prop(initValue: T) = VaadinProp(initValue, this)
 
-
-fun Button.pointer(): Unit {
+fun Button.pointer() {
     style["cursor"] = "pointer"
 }
 
