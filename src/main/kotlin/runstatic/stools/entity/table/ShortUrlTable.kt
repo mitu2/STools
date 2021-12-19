@@ -15,7 +15,7 @@ import javax.persistence.Table
 @Entity
 @Table(name = "short_url", indexes = [Index(name = "router_index", columnList = "router", unique = true)])
 class ShortUrlTable(
-    @Column(name = "url", nullable = false)
+    @Column(name = "url", nullable = false, length = 5000)
     override var url: String,
     @Column(name = "router", nullable = false, length = 25)
     override var router: String,

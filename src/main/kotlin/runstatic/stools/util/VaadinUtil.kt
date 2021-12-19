@@ -18,7 +18,6 @@ class VaadinProp<T : Any>(
         component.value = initValue
     }
 
-
     operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return component.value
     }
@@ -31,6 +30,10 @@ class VaadinProp<T : Any>(
 
 fun Button.pointer() {
     style["cursor"] = "pointer"
+}
+
+fun Button.inputRight() {
+    style["margin"] = "0 -5px 0 0"
 }
 
 

@@ -22,7 +22,6 @@ import javax.validation.constraints.NotBlank
 @RequestMapping(path = ["httpTool"])
 @PermitAll
 class HttpToolController @Autowired constructor(
-    private val shortUrlService: ShortUrlService
 ) {
 
     val log = useSlf4jLogger()
@@ -41,19 +40,6 @@ class HttpToolController @Autowired constructor(
             model["to"] = param.to
         }
     }
-
-    // @ApiOperation(value = "短网址跳转接口", code = 302)
-    // @GetMapping(path = ["redirect/{router}"])
-    // @Suppress("SpringMVCViewInspection")
-    // fun redirectShortUrl(@PathVariable router: String): ModelAndView = ModelAndView().apply {
-    //     viewName = try {
-    //         val shortUrl = shortUrlService.findShortUrlByRouter(router)
-    //         "redirect:${shortUrl.url}"
-    //     } catch (e: Exception) {
-    //         log.debug(e.message, e)
-    //         "redirect:404"
-    //     }
-    // }
 
 }
 

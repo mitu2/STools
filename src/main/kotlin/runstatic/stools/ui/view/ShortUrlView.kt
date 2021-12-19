@@ -13,12 +13,14 @@ import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import runstatic.stools.configuration.ApplicationProperties
 import runstatic.stools.service.ShortUrlService
 import runstatic.stools.ui.component.PageFooter
 import runstatic.stools.util.VaadinProp
+import runstatic.stools.util.inputRight
 import runstatic.stools.util.pointer
-import java.net.URL
 
 /**
  *
@@ -29,10 +31,9 @@ import java.net.URL
 @UIScope
 @SpringComponent
 @CssImport("./css/shortUrl.css")
-class ShortUrlView(
+class ShortUrlView @Autowired constructor(
     private val shortUrlService: ShortUrlService,
-    @Value("\${stools.base-url:'https://static.run'}")
-    private val baseUrl: String
+    private val properties: ApplicationProperties
 ) : KComposite() {
 
     // private val logger = useSlf4jLogger()
@@ -57,10 +58,9 @@ class ShortUrlView(
 
     private val resultField: TextField = TextField("结果").apply {
         isReadOnly = true
-        setId("result")
         suffixComponent = Button("复制").apply {
             pointer()
-            addClassName("copy-button")
+            inputRight()
             addClickListener {
                 copyToBrowser()
             }
@@ -108,7 +108,7 @@ class ShortUrlView(
 
     fun formatHostAndPath(value: String?) {
 
-        if(value.isNullOrBlank()) {
+        if (value.isNullOrBlank()) {
             return
         }
 
@@ -126,7 +126,7 @@ class ShortUrlView(
     fun makeShotUrl() {
         val httpUrl = protocol + hostAndPath
         val router = shortUrlService.randomShortUrl(httpUrl)
-        result = "${baseUrl}/s/$router"
+        result = "${properties.baseUrl}/s/$router"
     }
 
     fun copyToBrowser() {

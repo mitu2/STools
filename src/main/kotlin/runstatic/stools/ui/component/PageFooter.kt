@@ -19,7 +19,7 @@ import com.vaadin.flow.component.dependency.CssImport
 class PageFooter : Component(), HasComponents, HasStyle {
 
     init {
-        element.classList.add("footer")
+        addClassName("footer")
         div("footer-inner") {
             div("copyright") {
                 anchor("https://github.com/mitu2/STools", "STools") {

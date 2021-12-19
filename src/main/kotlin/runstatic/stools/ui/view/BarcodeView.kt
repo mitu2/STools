@@ -31,7 +31,6 @@ import java.io.ByteArrayOutputStream
 @PageTitle("条形码/二维码一键生成 - static.run")
 @UIScope
 @SpringComponent
-//@Theme(value = Material::class)
 class BarcodeView : KComposite() {
 
     private var content = ""
@@ -41,7 +40,7 @@ class BarcodeView : KComposite() {
 
     private lateinit var result: Image
 
-    private val contentErr = Notification("请输入内容后再点击制作", 3000, Notification.Position.TOP_CENTER)/*.addCloseButton()*/
+    private val contentErr = Notification("请输入内容后再点击制作", 3000, Notification.Position.TOP_CENTER)
 
     private val root = ui {
         flexLayout {

@@ -1,16 +1,14 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
-import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
-import com.vaadin.flow.theme.Theme
-import com.vaadin.flow.theme.material.Material
 import runstatic.stools.ui.component.PageFooter
+import runstatic.stools.util.inputRight
 import runstatic.stools.util.pointer
 
 
@@ -29,7 +27,6 @@ import runstatic.stools.util.pointer
 @CssImport("./css/Welcome.css")
 @SpringComponent
 @UIScope
-//@Theme(value = Material::class)
 class WelcomeView : KComposite() {
 
 
@@ -38,14 +35,15 @@ class WelcomeView : KComposite() {
             setId("app")
             formLayout("main") {
                 h3("你好, Hello World!")
-//                image("/image/cat.gif")
+                // image("/image/cat.gif")
                 p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
                 textField("Github") {
                     value = "https://github.com/mitu2"
                     isReadOnly = true
-                    button("OPEN") {
+                    suffixComponent = button("OPEN") {
                         pointer()
-                        addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
+                        inputRight()
+                        // addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open(this@textField.value)
                         }
@@ -54,9 +52,10 @@ class WelcomeView : KComposite() {
                 textField("Blog") {
                     value = "https://blog.static.run"
                     isReadOnly = true
-                    button("OPEN") {
+                    suffixComponent = button("OPEN") {
                         pointer()
-                        addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
+                        inputRight()
+                        // addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open(this@textField.value)
                         }
@@ -66,9 +65,10 @@ class WelcomeView : KComposite() {
                 textField("Email") {
                     value = "chenmoand@gmail.com"
                     isReadOnly = true
-                    button("OPEN") {
+                    suffixComponent = button("OPEN") {
                         pointer()
-                        addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
+                        inputRight()
+                        // addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open("mailto:${this@textField.value}")
                         }
@@ -84,7 +84,7 @@ class WelcomeView : KComposite() {
         }
     }
 
-    fun open(url: String, type: String = "_self") {
+    fun open(url: String, type: String = "_blank") {
         root.element.executeJs("window.open(\$0, \$1)", url, type)
     }
 
