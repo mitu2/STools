@@ -2,6 +2,7 @@ package runstatic.stools.configuration
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import runstatic.stools.util.useSlf4jLogger
@@ -12,6 +13,7 @@ import runstatic.stools.util.useSlf4jLogger
  * @version 0.1
  */
 @Configuration
+// @EnableWebMvc
 class WebMvcConfiguration : WebMvcConfigurer {
 
     private val logger = useSlf4jLogger()

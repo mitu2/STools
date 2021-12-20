@@ -1,8 +1,6 @@
 package runstatic.stools.service
 
 import runstatic.stools.entity.table.ShortUrlTable
-import runstatic.stools.exception.NotFountShortUrlException
-import kotlin.jvm.Throws
 
 /**
  *

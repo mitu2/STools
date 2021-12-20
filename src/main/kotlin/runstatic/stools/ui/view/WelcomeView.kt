@@ -24,7 +24,7 @@ import runstatic.stools.util.pointer
     ]
 )
 @PageTitle("沉默的小玩意 - static.run")
-@CssImport("./css/Welcome.css")
+@CssImport("./css/welcome.css")
 @SpringComponent
 @UIScope
 class WelcomeView : KComposite() {
@@ -35,7 +35,6 @@ class WelcomeView : KComposite() {
             setId("app")
             formLayout("main") {
                 h3("你好, Hello World!")
-                // image("/image/cat.gif")
                 p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
                 textField("Github") {
                     value = "https://github.com/mitu2"
@@ -43,7 +42,6 @@ class WelcomeView : KComposite() {
                     suffixComponent = button("OPEN") {
                         pointer()
                         inputRight()
-                        // addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open(this@textField.value)
                         }
@@ -55,7 +53,6 @@ class WelcomeView : KComposite() {
                     suffixComponent = button("OPEN") {
                         pointer()
                         inputRight()
-                        // addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open(this@textField.value)
                         }
@@ -68,7 +65,6 @@ class WelcomeView : KComposite() {
                     suffixComponent = button("OPEN") {
                         pointer()
                         inputRight()
-                        // addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             open("mailto:${this@textField.value}")
                         }

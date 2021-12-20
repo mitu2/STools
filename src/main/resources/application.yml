@@ -17,9 +17,11 @@ springfox:
   documentation:
     swagger-ui:
       base-url: /
+      enabled: false
     swagger:
       v2:
         path: /swagger/v2/docs
+        enabled: false
 vaadin:
   pnpm-enabled: false
 

@@ -30,7 +30,6 @@ import runstatic.stools.util.pointer
 @PageTitle("短网址一键生成 - static.run")
 @UIScope
 @SpringComponent
-@CssImport("./css/shortUrl.css")
 class ShortUrlView @Autowired constructor(
     private val shortUrlService: ShortUrlService,
     private val properties: ApplicationProperties
@@ -40,7 +39,8 @@ class ShortUrlView @Autowired constructor(
 
     private val protocolSelect = Select<String>().apply {
         setItems(*PROTOCOLS)
-        addClassName("protocol")
+        style["width"] = "105px";
+        style["margin-left"] = "-5px"
     }
 
     private val hostAndPathField: TextField = TextField("网址").apply {

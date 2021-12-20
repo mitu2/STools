@@ -1,14 +1,13 @@
 package runstatic.stools.controller
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
 import org.hibernate.validator.constraints.Range
 import org.hibernate.validator.constraints.URL
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
-import runstatic.stools.service.ShortUrlService
 import runstatic.stools.util.useSlf4jLogger
 import javax.annotation.security.PermitAll
 import javax.validation.constraints.NotBlank
@@ -17,7 +16,6 @@ import javax.validation.constraints.NotBlank
  *
  * @author chenmoand
  */
-@Api(value = "http工具", tags = ["http"])
 @RestController
 @RequestMapping(path = ["httpTool"])
 @PermitAll
@@ -26,7 +24,6 @@ class HttpToolController @Autowired constructor(
 
     val log = useSlf4jLogger()
 
-    @ApiOperation(value = "重定向跳转接口", code = 302)
     @RequestMapping(path = ["redirect"])
     @Suppress("SpringMVCViewInspection")
     fun redirect(@Validated @ModelAttribute param: HttpToolParams.RedirectParam): ModelAndView = ModelAndView().apply {
