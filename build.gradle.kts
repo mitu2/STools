@@ -30,8 +30,10 @@ repositories {
 }
 
 extra["vaadinVersion"] = "14.7.3"
+ext["log4j2.version"] = "2.17.0"
 
 dependencies {
+    implementation(platform("org.apache.logging.log4j:log4j-bom:2.17.0"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -43,8 +45,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.session:spring-session-core:2.5.2")
     implementation("com.vaadin:vaadin-spring-boot-starter:21.0.4")
-//    implementation("com.vaadin:exampledata:4.0.0")
-
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("mysql:mysql-connector-java:8.0.25")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -57,7 +57,7 @@ dependencies {
     implementation("com.google.zxing:core:3.4.1")
     // https://mvnrepository.com/artifact/com.google.zxing/javase
     implementation("com.google.zxing:javase:3.4.1")
-    implementation("io.springfox:springfox-boot-starter:3.0.0")
+    // implementation("io.springfox:springfox-boot-starter:3.0.0")
     // https://mvnrepository.com/artifact/com.github.mvysny.karibudsl/karibu-dsl
     implementation("com.github.mvysny.karibudsl:karibu-dsl:1.1.1")
 //    implementation("org.springframework.security:spring-security-config")
@@ -69,6 +69,14 @@ dependencyManagement {
         mavenBom("com.vaadin:vaadin-bom:${property("vaadinVersion")}")
     }
 }
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.apache.logging.log4j") {
+            useVersion("2.17.0")
+        }
+    }
+}
+
 //
 //tasks.withType<GradleBuild> {
 //    setProperty("vaadin.productionMode", true)
