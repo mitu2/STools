@@ -15,10 +15,9 @@ import com.vaadin.flow.server.InputStreamFactory
 import com.vaadin.flow.server.StreamResource
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
-import com.vaadin.flow.theme.Theme
-import com.vaadin.flow.theme.material.Material
 import okhttp3.internal.closeQuietly
 import runstatic.stools.ui.component.PageFooter
+import runstatic.stools.util.pageLayout
 import runstatic.stools.util.pointer
 import java.io.ByteArrayOutputStream
 
@@ -43,51 +42,51 @@ class BarcodeView : KComposite() {
     private val contentErr = Notification("请输入内容后再点击制作", 3000, Notification.Position.TOP_CENTER)
 
     private val root = ui {
-        flexLayout {
-            flexWrap = FlexLayout.FlexWrap.WRAP
-            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-            setFlexDirection(FlexLayout.FlexDirection.COLUMN)
-            alignContent = FlexLayout.ContentAlignment.CENTER
-            alignItems = FlexComponent.Alignment.BASELINE
-            formLayout {
-                width = "400px"
-                style["margin"] = "0 auto"
-                textField("内容") {
-                    value = content
-                    isRequired = true
-                    placeholder = "请输入任意字符或网址"
-                    addValueChangeListener { content = it.value }
+        pageLayout {
+            flexLayout {
+                flexWrap = FlexLayout.FlexWrap.WRAP
+                justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+                setFlexDirection(FlexLayout.FlexDirection.COLUMN)
+                alignContent = FlexLayout.ContentAlignment.CENTER
+                alignItems = FlexComponent.Alignment.BASELINE
+                formLayout {
+                    width = "400px"
+                    style["margin"] = "0 auto"
+                    textField("内容") {
+                        value = content
+                        isRequired = true
+                        placeholder = "请输入任意字符或网址"
+                        addValueChangeListener { content = it.value }
+                    }
+                    select<BarcodeFormat>("类型") {
+                        setItems(*BarcodeFormat.values())
+                        value = format
+                        addValueChangeListener { format = it.value }
+                    }
+                    numberField("宽") {
+                        max = 4096.0
+                        min = 20.0
+                        value = imageWith.toDouble()
+                        addValueChangeListener { imageWith = it.value.toInt() }
+                    }
+                    numberField("高") {
+                        max = 4096.0
+                        min = 20.0
+                        value = imageHeight.toDouble()
+                        addValueChangeListener { imageHeight = it.value.toInt() }
+                    }
+                    button("制作") {
+                        pointer()
+                        addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
+                        onLeftClick { makeImage() }
+                    }
                 }
-                select<BarcodeFormat>("类型") {
-                    setItems(*BarcodeFormat.values())
-                    value = format
-                    addValueChangeListener { format = it.value }
+                result = image {
+                    style["margin"] = "0 auto"
                 }
-                numberField("宽") {
-                    max = 4096.0
-                    min = 20.0
-                    value = imageWith.toDouble()
-                    addValueChangeListener { imageWith = it.value.toInt() }
-                }
-                numberField("高") {
-                    max = 4096.0
-                    min = 20.0
-                    value = imageHeight.toDouble()
-                    addValueChangeListener { imageHeight = it.value.toInt() }
-                }
-                button("制作") {
-                    pointer()
-                    addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
-                    onLeftClick { makeImage() }
-                }
+                add(contentErr)
             }
-            result = image {
-                style["margin"] = "0 auto"
-            }
-            add(contentErr)
-            add(PageFooter())
         }
-
     }
 
     fun makeImage() {

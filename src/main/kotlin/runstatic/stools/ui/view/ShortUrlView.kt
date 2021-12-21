@@ -4,7 +4,6 @@ import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.selectAll
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
-import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.select.Select
@@ -14,12 +13,12 @@ import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import runstatic.stools.configuration.ApplicationProperties
 import runstatic.stools.service.ShortUrlService
 import runstatic.stools.ui.component.PageFooter
 import runstatic.stools.util.VaadinProp
 import runstatic.stools.util.inputRight
+import runstatic.stools.util.pageLayout
 import runstatic.stools.util.pointer
 
 /**
@@ -73,26 +72,27 @@ class ShortUrlView @Autowired constructor(
     private var result by VaadinProp("", resultField)
 
     private val root = ui {
-        flexLayout {
-            flexWrap = FlexLayout.FlexWrap.WRAP
-            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-            setFlexDirection(FlexLayout.FlexDirection.COLUMN)
-            alignContent = FlexLayout.ContentAlignment.CENTER
-            alignItems = FlexComponent.Alignment.BASELINE
-            formLayout {
-                width = "400px"
-                style["margin"] = "0 auto"
-                add(hostAndPathField)
-                add(resultField)
-                button("制作") {
-                    pointer()
-                    addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
-                    onLeftClick {
-                        makeShotUrl()
+        pageLayout {
+            flexLayout {
+                flexWrap = FlexLayout.FlexWrap.WRAP
+                justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+                setFlexDirection(FlexLayout.FlexDirection.COLUMN)
+                alignContent = FlexLayout.ContentAlignment.CENTER
+                alignItems = FlexComponent.Alignment.BASELINE
+                formLayout {
+                    width = "400px"
+                    style["margin"] = "0 auto"
+                    add(hostAndPathField)
+                    add(resultField)
+                    button("制作") {
+                        pointer()
+                        addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
+                        onLeftClick {
+                            makeShotUrl()
+                        }
                     }
                 }
             }
-            add(PageFooter())
         }
     }
 

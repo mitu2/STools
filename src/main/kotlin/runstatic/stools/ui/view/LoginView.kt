@@ -11,6 +11,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.ui.component.PageFooter
+import runstatic.stools.util.pageLayout
 
 
 /**
@@ -23,16 +24,17 @@ import runstatic.stools.ui.component.PageFooter
 @UIScope
 class LoginView @Autowired constructor(
 
-) : KComposite(){
+) : KComposite() {
 
     private val loginForm = LoginForm().apply {
     }
 
     private val root = ui {
-        flexLayout {
-            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-            add(loginForm)
-            add(PageFooter())
+        pageLayout {
+            flexLayout {
+                justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+                add(loginForm)
+            }
         }
     }
 

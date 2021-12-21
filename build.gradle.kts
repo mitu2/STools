@@ -57,7 +57,7 @@ dependencies {
     implementation("com.google.zxing:core:3.4.1")
     // https://mvnrepository.com/artifact/com.google.zxing/javase
     implementation("com.google.zxing:javase:3.4.1")
-    // implementation("io.springfox:springfox-boot-starter:3.0.0")
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
     // https://mvnrepository.com/artifact/com.github.mvysny.karibudsl/karibu-dsl
     implementation("com.github.mvysny.karibudsl:karibu-dsl:1.1.1")
 //    implementation("org.springframework.security:spring-security-config")

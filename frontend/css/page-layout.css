@@ -1,0 +1,8 @@
+.main {
+    padding-bottom: 150px;
+}
+
+#app {
+    min-height: 100%;
+    position: relative;
+}

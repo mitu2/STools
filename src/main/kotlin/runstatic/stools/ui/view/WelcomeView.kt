@@ -9,6 +9,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import runstatic.stools.ui.component.PageFooter
 import runstatic.stools.util.inputRight
+import runstatic.stools.util.pageLayout
 import runstatic.stools.util.pointer
 
 
@@ -31,9 +32,9 @@ class WelcomeView : KComposite() {
 
 
     private val root = ui {
-        verticalLayout {
-            setId("app")
-            formLayout("main") {
+        pageLayout {
+            addClassName("welcome")
+            formLayout {
                 h3("你好, Hello World!")
                 p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
                 textField("Github") {
@@ -76,7 +77,6 @@ class WelcomeView : KComposite() {
                 }
 
             }
-            add(PageFooter())
         }
     }
 

@@ -7,6 +7,7 @@
     min-height: 50px;
     font-size: 14px;
     color: #999;
+    margin-top: 0 !important;
 }
 
 .footer-inner {

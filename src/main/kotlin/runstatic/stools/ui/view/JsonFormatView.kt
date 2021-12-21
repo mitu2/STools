@@ -3,9 +3,9 @@ package runstatic.stools.ui.view
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.mvysny.karibudsl.v10.KComposite
 import com.github.mvysny.karibudsl.v10.flexLayout
-import com.github.mvysny.karibudsl.v10.formLayout
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.textfield.TextArea
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import runstatic.stools.ui.component.PageFooter
 import runstatic.stools.util.VaadinProp
+import runstatic.stools.util.pageLayout
 
 /**
  *
@@ -33,24 +34,32 @@ class JsonFormatView @Autowired constructor(
 
     private val inJsonTextArea = TextArea("inJson").apply {
         addClassName("json-text-area")
+        isRequired = true
+        minHeight = "300px"
+        maxHeight = "300px"
     }
     private var inJson: String by VaadinProp("{\n}", inJsonTextArea)
 
     private val outJsonTextArea = TextArea("outJson").apply {
         addClassName("json-text-area")
+        isReadOnly = true
+        minHeight = "300px"
+        maxHeight = "300px"
     }
-    private var outJson: String by VaadinProp("{\n}", outJsonTextArea)
+    private var outJson: String by VaadinProp("", outJsonTextArea)
 
 
     private val root = ui {
-        flexLayout {
-            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-            add(inJsonTextArea)
-            add(outJsonTextArea)
-            // formLayout {
-            //
-            // }
-            add(PageFooter())
+        pageLayout {
+            flexLayout {
+                justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+                flexWrap = FlexLayout.FlexWrap.WRAP
+                add(inJsonTextArea)
+                add(outJsonTextArea)
+                // formLayout {
+                //
+                // }
+            }
         }
     }
 

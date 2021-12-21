@@ -1,19 +1,7 @@
-.main {
+.welcome {
     text-align: center;
     width: 420px;
     margin: 0 auto;
-    position: relative;
-    min-height: 100%;
-}
-
-#app {
-    position: relative;
-    /*font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;*/
-    /*font-size: 14px;*/
-    /*line-height: 2;*/
-    /*color: #555;*/
-    /*background: #fff;*/
-    height: 100%;
 }
 
 
