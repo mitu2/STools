@@ -1,7 +1,6 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.selectAll
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -15,7 +14,6 @@ import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.configuration.ApplicationProperties
 import runstatic.stools.service.ShortUrlService
-import runstatic.stools.ui.component.PageFooter
 import runstatic.stools.util.VaadinProp
 import runstatic.stools.util.inputRight
 import runstatic.stools.util.pageLayout
@@ -130,8 +128,16 @@ class ShortUrlView @Autowired constructor(
     }
 
     fun copyToBrowser() {
-        resultField.selectAll()
-        resultField.element.executeJs("document.execCommand('copy');")
+        resultField.element.executeJs(
+            """ if(window.isSecureContext && navigator.clipboard) {
+                navigator.clipboard.writeText($0).then(res=>{
+                     console.log("Input data copied to clipboard successfully");
+                })
+            } else {
+                this.inputElement.select()
+                document.execCommand('copy');
+            } """.trimIndent(), result
+        )
     }
 
     companion object {

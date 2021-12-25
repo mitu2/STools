@@ -1,5 +1,6 @@
 package runstatic.stools.util
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.button.Button
@@ -30,6 +31,16 @@ class VaadinProp<T : Any>(
     }
 }
 
+fun HasComponents.pageLayout(
+    className: String? = null,
+    initCallback: Div.() -> Unit = {}
+): PageLayout = PageLayout(className, initCallback).also { this + it }
+
+
+operator fun <C: HasComponents> C.plus(component: Component) = apply { add(component) }
+
+operator fun <C: HasComponents> C.plus(text: String) = apply { add(text) }
+
 
 fun Button.pointer() {
     style["cursor"] = "pointer"
@@ -39,14 +50,8 @@ fun Button.inputRight() {
     style["margin"] = "0 -5px 0 0"
 }
 
-fun HasComponents.pageLayout(
-    className: String? = null,
-    initCallback: Div.() -> Unit = {}
-): PageLayout {
-    val layout = PageLayout(className, initCallback)
-    add(layout)
-    return layout
-}
+
+
 
 
 
