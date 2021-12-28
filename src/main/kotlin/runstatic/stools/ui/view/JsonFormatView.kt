@@ -2,7 +2,9 @@ package runstatic.stools.ui.view
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.mvysny.karibudsl.v10.KComposite
+import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.flexLayout
+import com.github.mvysny.karibudsl.v10.onLeftClick
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
@@ -15,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import runstatic.stools.ui.component.PageFooter
 import runstatic.stools.util.VaadinProp
+import runstatic.stools.util.inputRight
 import runstatic.stools.util.pageLayout
+import runstatic.stools.util.pointer
 
 /**
  *
@@ -56,9 +60,12 @@ class JsonFormatView @Autowired constructor(
                 flexWrap = FlexLayout.FlexWrap.WRAP
                 add(inJsonTextArea)
                 add(outJsonTextArea)
-                // formLayout {
-                //
-                // }
+                button("Make") {
+                    pointer()
+                    inputRight()
+                    onLeftClick {
+                    }
+                }
             }
         }
     }

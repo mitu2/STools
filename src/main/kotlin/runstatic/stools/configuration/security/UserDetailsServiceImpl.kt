@@ -27,32 +27,30 @@ class UserDetailsServiceImpl @Autowired constructor(
         if (username.isNullOrBlank()) {
             throw UsernameNotFoundException("username must not blank!")
         }
-        val userTable: UserTable =
+        val entity: UserTable =
             userService.getUserByAccount(username) ?: throw UsernameNotFoundException("Not obtained by username!")
 
         return object : UserDetails {
 
-            override fun getAuthorities(): List<GrantedAuthority> {
-                if(userTable.id == null) {
-                    return emptyList()
-                }
-                return authorityService
-                    .findByUserId(userTable.id)
+            override fun getAuthorities(): List<GrantedAuthority> = entity.id?.run {
+                authorityService
+                    .findByUserId(this)
                     .map {
                         GrantedAuthority {
                             it.value
                         }
                     }
-            }
+            } ?: emptyList()
+
 
             @JsonIgnore
-            override fun getPassword(): String = userTable.password
+            override fun getPassword(): String = entity.password
 
-            override fun getUsername(): String = userTable.nickname
+            override fun getUsername(): String = entity.nickname
 
             override fun isAccountNonExpired(): Boolean = true
 
-            override fun isAccountNonLocked(): Boolean = userTable.status == 2
+            override fun isAccountNonLocked(): Boolean = entity.status == 2
 
             override fun isCredentialsNonExpired(): Boolean = true
 

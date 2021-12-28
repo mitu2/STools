@@ -1,8 +1,6 @@
-package runstatic.stools.tool
+package runstatic.stools.entity.support
 
 import org.springframework.beans.BeanUtils
-import runstatic.stools.entity.support.BaseEntity
-import runstatic.stools.entity.support.BaseTable
 import java.io.Serializable
 
 /**

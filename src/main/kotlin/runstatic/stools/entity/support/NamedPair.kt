@@ -14,23 +14,23 @@ abstract class NamedPair<K, V> protected constructor(
     val valueName: String
 ) : BaseEntity() {
 
-    override fun addProperty(key: String, value: Any) {
+    override fun addProperty(key: String, value: Any?) {
         if (keyName == key || valueName == key) {
             super.addProperty(key, value)
         }
     }
 
-    open var key: K
+    open var key: K?
         set(value) {
             properties[keyName] = value!!
         }
         @JsonIgnore
-        get() = properties[keyName] as K
+        get() = properties[keyName] as K?
 
-    open var value: V
-        set(_value) {
-            properties[valueName] = _value!!
+    open var value: V?
+        set(value) {
+            properties[valueName] = value!!
         }
         @JsonIgnore
-        get() = properties[keyName] as V
+        get() = properties[keyName] as V?
 }
