@@ -29,5 +29,5 @@ logging:
   level:
     # root: warn
     web: debug
-    run:
-      static: debug
+    runstatic:
+      stools: debug

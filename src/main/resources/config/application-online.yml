@@ -24,7 +24,7 @@ logging:
   level:
     # root: warn
     web: debug
-    run:
-      static: debug
+    runstatic:
+      stools: info
   file:
     path: ${user.home}/.STools/logs

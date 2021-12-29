@@ -15,22 +15,22 @@ inline fun <reified S : Any> (@LoggerDsl S).useSlf4jLogger(): Logger {
 }
 
 @LoggerDsl
-fun (@LoggerDsl Logger).ifDebugEnabled(callback: @LoggerDsl Logger.() -> Unit) = state(isDebugEnabled, callback)
+fun (@LoggerDsl Logger).ifDebugEnabled(block: () -> String?) = state(isDebugEnabled) { debug(block()) }
 
 @LoggerDsl
-fun (@LoggerDsl Logger).ifInfoEnabled(callback: @LoggerDsl Logger.() -> Unit) = state(isInfoEnabled, callback)
+fun (@LoggerDsl Logger).ifInfoEnabled(block: () -> String?) = state(isInfoEnabled) { info(block()) }
 
 @LoggerDsl
-fun (@LoggerDsl Logger).isErrorEnabled(callback: @LoggerDsl Logger.() -> Unit) = state(isErrorEnabled, callback)
+fun (@LoggerDsl Logger).ifErrorEnabled(block: () -> String?) = state(isErrorEnabled) { error(block()) }
 
 @LoggerDsl
-fun (@LoggerDsl Logger).ifTraceEnabled(callback: @LoggerDsl Logger.() -> Unit) = state(isTraceEnabled, callback)
+fun (@LoggerDsl Logger).ifTraceEnabled(block: () -> String?) = state(isTraceEnabled) { trace(block()) }
 
 @LoggerDsl
-fun (@LoggerDsl Logger).ifWarnEnabled(callback: @LoggerDsl Logger.() -> Unit) = state(isWarnEnabled, callback)
+fun (@LoggerDsl Logger).ifWarnEnabled(block: () -> String?) = state(isWarnEnabled) { warn(block()) }
 
-inline fun (@LoggerDsl Logger).state(bol: Boolean, callback: @LoggerDsl Logger.() -> Unit) {
-    if (bol) {
-        callback(this)
+inline fun (@LoggerDsl Logger).state(condition: Boolean, block: @LoggerDsl Logger.() -> Unit) {
+    if (condition) {
+        block()
     }
 }

@@ -18,5 +18,5 @@ spring:
 logging:
   level:
     root: warn
-    run:
-      static: debug
+    runstatic:
+      stools: debug
