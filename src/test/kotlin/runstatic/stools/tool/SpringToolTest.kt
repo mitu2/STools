@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import runstatic.stools.util.useSlf4jLogger
+import runstatic.stools.logging.useSlf4jLogger
 
 /**
  *

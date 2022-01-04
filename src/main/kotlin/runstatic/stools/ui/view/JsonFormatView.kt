@@ -2,6 +2,7 @@ package runstatic.stools.ui.view
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.convertValue
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.selectAll
 import com.vaadin.flow.component.dependency.CssImport
@@ -15,7 +16,11 @@ import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
-import runstatic.stools.util.*
+import runstatic.stools.logging.debug
+import runstatic.stools.logging.useSlf4jLogger
+import runstatic.stools.util.VaadinProp
+import runstatic.stools.util.pageLayout
+import runstatic.stools.util.pointer
 
 /**
  *
@@ -44,6 +49,7 @@ class JsonFormatView @Autowired constructor(
         isRequired = true
         minHeight = "300px"
         maxHeight = "300px"
+        maxLength = Int.MAX_VALUE
     }
     private var inJson: String by VaadinProp("{}", inJsonTextArea)
 
@@ -52,13 +58,13 @@ class JsonFormatView @Autowired constructor(
         isReadOnly = true
         minHeight = "300px"
         maxHeight = "300px"
+        maxLength = Int.MAX_VALUE
         addFocusListener { selectAll() }
     }
     private var outJson: String by VaadinProp("", outJsonTextArea)
 
 
     private val jsonKeyOptionField = TextField("jsonKey").apply {
-
     }
 
     private var jsonKeyOption by VaadinProp("", jsonKeyOptionField)
@@ -96,17 +102,26 @@ class JsonFormatView @Autowired constructor(
 
     fun formatJson() {
         try {
-            val json = mapper.readTree(inJson)
+            var json = mapper.readTree(inJson)
 
-            if(!jsonKeyOption.isNullOrBlank()) {
-                if(json.isArray) {
-                    TODO("Not Ok")
+            if (!jsonKeyOption.isNullOrBlank()) {
+                if (json.isArray) {
+                    json = mapper.convertValue(
+                        mapper.convertValue<Array<Map<String, Any?>>>(json)
+                            .asSequence()
+                            .runningFold(hashMapOf<String, Any>()) { acc, map ->
+                                map[jsonKeyOption]?.apply {
+                                    acc[this.toString()] = map
+                                }
+                                return@runningFold acc
+                            }
+                    )
                 }
             }
 
             outJson = mapper.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(json)
-            logger.ifDebugEnabled { outJson }
+            logger.debug { outJson }
         } catch (e: Exception) {
             if (logger.isDebugEnabled) {
                 logger.debug(e.message, e)

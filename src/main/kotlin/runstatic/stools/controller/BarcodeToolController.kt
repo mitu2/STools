@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import runstatic.stools.util.useSlf4jLogger
+import runstatic.stools.logging.useSlf4jLogger
 import java.io.ByteArrayOutputStream
 import javax.annotation.security.PermitAll
 import javax.validation.constraints.NotBlank

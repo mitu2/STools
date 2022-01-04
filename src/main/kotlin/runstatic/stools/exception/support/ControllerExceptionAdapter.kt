@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import runstatic.stools.controller.ControllerPosition
-import runstatic.stools.util.useSlf4jLogger
+import runstatic.stools.logging.useSlf4jLogger
 import javax.servlet.http.HttpServletRequest
 
 /**

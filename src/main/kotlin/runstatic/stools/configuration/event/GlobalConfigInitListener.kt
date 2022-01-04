@@ -8,7 +8,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
 import runstatic.stools.constant.GlobalConfigKeys
 import runstatic.stools.service.GlobalConfigService
-import runstatic.stools.util.useSlf4jLogger
+import runstatic.stools.logging.useSlf4jLogger
 
 /**
  *

@@ -30,7 +30,7 @@ repositories {
 }
 
 extra["vaadinVersion"] = "14.7.3"
-ext["log4j2.version"] = "2.17.0"
+ext["log4j2.version"] = "2.17.1"
 
 dependencies {
     implementation(platform("org.apache.logging.log4j:log4j-bom:2.17.0"))
@@ -72,7 +72,7 @@ dependencyManagement {
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.apache.logging.log4j") {
-            useVersion("2.17.0")
+            useVersion("2.17.1")
         }
     }
 }

@@ -2,7 +2,7 @@ package runstatic.stools.util
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.net.URL
+import runstatic.stools.logging.useSlf4jLogger
 import java.util.concurrent.CountDownLatch
 
 /**
