@@ -109,12 +109,7 @@ class JsonFormatView @Autowired constructor(
                     json = mapper.convertValue(
                         mapper.convertValue<Array<Map<String, Any?>>>(json)
                             .asSequence()
-                            .runningFold(hashMapOf<String, Any>()) { acc, map ->
-                                map[jsonKeyOption]?.apply {
-                                    acc[this.toString()] = map
-                                }
-                                return@runningFold acc
-                            }
+                            .associateBy { it[jsonKeyOption] }
                     )
                 }
             }
