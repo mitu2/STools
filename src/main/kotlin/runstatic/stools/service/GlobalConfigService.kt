@@ -6,6 +6,11 @@ package runstatic.stools.service
  */
 interface GlobalConfigService {
 
-    fun getValue(key: String, _default: String? = null): String?
+    fun getValue(key: String, defaultValue: String? = null): String?
 
+    fun setValue(key: String, value: String?)
+
+    operator fun set(key: String, value: String) = setValue(key, value)
+
+    operator fun get(key: String) = getValue(key)
 }

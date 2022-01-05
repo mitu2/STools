@@ -12,9 +12,9 @@ import javax.persistence.*
 class GlobalConfigTable(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    override var id: Int,
+    override var id: Int? = null,
     @Column(name = "`key`", nullable = false)
     override var key: String,
     @Column(name = "`value`")
-    override var value: String
+    override var value: String?
 ) : GlobalConfig

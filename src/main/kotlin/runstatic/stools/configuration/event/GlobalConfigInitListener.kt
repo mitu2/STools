@@ -6,15 +6,16 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
+import org.springframework.stereotype.Component
 import runstatic.stools.constant.GlobalConfigKeys
-import runstatic.stools.service.GlobalConfigService
 import runstatic.stools.logging.useSlf4jLogger
+import runstatic.stools.service.GlobalConfigService
 
 /**
  *
  * @author chenmoand
  */
-//@Component
+@Component
 class GlobalConfigInitListener @Autowired constructor(
     builder: Jackson2ObjectMapperBuilder,
     private val globalConfigService: GlobalConfigService,
@@ -30,8 +31,10 @@ class GlobalConfigInitListener @Autowired constructor(
         val isFirst = globalConfigService.getValue(GlobalConfigKeys.IS_FIRST, "true").toBoolean()
 
         if (isFirst) {
-            jdbcTokenRepositoryImpl.setCreateTableOnStartup(true)
+            jdbcTokenRepositoryImpl.jdbcTemplate?.execute(JdbcTokenRepositoryImpl.CREATE_TABLE_SQL)
         }
+
+        globalConfigService[GlobalConfigKeys.IS_FIRST] = "false"
 
     }
 

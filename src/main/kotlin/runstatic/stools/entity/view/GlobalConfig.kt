@@ -6,10 +6,10 @@ package runstatic.stools.entity.view
  */
 interface GlobalConfig {
 
-    var id: Int
+    var id: Int?
 
     var key: String
 
-    var value: String
+    var value: String?
 
 }

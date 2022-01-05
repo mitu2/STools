@@ -38,7 +38,7 @@ class SecurityConfiguration @Autowired constructor(
 
 
     @Bean
-    fun persistentTokenRepository(): PersistentTokenRepository {
+    fun jdbcTokenRepositoryImpl(): JdbcTokenRepositoryImpl {
         val jdbcTokenRepositoryImpl = JdbcTokenRepositoryImpl()
         jdbcTokenRepositoryImpl.setDataSource(dataSource)
         return jdbcTokenRepositoryImpl
