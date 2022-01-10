@@ -1,6 +1,9 @@
 package runstatic.stools.entity.table
 
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import runstatic.stools.entity.view.GlobalConfig
+import java.time.LocalDateTime
 import javax.persistence.*
 
 /**
@@ -16,5 +19,11 @@ class GlobalConfigTable(
     @Column(name = "`key`", nullable = false)
     override var key: String,
     @Column(name = "`value`")
-    override var value: String?
+    override var value: String?,
+    @CreationTimestamp
+    @Column(name = "create_time", nullable = false, updatable = false)
+    val createTime: LocalDateTime? = null,
+    @UpdateTimestamp
+    @Column(name = "update_time", nullable = false)
+    var updateTime: LocalDateTime? = null
 ) : GlobalConfig

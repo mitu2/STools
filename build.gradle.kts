@@ -33,7 +33,7 @@ extra["vaadinVersion"] = "14.7.3"
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
-    implementation(platform("org.apache.logging.log4j:log4j-bom:2.17.0"))
+    implementation(platform("org.apache.logging.log4j:log4j-bom:2.17.1"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -82,6 +82,9 @@ configurations.all {
 //    setProperty("vaadin.productionMode", true)
 //}
 
+springBoot {
+    buildInfo()
+}
 
 val env = System.getProperty("profile") ?: "dev"
 

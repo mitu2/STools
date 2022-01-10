@@ -12,8 +12,11 @@ class GlobalConfigServiceImpl @Autowired constructor(
     private val globalConfigRepository: GlobalConfigRepository
 ) : GlobalConfigService {
 
-    override fun getValue(key: String, defaultValue: String?): String? =
-        globalConfigRepository.findByKey(key)?.value ?: defaultValue
+    override fun getEntityByKey(key: String): GlobalConfigTable? = globalConfigRepository.findByKey(key)
+
+    override fun getEntityById(id: Int): GlobalConfigTable? = globalConfigRepository.getById(id)
+
+    override fun getValue(key: String, defaultValue: String?): String? = getEntityByKey(key)?.value ?: defaultValue
 
     @Transactional
     override fun setValue(key: String, value: String?) {
@@ -23,8 +26,6 @@ class GlobalConfigServiceImpl @Autowired constructor(
             key = key, value = value
         )
         globalConfigRepository.save(entity)
-
-
     }
 
 }
