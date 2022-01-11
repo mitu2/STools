@@ -1,4 +1,4 @@
-package runstatic.stools.exception
+package runstatic.stools.service.exception
 
 import org.junit.jupiter.api.Test
 
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
  *
  * @author chenmoand
  */
-class TerminateExecutionResultTest {
+class ServiceNotCompletedInfoTest {
 
     @Test
     fun mapTest() {

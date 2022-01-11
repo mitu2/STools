@@ -12,6 +12,4 @@ object GlobalConfigKeys {
 
     const val RUN_NUMBERS = "RUN_NUMBER"
 
-    const val INSTALL_TIME = "INSTALL_TIME"
-
 }

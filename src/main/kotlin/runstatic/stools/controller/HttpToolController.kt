@@ -17,7 +17,7 @@ import javax.validation.constraints.NotBlank
  * @author chenmoand
  */
 @RestController
-@RequestMapping(path = ["httpTool"])
+@RequestMapping(path = ["api/http"])
 @PermitAll
 class HttpToolController @Autowired constructor(
 ) {
@@ -26,7 +26,7 @@ class HttpToolController @Autowired constructor(
 
     @RequestMapping(path = ["redirect"])
     @Suppress("SpringMVCViewInspection")
-    fun redirect(@Validated @ModelAttribute param: HttpToolParams.RedirectParam): ModelAndView = ModelAndView().apply {
+    fun redirect(@Validated @ModelAttribute param: RedirectParam): ModelAndView = ModelAndView().apply {
         val cycle = param.cycle
         if (cycle == null || cycle <= 0) {
             viewName = "redirect:${param.to}"
@@ -38,16 +38,12 @@ class HttpToolController @Autowired constructor(
         }
     }
 
-}
-
-sealed interface HttpToolParams {
-
     data class RedirectParam(
         @field:Range(min = 0, max = 15)
         var cycle: Int? = 0,
         @field:NotBlank
         @field:URL
         var to: String
-    ) : HttpToolParams
+    )
 
 }

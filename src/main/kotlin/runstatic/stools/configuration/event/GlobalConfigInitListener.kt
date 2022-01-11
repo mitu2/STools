@@ -39,8 +39,8 @@ class GlobalConfigInitListener @Autowired constructor(
     fun doFirstEnableServer() {
         val isFirst = globalConfigService.getValue(GlobalConfigKeys.IS_FIRST, "true").toBoolean()
         if (isFirst) {
-            jdbcTokenRepositoryImpl.jdbcTemplate?.execute(JdbcTokenRepositoryImpl.CREATE_TABLE_SQL)
-            logger.info { "init JdbcTokenRepositoryImpl table persistent_logins" }
+            // jdbcTokenRepositoryImpl.jdbcTemplate?.execute(JdbcTokenRepositoryImpl.CREATE_TABLE_SQL)
+            // logger.info { "init JdbcTokenRepositoryImpl table persistent_logins" }
             globalConfigService[GlobalConfigKeys.IS_FIRST] = "false"
         }
     }

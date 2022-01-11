@@ -16,7 +16,8 @@ import com.vaadin.flow.server.StreamResource
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import okhttp3.internal.closeQuietly
-import runstatic.stools.ui.component.PageFooter
+import org.springframework.beans.factory.annotation.Autowired
+import runstatic.stools.configuration.ApplicationProperties
 import runstatic.stools.util.pageLayout
 import runstatic.stools.util.pointer
 import java.io.ByteArrayOutputStream
@@ -30,12 +31,14 @@ import java.io.ByteArrayOutputStream
 @PageTitle("条形码/二维码一键生成 - static.run")
 @UIScope
 @SpringComponent
-class BarcodeView : KComposite() {
+class BarcodeView @Autowired constructor(
+    private val properties: ApplicationProperties
+) : KComposite() {
 
     private var content = ""
     private var format = BarcodeFormat.QR_CODE
-    private var imageWith = 240
-    private var imageHeight = 240
+    private var imageWith: Int = 240
+    private var imageHeight: Int = 240
 
     private lateinit var result: Image
 
@@ -91,19 +94,16 @@ class BarcodeView : KComposite() {
 
     fun makeImage() {
         if (content.isBlank()) {
-            contentErr.open()
+            Notification.show("请输入内容后再点击制作", 3000, Notification.Position.TOP_CENTER)
             return
         }
-        val writer = MultiFormatWriter()
-        val bitMatrix = writer.encode(content, format, imageWith, imageHeight)
-        val outputStream = ByteArrayOutputStream()
-        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream)
-        result.setSrc(StreamResource("make.png", InputStreamFactory {
-            return@InputStreamFactory outputStream.toByteArray().inputStream()
-        }))
+        if(imageWith <= 0 || imageHeight <= 0) {
+            Notification.show("请输入正确的宽或高,范围是(20-4096)", 3000, Notification.Position.TOP_CENTER)
+            return
+        }
+        result.src = "${properties.baseUrl}/api/barcode?text=${content}&width=${imageWith}&height=${imageHeight}&type=${format}"
         result.width = "${imageHeight}px"
         result.height = "${imageWith}px"
-        outputStream.closeQuietly()
     }
 
 }

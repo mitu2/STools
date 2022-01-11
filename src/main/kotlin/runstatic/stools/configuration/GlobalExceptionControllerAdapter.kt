@@ -1,4 +1,4 @@
-package runstatic.stools.exception.support
+package runstatic.stools.configuration
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.Ordered
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import runstatic.stools.controller.ControllerPosition
 import runstatic.stools.logging.useSlf4jLogger
+import runstatic.stools.service.exception.ServiceNotCompletedException
+import runstatic.stools.service.exception.ServiceNotCompletedInfo
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -17,28 +19,28 @@ import javax.servlet.http.HttpServletRequest
  * @author chenmoand
  */
 @ControllerAdvice(basePackageClasses = [ControllerPosition::class])
-class ControllerExceptionAdapter {
+class GlobalExceptionControllerAdapter {
 
     private val logger = useSlf4jLogger()
 
     @Autowired
     lateinit var request: HttpServletRequest
 
-    @ExceptionHandler(TerminateExecutionException::class)
+    @ExceptionHandler(ServiceNotCompletedException::class)
     @Order(Ordered.HIGHEST_PRECEDENCE)
     @ResponseBody
-    fun terminateExecutionExceptionHandler(exception: TerminateExecutionException): ResponseEntity<TerminateExecutionResult> =
+    fun serviceNotCompletedExceptionHandler(exception: ServiceNotCompletedException): ResponseEntity<ServiceNotCompletedInfo> =
         ResponseEntity
             .status(exception.httpStatus)
             .body(exception.result)
 
     @ExceptionHandler(Throwable::class)
     @ResponseBody
-    fun otherExceptionHandler(exception: Throwable): ResponseEntity<TerminateExecutionResult> {
+    fun otherExceptionHandler(exception: Throwable): ResponseEntity<ServiceNotCompletedInfo> {
         logger.error(exception.message, exception)
-        val result = TerminateExecutionResult(
-            path = request.servletPath ?: TerminateExecutionResult.DEFAULT_PATH,
-            message = exception.message ?: TerminateExecutionResult.DEFAULT_MESSAGE
+        val result = ServiceNotCompletedInfo(
+            path = request.servletPath ?: ServiceNotCompletedInfo.DEFAULT_PATH,
+            message = exception.message ?: ServiceNotCompletedInfo.DEFAULT_MESSAGE
         )
         result.properties["exception"] = exception.javaClass.name
         result.properties["stackTrace"] = exception.stackTrace.map { it.toString() }
