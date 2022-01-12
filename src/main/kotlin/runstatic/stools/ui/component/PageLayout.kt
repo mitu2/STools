@@ -19,7 +19,7 @@ class PageLayout(
     initCallback: Div.() -> Unit = {}
 ) : Component(), HasComponents, HasStyle {
 
-    val main = div("main")
+    private val main = div("main")
 
     init {
         setId("app")

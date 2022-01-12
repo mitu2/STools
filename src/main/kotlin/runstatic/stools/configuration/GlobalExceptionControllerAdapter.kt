@@ -43,7 +43,7 @@ class GlobalExceptionControllerAdapter {
             message = exception.message ?: ServiceNotCompletedInfo.DEFAULT_MESSAGE
         )
         result.properties["exception"] = exception.javaClass.name
-        result.properties["stackTrace"] = exception.stackTrace.map { it.toString() }
+        result.properties["stacktrace"] = exception.stackTrace.map { it.toString() }
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(result)

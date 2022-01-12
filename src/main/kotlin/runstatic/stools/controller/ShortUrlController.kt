@@ -22,4 +22,7 @@ class ShortUrlController @Autowired constructor(
         return "redirect:$url"
     }
 
+    @GetMapping("")
+    fun redirectIndex() = "redirect:chenmoand"
+
 }

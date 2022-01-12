@@ -4,7 +4,6 @@ import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import runstatic.stools.util.inputRight
@@ -16,18 +15,12 @@ import runstatic.stools.util.pointer
  *
  * @author chenmoand
  */
-@Route("")
-@RouteAlias.Container(
-    value = [
-        RouteAlias("index"),
-        RouteAlias("index.html"),
-    ]
-)
-@PageTitle("沉默的小玩意 - static.run")
-@CssImport("./css/welcome.css")
+@Route("chenmoand")
+@CssImport("./css/chenmoand.css")
+@PageTitle("Author Chenmoand - static.run")
 @SpringComponent
 @UIScope
-class WelcomeView : KComposite() {
+class ChenmoandView : KComposite() {
 
 
     private val root = ui {
@@ -57,7 +50,11 @@ class WelcomeView : KComposite() {
     }
 
     fun open(url: String, type: String = "_blank") {
-        root.element.executeJs("window.open(\$0, \$1)", url, type)
+        root.ui.ifPresent { ui ->
+            ui.access {
+                ui.page.open(url, type)
+            }
+        }
     }
 
 
