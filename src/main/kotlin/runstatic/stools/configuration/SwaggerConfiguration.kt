@@ -1,5 +1,7 @@
 package runstatic.stools.configuration
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import runstatic.stools.controller.ControllerPosition
@@ -17,7 +19,10 @@ import springfox.documentation.spring.web.plugins.Docket
  */
 @Configuration
 @EnableOpenApi
-class SwaggerConfiguration {
+class SwaggerConfiguration @Autowired constructor(
+    private val properties: ApplicationProperties,
+    private val buildProperties: BuildProperties
+) {
 
     @Bean
     fun docker(): Docket = Docket(DocumentationType.SWAGGER_2)
@@ -28,10 +33,10 @@ class SwaggerConfiguration {
 
     @Bean
     fun apiInfo(): ApiInfo = ApiInfoBuilder()
-        .title("Stools")
+        .title(buildProperties.name)
         .description("Project Stools by Chenmoand")
-        .version("1.0")
-        .contact(Contact("Chenmoand", "https://static.run", "chenmoand@outlook.com"))
+        .version(buildProperties.version)
+        .contact(Contact("Chenmoand", properties.baseUrl, "chenmoand@outlook.com"))
         .build()
 
 }

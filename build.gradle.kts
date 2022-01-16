@@ -83,7 +83,9 @@ configurations.all {
 //}
 
 springBoot {
-    buildInfo()
+    buildInfo {
+        generateBuildProperties()
+    }
 }
 
 val env = System.getProperty("profile") ?: "dev"

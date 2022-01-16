@@ -2,7 +2,7 @@ spring:
   profiles:
     active: dev
   pid:
-    file: ${user.home}/.STools/application.pid
+    file: ${stools.work-folder}/application.pid
   sql:
     init:
       data-locations:
@@ -24,4 +24,8 @@ springfox:
         enabled: true
 vaadin:
   pnpm-enabled: false
-
+logging:
+  file:
+    path: ${stools.work-folder}/logs
+stools:
+  work-folder: ${user.home}/.STools

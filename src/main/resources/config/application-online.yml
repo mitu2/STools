@@ -1,6 +1,5 @@
 stools:
   base-url: https://static.run
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -26,5 +25,3 @@ logging:
     web: debug
     runstatic:
       stools: info
-  file:
-    path: ${user.home}/.STools/logs

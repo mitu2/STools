@@ -1,5 +1,6 @@
 package runstatic.stools.configuration
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
@@ -13,7 +14,9 @@ import runstatic.stools.logging.useSlf4jLogger
  */
 @Configuration
 // @EnableWebMvc
-class WebMvcConfiguration : WebMvcConfigurer {
+class WebMvcConfiguration @Autowired constructor(
+    private val properties: ApplicationProperties
+) : WebMvcConfigurer {
 
     private val logger = useSlf4jLogger()
 
@@ -25,7 +28,7 @@ class WebMvcConfiguration : WebMvcConfigurer {
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("/**").addResourceLocations(
-            "classpath:/static/"
+            "classpath:/static/", "${properties.workFolder}/static/"
         )
 
         registry.addResourceHandler("/webjars/**").addResourceLocations(

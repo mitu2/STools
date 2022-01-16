@@ -34,6 +34,7 @@ class GlobalConfigInitListener @Autowired constructor(
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         doFirstEnableServer()
         recordServerStartNumber()
+        logger.info(buildProperties.toString())
     }
 
     fun doFirstEnableServer() {
