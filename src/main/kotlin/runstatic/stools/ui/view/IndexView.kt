@@ -7,6 +7,7 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
+import com.vaadin.flow.server.PWA
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import runstatic.stools.logging.info
@@ -20,7 +21,7 @@ import kotlin.concurrent.schedule
  * @author chenmoand
  */
 
-// @Route("")
+@Route("")
 @RouteAlias.Container(
     value = [
         RouteAlias("index"),
@@ -30,6 +31,7 @@ import kotlin.concurrent.schedule
 @PageTitle("Project Stools Readme - static.run")
 @SpringComponent
 @UIScope
+@PWA(name = "Github Project Stools", shortName = "Stools")
 class IndexView : KComposite() {
 
     private val logger = useSlf4jLogger()
@@ -43,6 +45,7 @@ class IndexView : KComposite() {
     }
 
     init {
+        UI.getCurrent().page.executeJs("setTimeout(() => window.location.href='/chenmoand', 1500)")
     }
 
 

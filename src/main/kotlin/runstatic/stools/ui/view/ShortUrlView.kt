@@ -1,14 +1,19 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
+import com.vaadin.flow.component.dependency.JsModule
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.server.PWA
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,6 +32,7 @@ import runstatic.stools.util.pointer
 @PageTitle("短网址一键生成 - static.run")
 @UIScope
 @SpringComponent
+@JsModule("./lib/copytoclipboard.js")
 class ShortUrlView @Autowired constructor(
     private val shortUrlService: ShortUrlService,
     private val properties: ApplicationProperties
@@ -55,11 +61,11 @@ class ShortUrlView @Autowired constructor(
 
     private val resultField: TextField = TextField("结果").apply {
         isReadOnly = true
-        suffixComponent = Button("复制").apply {
+        suffixComponent = Button("复制", VaadinIcon.COPY.create()).apply {
             pointer()
             inputRight()
             addClickListener {
-                copyToBrowser()
+                UI.getCurrent().page.executeJs("window.copyToClipboard($0)", value)
             }
         }
     }
@@ -122,22 +128,13 @@ class ShortUrlView @Autowired constructor(
     }
 
     fun makeShotUrl() {
+        if(hostAndPath.isNullOrBlank()) {
+            Notification.show("请输入正常的链接", 3000, Notification.Position.TOP_CENTER)
+            return
+        }
         val httpUrl = protocol + hostAndPath
         val router = shortUrlService.randomShortUrl(httpUrl)
         result = "${properties.baseUrl}/s/$router"
-    }
-
-    fun copyToBrowser() {
-        resultField.element.executeJs(
-            """ if(window.isSecureContext && navigator.clipboard) {
-                navigator.clipboard.writeText($0).then(res=>{
-                     console.log("Input data copied to clipboard successfully");
-                })
-            } else {
-                this.inputElement.select()
-                document.execCommand('copy');
-            } """.trimIndent(), result
-        )
     }
 
     companion object {
