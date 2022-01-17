@@ -32,7 +32,7 @@ class ChenmoandView : KComposite() {
             h3("你好, Hello World!")
             p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
             formLayout {
-                width = "40%"
+                width = "95%"
                 style["margin"] = "auto"
                 responsiveSteps = listOf(
                     FormLayout.ResponsiveStep("0", 1)
