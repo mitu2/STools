@@ -26,11 +26,14 @@ class WebDocController @Autowired constructor(
         @PathVariable artifactId: String, @PathVariable version: String,
     ) {
         val servletOutputStream = response.outputStream
-        val pathSplit = request.requestURI.split("/${group}@${artifactId}@${version}", "/${group}@${artifactId}")
+        val pathSplit = request.requestURI.split("/${group}:${artifactId}:${version}", "/${group}:${artifactId}")
         var path = if (pathSplit.size > 1) pathSplit[1] else ""
 
         if (path.startsWith("/")) {
             path = path.substring(1)
+        }
+        if(path == "/") {
+            path ="index.html"
         }
         webDocService.getDocInputStream(type, group, artifactId, version, path)
             .use {
