@@ -1,4 +1,4 @@
-package runstatic.stools.controller
+package runstatic.stools.controller.api
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -20,7 +20,7 @@ import javax.validation.constraints.NotBlank
  *
  * @author chenmoand
  */
-@RequestMapping("api/barcode")
+@RequestMapping(path = ["api/barcode"])
 @RestController
 @PermitAll
 class BarcodeToolController {

@@ -14,7 +14,7 @@ import runstatic.stools.service.CodeService
  * @author chenmoand
  */
 @RestController
-@RequestMapping("code")
+@RequestMapping(path = ["code"])
 class CodeController @Autowired constructor(
     private val codeService: CodeService
 ) {

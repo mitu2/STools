@@ -31,7 +31,7 @@ import kotlin.concurrent.schedule
 @PageTitle("Project Stools Readme - static.run")
 @SpringComponent
 @UIScope
-@PWA(name = "Github Project Stools", shortName = "Stools")
+// @PWA(name = "Github Project Stools", shortName = "Stools")
 class IndexView : KComposite() {
 
     private val logger = useSlf4jLogger()

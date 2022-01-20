@@ -74,6 +74,11 @@ class SecurityConfiguration @Autowired constructor(
 
     override fun configure(http: HttpSecurity): Unit = http.run {
 
+        http.headers()
+            .contentTypeOptions()
+            .disable()
+            .frameOptions().disable()
+
         http.csrf().disable()
             .requestCache().requestCache(CustomRequestCache())
             .and().requestMatchers()

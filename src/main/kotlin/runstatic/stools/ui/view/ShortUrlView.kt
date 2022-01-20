@@ -13,11 +13,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.server.PWA
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
-import runstatic.stools.configuration.ApplicationProperties
+import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.service.ShortUrlService
 import runstatic.stools.util.VaadinProp
 import runstatic.stools.util.inputRight
@@ -35,7 +34,7 @@ import runstatic.stools.util.pointer
 @JsModule("./lib/copytoclipboard.js")
 class ShortUrlView @Autowired constructor(
     private val shortUrlService: ShortUrlService,
-    private val properties: ApplicationProperties
+    private val properties: SToolsProperties
 ) : KComposite() {
 
     // private val logger = useSlf4jLogger()

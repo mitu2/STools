@@ -20,7 +20,7 @@ import springfox.documentation.spring.web.plugins.Docket
 @Configuration
 @EnableOpenApi
 class SwaggerConfiguration @Autowired constructor(
-    private val properties: ApplicationProperties,
+    private val properties: SToolsProperties,
     private val buildProperties: BuildProperties
 ) {
 

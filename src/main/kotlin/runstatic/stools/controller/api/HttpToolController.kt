@@ -1,4 +1,4 @@
-package runstatic.stools.controller
+package runstatic.stools.controller.api
 
 import org.hibernate.validator.constraints.Range
 import org.hibernate.validator.constraints.URL

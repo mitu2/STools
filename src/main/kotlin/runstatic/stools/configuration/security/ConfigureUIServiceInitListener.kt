@@ -6,12 +6,12 @@ import com.vaadin.flow.server.UIInitEvent
 import com.vaadin.flow.server.VaadinServiceInitListener
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import runstatic.stools.configuration.ApplicationProperties
+import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.util.SecurityUtils
 
 @Component
 class ConfigureUIServiceInitListener @Autowired constructor(
-    private val properties: ApplicationProperties
+    private val properties: SToolsProperties
 ) : VaadinServiceInitListener {
 
     override fun serviceInit(event: ServiceInitEvent) {

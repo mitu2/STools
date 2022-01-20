@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * @author chenmoand
  */
 @ConfigurationProperties(prefix = "stools")
-class ApplicationProperties {
+class SToolsProperties {
 
     var baseUrl: String = DEFAULT_BASE_UTL
 

@@ -2,8 +2,6 @@ package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
 import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.notification.Notification
@@ -11,16 +9,12 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.server.InputStreamFactory
-import com.vaadin.flow.server.StreamResource
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
-import okhttp3.internal.closeQuietly
 import org.springframework.beans.factory.annotation.Autowired
-import runstatic.stools.configuration.ApplicationProperties
+import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.util.pageLayout
 import runstatic.stools.util.pointer
-import java.io.ByteArrayOutputStream
 
 
 /**
@@ -32,7 +26,7 @@ import java.io.ByteArrayOutputStream
 @UIScope
 @SpringComponent
 class BarcodeView @Autowired constructor(
-    private val properties: ApplicationProperties
+    private val properties: SToolsProperties
 ) : KComposite() {
 
     private var content = ""

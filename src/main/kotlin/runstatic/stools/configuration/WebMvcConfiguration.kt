@@ -15,7 +15,7 @@ import runstatic.stools.logging.useSlf4jLogger
 @Configuration
 // @EnableWebMvc
 class WebMvcConfiguration @Autowired constructor(
-    private val properties: ApplicationProperties
+    private val properties: SToolsProperties
 ) : WebMvcConfigurer {
 
     private val logger = useSlf4jLogger()
