@@ -28,9 +28,7 @@ class WebDocController @Autowired constructor(
         val servletOutputStream = response.outputStream
         val pathSplit = request.requestURI.split("/${group}@${artifactId}@${version}", "/${group}@${artifactId}")
         var path = if (pathSplit.size > 1) pathSplit[1] else "index.html"
-        if(path == "/") {
-            path ="index.html"
-        }
+
         if (path.startsWith("/")) {
             path = path.substring(1)
         }
