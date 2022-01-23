@@ -34,7 +34,7 @@ fun terminate(
     httpStatus: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
     block: ServiceNotCompletedInfo.() -> Unit = {}
 ): Nothing {
-    val result = ServiceNotCompletedInfo()
+    val result = ServiceNotCompletedInfo(code = httpStatus.value(), message = httpStatus.reasonPhrase)
     result.block()
     throw ServiceNotCompletedException(result, httpStatus)
 }

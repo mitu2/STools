@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import runstatic.stools.logging.info
 import runstatic.stools.logging.useSlf4jLogger
+import java.net.URLConnection
+import java.nio.file.Files
+import java.nio.file.Paths
 
 /**
  *
@@ -20,8 +23,13 @@ internal class WebDocServiceImplTest {
 
     @Test
     fun testGetMavenLatestVersion() {
-        val latestVersion = webDocServiceImpl.getMavenLatestVersion("org.springframework", "spring-aop")
+        val latestVersion = webDocServiceImpl.getLatestVersion("spring","org.springframework", "spring-aop")
         logger.info { latestVersion }
     }
 
+    @Test
+    fun testGetFileMineType() {
+        logger.info(URLConnection.guessContentTypeFromName("css/style.css"))
+        logger.info(Files.probeContentType(Paths.get("css/style.css")))
+    }
 }

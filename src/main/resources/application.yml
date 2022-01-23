@@ -29,3 +29,12 @@ logging:
     path: ${stools.work-folder}/logs
 stools:
   work-folder: ${user.home}/.STools
+  web-doc-resources:
+    maven: ${stools.web-doc-resources.central}
+    central: https://maven.aliyun.com/repository/central
+    public: https://maven.aliyun.com/repository/public
+    google: https://maven.aliyun.com/repository/google
+    gradle-plugin: https://maven.aliyun.com/repository/gradle-plugin
+    spring: https://maven.aliyun.com/repository/spring
+    grails-core: https://maven.aliyun.com/repository/grails-core
+    apache-snapshots: https://maven.aliyun.com/repository/apache-snapshots

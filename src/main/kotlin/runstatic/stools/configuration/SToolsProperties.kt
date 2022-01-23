@@ -13,6 +13,8 @@ class SToolsProperties {
 
     var workFolder: String = DEFAULT_WORK_FOLDER
 
+    var webDocResources = hashMapOf<String, String>()
+
     companion object {
         private val USER_DIR: String = System.getProperty("user.home")
         val DEFAULT_WORK_FOLDER = "${USER_DIR}/.STools"

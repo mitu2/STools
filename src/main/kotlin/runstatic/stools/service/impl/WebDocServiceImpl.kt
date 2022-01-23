@@ -1,12 +1,15 @@
 package runstatic.stools.service.impl
 
+import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.service.WebDocService
+import runstatic.stools.service.exception.terminate
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -16,22 +19,29 @@ import java.util.jar.JarFile
 @Service
 class WebDocServiceImpl @Autowired constructor(
     private val restTemplate: RestTemplate,
-    private val properties: SToolsProperties,
+    private val sToolsProperties: SToolsProperties,
 ) : WebDocService {
 
-    override fun getLatestVersion(type: String, group: String, artifactId: String): String =
-        when (type) {
-            "maven" -> getMavenLatestVersion(group, artifactId)
-            else -> throw RuntimeException("not found $type : $group")
-        }
-
-
-    fun getMavenLatestVersion(group: String, artifactId: String): String {
-        val url = "${MAVEN_BASE_URL}/${group.replace(".", "/")}/${artifactId}/maven-metadata.xml"
-        val document = Jsoup.connect(url).get()
-        return document.select("metadata > versioning > latest").html()
+    private fun getResourceUrl(type: String) = sToolsProperties.webDocResources[type] ?: terminate(HttpStatus.BAD_REQUEST) {
+        message = "Not support type: $type, Please use ${sToolsProperties.webDocResources.keys}"
     }
 
+    override fun getLatestVersion(type: String, group: String, artifactId: String): String {
+        val resourceUrl = getResourceUrl(type)
+        val url = "${resourceUrl}/${group.replace(".", "/")}/${artifactId}/maven-metadata.xml"
+        try {
+            val document = Jsoup.connect(url).get()
+            return document.select("metadata > versioning > latest").html()
+        } catch (e: HttpStatusException) {
+            terminate(HttpStatus.valueOf(e.statusCode)) {
+                message = e.message ?: "Error"
+            }
+        } catch (e: Exception) {
+            terminate {
+                message = e.message ?: "Error"
+            }
+        }
+    }
 
     override fun getDocInputStream(
         type: String,
@@ -39,27 +49,28 @@ class WebDocServiceImpl @Autowired constructor(
         artifactId: String,
         version: String,
         path: String
-    ): InputStream =
-        when (type) {
-            "maven" -> getMavenDocInputStream(group, artifactId, version, path)
-            else -> throw RuntimeException("not found $type : $group")
-        }
-
-    fun getMavenDocInputStream(group: String, artifactId: String, version: String, path: String): InputStream {
+    ): InputStream {
+        val resourceUrl = getResourceUrl(type)
         val groupPath = group.replace(".", "/")
         val reqPath = "${groupPath}/${artifactId}/${version}/${artifactId}-${version}-javadoc.jar";
-        val file = File("${properties.workFolder}/web-doc/${reqPath}")
-        val dir = file.parentFile
-        if (!dir.exists()) {
-            dir.mkdirs()
+        val file = File("${sToolsProperties.workFolder}/web-doc/${reqPath}")
+        with (file.parentFile) {
+            !exists() && mkdir()
         }
-        if (!file.exists() && !REQ_CACHE.contains(reqPath)) {
+
+        if (!file.exists()) {
+            if (REQ_CACHE.contains(reqPath)) {
+                terminate(HttpStatus.RESET_CONTENT)
+            }
             REQ_CACHE.add(reqPath)
             try {
-                val url = "${MAVEN_BASE_URL}/${reqPath}"
-                restTemplate.execute(url, HttpMethod.GET, { req ->
-                    // req.headers.set("Range", String.format("bytes=%d-%d", 0, Long.MAX_VALUE))
-                }, { resp ->
+                val url = "${resourceUrl}/${reqPath}"
+                restTemplate.execute(url, HttpMethod.GET, {}, { resp ->
+                    if (resp.statusCode == HttpStatus.NOT_FOUND) {
+                        terminate(HttpStatus.NOT_FOUND) {
+                            message = "Not Found $reqPath"
+                        }
+                    }
                     resp.body.use {
                         file.createNewFile()
                         val fileOutputStream = FileOutputStream(file)
@@ -72,13 +83,16 @@ class WebDocServiceImpl @Autowired constructor(
             }
 
         }
+
         return JarFile(file).run {
-            getInputStream(getJarEntry(path))
+            getInputStream(
+                getJarEntry(path) ?: terminate(HttpStatus.NOT_FOUND)
+            )
         }
     }
 
+
     companion object {
-        const val MAVEN_BASE_URL = "https://maven.aliyun.com/repository/central"
         val REQ_CACHE: MutableList<String> = Collections.synchronizedList(arrayListOf<String>())
     }
 
