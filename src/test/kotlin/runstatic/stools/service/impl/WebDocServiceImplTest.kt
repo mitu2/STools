@@ -31,5 +31,6 @@ internal class WebDocServiceImplTest {
     fun testGetFileMineType() {
         logger.info(URLConnection.guessContentTypeFromName("css/style.css"))
         logger.info(Files.probeContentType(Paths.get("css/style.css")))
+        logger.info(Files.probeContentType(Paths.get("index.html")))
     }
 }
