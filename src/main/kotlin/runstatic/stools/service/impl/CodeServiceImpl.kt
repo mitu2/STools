@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 import runstatic.stools.entity.table.CodeTable
 import runstatic.stools.repository.CodeRepository
 import runstatic.stools.service.CodeService
-import runstatic.stools.util.useSlf4jLogger
+import runstatic.stools.logging.useSlf4jLogger
 
 
 @Service

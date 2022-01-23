@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+/webpack.config.js
+/webpack.generated.js
+/node_modules/
+/package.json
+/target/
+/package-lock.json

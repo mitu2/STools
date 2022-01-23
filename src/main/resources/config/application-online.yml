@@ -1,3 +1,5 @@
+stools:
+  base-url: https://static.run
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -10,5 +12,16 @@ spring:
     cache: true
   jpa:
     open-in-view: false
+    hibernate:
+      ddl-auto: update
   devtools:
     add-properties: false
+vaadin:
+  servlet:
+    productionMode: true
+logging:
+  level:
+    # root: warn
+    web: debug
+    runstatic:
+      stools: info

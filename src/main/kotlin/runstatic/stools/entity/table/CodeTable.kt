@@ -13,7 +13,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "code", indexes = [Index(name = "uuid_index", columnList = "uuid", unique = true)])
 class CodeTable(
-    id: Long?,
     @Column(name = "uuid", length = 32, nullable = false)
     @ColumnDefault("''")
     override var uuid: String = "",
@@ -25,6 +24,4 @@ class CodeTable(
     @Version
     @Column(name = "version", nullable = false)
     override var version: Int = 0,
-    createTime: LocalDateTime = LocalDateTime.now(),
-    updateTime: LocalDateTime = LocalDateTime.now(),
-) : BaseTable<Long>(id, createTime, updateTime), Code
+) : BaseTable<Long>(), Code

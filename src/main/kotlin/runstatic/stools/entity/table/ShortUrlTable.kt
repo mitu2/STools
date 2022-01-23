@@ -15,14 +15,10 @@ import javax.persistence.Table
 @Entity
 @Table(name = "short_url", indexes = [Index(name = "router_index", columnList = "router", unique = true)])
 class ShortUrlTable(
-    id: Long?,
-    @Column(name = "url", nullable = false)
+    @Column(name = "url", nullable = false, length = 5000)
     override var url: String,
     @Column(name = "router", nullable = false, length = 25)
     override var router: String,
     @Column(name = "expireDate")
-    override var expireDate: LocalDateTime?,
-    createTime: LocalDateTime,
-    updateTime: LocalDateTime
-) :
-    BaseTable<Long>(id, createTime, updateTime), ShortUrl
+    override var expireDate: LocalDateTime? = null,
+) : BaseTable<Long>(), ShortUrl

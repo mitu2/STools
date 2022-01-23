@@ -1,0 +1,61 @@
+
+.footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 50px;
+    font-size: 14px;
+    color: #999;
+    margin-top: 0 !important;
+}
+
+.footer-inner {
+    box-sizing: border-box;
+    margin: 20px auto;
+    width: 700px;
+    text-align: center;
+}
+
+.police-badge {
+    width: 15px;
+    height: 15px;
+}
+
+.footer-item-inline + .footer-item-inline {
+    margin-left: 15px;
+}
+
+a {
+    color: #555;
+    text-decoration: none;
+    outline: none;
+    border-bottom: 1px solid #999;
+    word-wrap: break-word;
+}
+
+a {
+    background-color: transparent;
+}
+
+/*a:-webkit-any-link {*/
+/*    color: -webkit-link;*/
+/*    cursor: pointer;*/
+/*    text-decoration: underline;*/
+/*}*/
+
+a:hover {
+    color: #222;
+    border-bottom-color: #222;
+    text-decoration: none;
+}
+
+html, body {
+    height: 100%;
+}
+
+@media (max-width: 767px) {
+    .footer-inner {
+        width: auto;
+    }
+}

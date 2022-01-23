@@ -1,7 +1,8 @@
-
+stools:
+  base-url: http://localhost:${server.port}
 spring:
   datasource:
-    url: jdbc:mysql://local.static.run:3306/stools?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://127.0.0.1:3306/stools?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -27,5 +28,5 @@ logging:
   level:
     # root: warn
     web: debug
-    run:
-      static: debug
+    runstatic:
+      stools: debug
