@@ -24,6 +24,7 @@ springfox:
         enabled: true
 vaadin:
   pnpm-enabled: false
+  url-mapping: /v/*
 logging:
   file:
     path: ${stools.work-folder}/logs
