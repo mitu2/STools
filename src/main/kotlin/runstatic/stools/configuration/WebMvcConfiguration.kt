@@ -31,7 +31,7 @@ class WebMvcConfiguration @Autowired constructor(
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
 
-        registry.addResourceHandler(*WebDocResourceResolver.PATH_PATTERNS)
+        registry.addResourceHandler("/web-doc/**")
             .resourceChain(true)
             .addResolver(webDocResourceResolver)
 
