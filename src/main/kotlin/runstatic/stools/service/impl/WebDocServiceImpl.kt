@@ -3,18 +3,22 @@ package runstatic.stools.service.impl
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.FileUrlResource
+import org.springframework.core.io.Resource
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.util.ResourceUtils
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import runstatic.stools.configuration.SToolsProperties
+import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.service.WebDocService
 import runstatic.stools.service.exception.terminate
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.*
-import java.util.jar.JarFile
 
 @Service
 class WebDocServiceImpl @Autowired constructor(
@@ -22,9 +26,12 @@ class WebDocServiceImpl @Autowired constructor(
     private val sToolsProperties: SToolsProperties,
 ) : WebDocService {
 
-    private fun getResourceUrl(type: String) = sToolsProperties.webDocResources[type] ?: terminate(HttpStatus.BAD_REQUEST) {
-        message = "Not support type: $type, Please use ${sToolsProperties.webDocResources.keys}"
-    }
+    private val logger = useSlf4jLogger();
+
+    private fun getResourceUrl(type: String) =
+        sToolsProperties.webDocResources[type] ?: terminate(HttpStatus.BAD_REQUEST) {
+            message = "Not support type: $type, Please use ${sToolsProperties.webDocResources.keys}"
+        }
 
     override fun getLatestVersion(type: String, group: String, artifactId: String): String {
         val resourceUrl = getResourceUrl(type)
@@ -49,28 +56,32 @@ class WebDocServiceImpl @Autowired constructor(
         artifactId: String,
         version: String,
         path: String
-    ): InputStream {
+    ): InputStream = getDocResource(type, group, artifactId, version, path).inputStream
+
+
+    override fun getDocResource(
+        type: String,
+        group: String,
+        artifactId: String,
+        version: String,
+        path: String
+    ): Resource {
         val resourceUrl = getResourceUrl(type)
         val groupPath = group.replace(".", "/")
         val reqPath = "${groupPath}/${artifactId}/${version}/${artifactId}-${version}-javadoc.jar";
-        val file = File("${sToolsProperties.workFolder}/web-doc/${reqPath}")
-        with (file.parentFile) {
+        val jarPath = "${sToolsProperties.workFolder}/web-doc/${reqPath}"
+        val file = File(jarPath)
+        with(file.parentFile) {
             !exists() && mkdir()
         }
-
+        if (REQ_CACHE.contains(reqPath)) {
+            terminate(HttpStatus.RESET_CONTENT)
+        }
         if (!file.exists()) {
-            if (REQ_CACHE.contains(reqPath)) {
-                terminate(HttpStatus.RESET_CONTENT)
-            }
-            REQ_CACHE.add(reqPath)
             try {
+                REQ_CACHE.add(reqPath)
                 val url = "${resourceUrl}/${reqPath}"
                 restTemplate.execute(url, HttpMethod.GET, {}, { resp ->
-                    if (resp.statusCode == HttpStatus.NOT_FOUND) {
-                        terminate(HttpStatus.NOT_FOUND) {
-                            message = "Not Found $reqPath"
-                        }
-                    }
                     resp.body.use {
                         file.createNewFile()
                         val fileOutputStream = FileOutputStream(file)
@@ -78,17 +89,14 @@ class WebDocServiceImpl @Autowired constructor(
                         fileOutputStream.close()
                     }
                 })
+            } catch (e: RestClientException) {
+                logger.debug(e.message, e)
+                terminate {  }
             } finally {
                 REQ_CACHE.remove(reqPath)
             }
-
         }
-
-        return JarFile(file).run {
-            getInputStream(
-                getJarEntry(path) ?: terminate(HttpStatus.NOT_FOUND)
-            )
-        }
+        return FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}"))
     }
 
 

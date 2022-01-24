@@ -10,6 +10,7 @@ import java.net.URLConnection
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import javax.activation.MimetypesFileTypeMap
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -30,38 +31,31 @@ class WebDocController @Autowired constructor(
         @PathVariable artifactId: String, @PathVariable version: String
     ) = "redirect:/web-doc/${type}/${group}:${artifactId}:${version}/index.html"
 
-    @RequestMapping(path = ["{type}/{group}:{artifactId}:{version}/**"])
-    fun docHtml(
-        request: HttpServletRequest, response: HttpServletResponse,
-        @PathVariable type: String, @PathVariable group: String,
-        @PathVariable artifactId: String, @PathVariable version: String,
-    ) {
-        val servletOutputStream = response.outputStream
-        val pathSplit = request.requestURI.split("/${group}:${artifactId}:${version}", "/${group}:${artifactId}")
-        var path = if (pathSplit.size > 1) pathSplit[1] else "index.html"
-
-        if (path == "/") {
-            path = "index.html"
-        }
-        if (path.startsWith("/")) {
-            path = path.substring(1)
-        }
-        webDocService.getDocInputStream(type, group, artifactId, version, path)
-            .use {
-                it.copyTo(servletOutputStream)
-                servletOutputStream.flush()
-            }
-        response.addHeader("Cache-Control", "max-age=604800")
-        response.addHeader("content-type", getFileContentType(path))
-    }
-
-    private fun getFileContentType(path: String): String {
-        return try {
-            Files.probeContentType(Paths.get(path))
-        } catch (e: Exception) {
-            "text/plain"
-        }
-    }
+    // @RequestMapping(path = ["{type}/{group}:{artifactId}:{version}/**"])
+    // fun docHtml(
+    //     request: HttpServletRequest, response: HttpServletResponse,
+    //     @PathVariable type: String, @PathVariable group: String,
+    //     @PathVariable artifactId: String, @PathVariable version: String,
+    // ) {
+    //     val servletOutputStream = response.outputStream
+    //     val pathSplit = request.requestURI.split("/${group}:${artifactId}:${version}", "/${group}:${artifactId}")
+    //     var path = if (pathSplit.size > 1) pathSplit[1] else "index.html"
+    //
+    //     if (path == "/") {
+    //         path = "index.html"
+    //     }
+    //     if (path.startsWith("/")) {
+    //         path = path.substring(1)
+    //     }
+    //     webDocService.getDocInputStream(type, group, artifactId, version, path)
+    //         .use {
+    //             it.copyTo(servletOutputStream)
+    //             response.setHeader("Cache-Control", "max-age=604800")
+    //             response.setHeader("Content-Type", getFileContentType(path))
+    //             response.flushBuffer()
+    //             servletOutputStream.flush()
+    //         }
+    // }
 
 
     @RequestMapping(path = ["{type}/{group}:{artifactId}"])
@@ -70,14 +64,14 @@ class WebDocController @Autowired constructor(
         @PathVariable artifactId: String
     ) = "redirect:/web-doc/${type}/${group}:${artifactId}/index.html"
 
-    @RequestMapping(path = ["{type}/{group}:{artifactId}/**"])
-    fun docLatestHtml(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        @PathVariable type: String,
-        @PathVariable group: String,
-        @PathVariable artifactId: String
-    ) = docHtml(request, response, type, group, artifactId, webDocService.getLatestVersion(type, group, artifactId))
+    // @RequestMapping(path = ["{type}/{group}:{artifactId}/**"])
+    // fun docLatestHtml(
+    //     request: HttpServletRequest,
+    //     response: HttpServletResponse,
+    //     @PathVariable type: String,
+    //     @PathVariable group: String,
+    //     @PathVariable artifactId: String
+    // ) = docHtml(request, response, type, group, artifactId, webDocService.getLatestVersion(type, group, artifactId))
 
 
 }
