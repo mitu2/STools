@@ -2,6 +2,7 @@ package runstatic.stools.configuration.webdoc
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.Resource
+import org.springframework.lang.Nullable
 import org.springframework.stereotype.Component
 import org.springframework.util.AntPathMatcher
 import org.springframework.web.servlet.resource.ResourceResolver
@@ -26,9 +27,14 @@ class WebDocResourceResolver @Autowired constructor(
         chain: ResourceResolverChain
     ): Resource? {
         if (request == null) {
-            return null
+            return chain.resolveResource(null, requestPath, locations)
         }
-        val params = PATH_MATCHER.extractUriTemplateVariables(PATTERN_1, request.requestURI)
+
+        val params = try {
+            PATH_MATCHER.extractUriTemplateVariables(PATTERN_1, request.requestURI)
+        } catch (e: IllegalStateException) {
+            PATH_MATCHER.extractUriTemplateVariables(PATTERN_2, request.requestURI)
+        }
         val type = params["type"] ?: terminate()
         val group = params["group"] ?: terminate()
         val artifactId = params["artifactId"] ?: terminate()

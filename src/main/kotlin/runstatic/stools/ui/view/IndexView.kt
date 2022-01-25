@@ -45,7 +45,7 @@ class IndexView : KComposite() {
     }
 
     init {
-        UI.getCurrent().page.executeJs("setTimeout(() => window.location.href='/chenmoand', 1500)")
+        UI.getCurrent().page.executeJs("setTimeout(() => window.location.href='/ui/chenmoand', 1500)")
     }
 
 

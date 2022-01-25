@@ -29,7 +29,7 @@ repositories {
     mavenCentral()
 }
 
-extra["vaadinVersion"] = "14.7.3"
+extra["vaadinVersion"] = "22.0.4"
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
@@ -40,11 +40,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.springframework.session:spring-session-core:2.5.2")
-    implementation("com.vaadin:vaadin-spring-boot-starter:21.0.4")
+    implementation("org.springframework.session:spring-session-core:2.6.1")
+    implementation("com.vaadin:vaadin-spring-boot-starter:22.0.2")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("mysql:mysql-connector-java:8.0.25")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
