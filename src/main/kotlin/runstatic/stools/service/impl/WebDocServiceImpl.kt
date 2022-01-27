@@ -91,12 +91,17 @@ class WebDocServiceImpl @Autowired constructor(
                 })
             } catch (e: RestClientException) {
                 logger.debug(e.message, e)
-                terminate {  }
+                terminate()
             } finally {
                 REQ_CACHE.remove(reqPath)
             }
         }
-        return FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}"))
+        return with(FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}"))) {
+            if (!exists()) {
+                terminate(HttpStatus.NOT_FOUND)
+            }
+            this
+        }
     }
 
 

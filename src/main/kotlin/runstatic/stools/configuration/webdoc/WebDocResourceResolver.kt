@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component
 import org.springframework.util.AntPathMatcher
 import org.springframework.web.servlet.resource.ResourceResolver
 import org.springframework.web.servlet.resource.ResourceResolverChain
+import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.service.WebDocService
+import runstatic.stools.service.exception.ServiceNotCompletedException
 import runstatic.stools.service.exception.terminate
 import javax.servlet.http.HttpServletRequest
 
@@ -19,6 +21,8 @@ import javax.servlet.http.HttpServletRequest
 class WebDocResourceResolver @Autowired constructor(
     private val webDocService: WebDocService
 ) : ResourceResolver {
+
+    private val logger = useSlf4jLogger();
 
     override fun resolveResource(
         request: HttpServletRequest?,
@@ -51,7 +55,14 @@ class WebDocResourceResolver @Autowired constructor(
         if (path.startsWith("/")) {
             path = path.substring(1)
         }
-        return webDocService.getDocResource(type, group, artifactId, version, path)
+        return try {
+            webDocService.getDocResource(type, group, artifactId, version, path)
+        } catch (e: ServiceNotCompletedException) {
+            if (logger.isDebugEnabled) {
+                logger.debug("Get $type resource $group:$artifactId:$version find file $path not found!")
+            }
+            null
+        }
     }
 
     override fun resolveUrlPath(
