@@ -1,4 +1,4 @@
-package runstatic.stools.ui.view
+package runstatic.stools.ui.view.admin
 
 import com.github.mvysny.karibudsl.v10.KComposite
 import com.github.mvysny.karibudsl.v10.flexLayout
@@ -10,7 +10,6 @@ import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
-import runstatic.stools.ui.component.PageFooter
 import runstatic.stools.util.pageLayout
 
 
