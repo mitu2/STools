@@ -68,7 +68,9 @@ class SecurityConfiguration @Autowired constructor(
             "/offline-page.html",
             "/frontend/**",
             "/webjars/**",
-            "/frontend-es5/**", "/frontend-es6/**"
+            "/frontend-es5/**",
+            "/frontend-es6/**",
+            "/web-doc/**"
         );
     }
 

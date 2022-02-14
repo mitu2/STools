@@ -16,8 +16,7 @@ class SToolsProperties {
     var webDocResources = hashMapOf<String, String>()
 
     companion object {
-        private val USER_DIR: String = System.getProperty("user.home")
-        val DEFAULT_WORK_FOLDER = "${USER_DIR}/.STools"
+        val DEFAULT_WORK_FOLDER = "${System.getProperty("user.home")}/.STools"
         const val DEFAULT_BASE_UTL = "https://static.run"
     }
 }

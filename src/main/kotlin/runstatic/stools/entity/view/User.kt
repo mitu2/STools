@@ -1,8 +1,8 @@
 package runstatic.stools.entity.view
 
 import org.hibernate.validator.constraints.Range
-import runstatic.stools.constant.RegexpConsts.ACCOUNT_REGEXP
-import runstatic.stools.constant.RegexpConsts.PASSWORD_REGEXP
+import runstatic.stools.constant.RegexpCosts.ACCOUNT_REGEXP
+import runstatic.stools.constant.RegexpCosts.PASSWORD_REGEXP
 import runstatic.stools.constant.ValidGroups
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
