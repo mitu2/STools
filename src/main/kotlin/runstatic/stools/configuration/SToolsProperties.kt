@@ -15,6 +15,18 @@ class SToolsProperties {
 
     var webDocResources = hashMapOf<String, String>()
 
+    var vaadinBaseUrl: String = "/"
+
+    var admin: Admin = Admin()
+
+
+    data class Admin(
+        var enabled: Boolean = false,
+        var username: String = "",
+        var password: String = "",
+        var email: String = ""
+    )
+
     companion object {
         val DEFAULT_WORK_FOLDER = "${System.getProperty("user.home")}/.STools"
         const val DEFAULT_BASE_UTL = "https://static.run"

@@ -34,4 +34,5 @@ object SecurityUtils {
         return (authentication != null && authentication !is AnonymousAuthenticationToken
                 && authentication.isAuthenticated)
     }
+
 }

@@ -37,16 +37,16 @@ class BarcodeToolController {
                 /* @see https://stackoverflow.com/questions/14019012/how-to-remove-white-space-on-side-qr-code-using-zxing */
                 mapOf(EncodeHintType.MARGIN to 0)
             )
-        val outputStream = ByteArrayOutputStream()
-        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream)
-        return outputStream.toByteArray()
+        return ByteArrayOutputStream().apply {
+            MatrixToImageWriter.writeToStream(bitMatrix, "PNG", this)
+        }.toByteArray()
     }
 
 
-    data class GenerateParam constructor(
+    class GenerateParam constructor(
         @field:NotBlank
         var text: String,
-        var type: BarcodeFormat? = BarcodeFormat.QR_CODE,
+        var type: BarcodeFormat = BarcodeFormat.QR_CODE,
         @field:Range(min = 20, max = 4096)
         var width: Int = 200,
         @field:Range(min = 20, max = 4096)

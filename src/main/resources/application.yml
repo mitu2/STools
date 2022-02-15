@@ -24,12 +24,18 @@ springfox:
         enabled: true
 vaadin:
   pnpm-enabled: false
-  urlMapping: /ui/*
+  urlMapping: ${stools.vaadin-base-url}/*
 logging:
   file:
     path: ${stools.work-folder}/logs
 stools:
+  admin:
+    enabled: true
+    username: chenmoand
+    password: chenmoand
+    email: chenmoand@outlook.com
   work-folder: ${user.home}/.STools
+  vaadin-base-url: /ui
   web-doc-resources:
     maven: ${stools.web-doc-resources.central}
     central: https://maven.aliyun.com/repository/central

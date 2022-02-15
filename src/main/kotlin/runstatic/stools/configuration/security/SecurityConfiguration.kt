@@ -30,8 +30,8 @@ import javax.sql.DataSource
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 class SecurityConfiguration @Autowired constructor(
     builder: Jackson2ObjectMapperBuilder,
-    private val userDetailsService: UserDetailsService,
-    private val dataSource: DataSource
+    private val dataSource: DataSource,
+    private val requestCache: CustomRequestCache
 ) : WebSecurityConfigurerAdapter() {
 
     private val mapper: ObjectMapper = builder.createXmlMapper(false).build()
@@ -82,7 +82,8 @@ class SecurityConfiguration @Autowired constructor(
             .frameOptions().disable()
 
         http.csrf().disable()
-            .requestCache().requestCache(CustomRequestCache())
+            .requestCache()
+            .requestCache(requestCache)
             .and().requestMatchers()
             .and().authorizeRequests()
             .antMatchers(HttpMethod.GET).permitAll()

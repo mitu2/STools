@@ -15,7 +15,7 @@ class ShortUrlServiceImpl @Autowired constructor(
 ) : ShortUrlService {
 
     @Cacheable(cacheNames = ["shortUrl:router"])
-    override fun findShortUrlByRouter(router: String) = shortUrlRepository.findByRouter(router)
+    override fun getShortUrlByRouter(router: String) = shortUrlRepository.findByRouter(router)
 
 
     @Transactional

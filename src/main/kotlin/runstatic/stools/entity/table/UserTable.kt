@@ -19,16 +19,16 @@ class UserTable(
     @Column(name = "account", length = 20, nullable = false)
     @ColumnDefault("''")
     override var account: String,
-    @Column(name = "nickname")
-    @ColumnDefault("''")
-    override var nickname: String,
-    @Column(name = "status", length = 1, nullable = false)
-    @ColumnDefault("1")
-    override var status: Int,
     @Column(name = "password", nullable = false)
     override var password: String,
+    @Column(name = "nickname")
+    @ColumnDefault("''")
+    override var nickname: String = "",
+    @Column(name = "status", length = 1, nullable = false)
+    @ColumnDefault("1")
+    override var status: Int = 1,
     @Column(name = "email")
-    override var email: String?,
+    override var email: String? = null,
 ) : BaseTable<Long>(), User {
 
 }

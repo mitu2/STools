@@ -42,10 +42,11 @@ class GlobalExceptionControllerAdapter @Autowired constructor(
         logger.error(exception.message, exception)
 
         val result = ServiceNotCompletedInfo(
+            code = 500,
             path = request.servletPath ?: ServiceNotCompletedInfo.DEFAULT_PATH,
             message = exception.message ?: ServiceNotCompletedInfo.DEFAULT_MESSAGE,
-
         )
+
         if (!environment.acceptsProfiles { it.test("online") }) {
             result.properties["exception"] = exception.javaClass.name
             result.properties["stacktrace"] = exception.stackTrace.map { it.toString() }

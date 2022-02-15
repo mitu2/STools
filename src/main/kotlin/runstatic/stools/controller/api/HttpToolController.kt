@@ -38,12 +38,12 @@ class HttpToolController @Autowired constructor(
         }
     }
 
-    data class RedirectParam(
+    class RedirectParam(
         @field:Range(min = 0, max = 15)
-        var cycle: Int? = 0,
-        @field:NotBlank
+        val cycle: Int? = 0,
         @field:URL
-        var to: String
+        @field:NotBlank
+        val to: String
     )
 
 }
