@@ -91,11 +91,12 @@ class BarcodeView @Autowired constructor(
             Notification.show("请输入内容后再点击制作", 3000, Notification.Position.TOP_CENTER)
             return
         }
-        if(imageWith <= 0 || imageHeight <= 0) {
+        if (imageWith <= 0 || imageHeight <= 0) {
             Notification.show("请输入正确的宽或高,范围是(20-4096)", 3000, Notification.Position.TOP_CENTER)
             return
         }
-        result.src = "${properties.baseUrl}/api/barcode?text=${content}&width=${imageWith}&height=${imageHeight}&type=${format}"
+        result.src =
+            "${properties.baseUrl}/api/barcode?text=${content}&width=${imageWith}&height=${imageHeight}&type=${format}"
         result.width = "${imageHeight}px"
         result.height = "${imageWith}px"
     }

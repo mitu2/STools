@@ -9,7 +9,7 @@ import runstatic.stools.entity.table.CodeTable
  * @author chenmoand
  */
 @Repository
-interface CodeRepository: JpaRepositoryImplementation<CodeTable, Long> {
+interface CodeRepository : JpaRepositoryImplementation<CodeTable, Long> {
 
     fun findByUuid(uuid: String): CodeTable?
 

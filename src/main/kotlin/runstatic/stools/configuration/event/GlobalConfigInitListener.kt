@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.math.NumberUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.event.ApplicationReadyEvent
-import org.springframework.boot.info.BuildProperties
 import org.springframework.context.ApplicationListener
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
 import org.springframework.stereotype.Component
 import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.constant.GlobalConfigKeys
@@ -26,11 +24,11 @@ import runstatic.stools.service.UserService
 class GlobalConfigInitListener @Autowired constructor(
     builder: Jackson2ObjectMapperBuilder,
     private val globalConfigService: GlobalConfigService,
-    private val jdbcTokenRepositoryImpl: JdbcTokenRepositoryImpl,
+//    private val jdbcTokenRepositoryImpl: JdbcTokenRepositoryImpl,
     private val properties: SToolsProperties,
     private val userService: UserService,
     private val passwordEncoder: PasswordEncoder,
-    private val buildProperties: BuildProperties
+//    private val buildProperties: BuildProperties
 ) : ApplicationListener<ApplicationReadyEvent> {
 
     private val logger = useSlf4jLogger()
@@ -41,21 +39,53 @@ class GlobalConfigInitListener @Autowired constructor(
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         doFirstEnableServer()
         recordServerStartNumber()
+        initAdmin()
     }
 
     fun doFirstEnableServer() {
         val isFirst = globalConfigService.getValue(GlobalConfigKeys.IS_FIRST, "true").toBoolean()
         if (isFirst) {
-            // jdbcTokenRepositoryImpl.jdbcTemplate?.execute(JdbcTokenRepositoryImpl.CREATE_TABLE_SQL)
-            // logger.info { "init JdbcTokenRepositoryImpl table persistent_logins" }
             globalConfigService[GlobalConfigKeys.IS_FIRST] = "false"
         }
-        var (enabled, username, password, email) = properties.admin
-        if (!enabled || userService.getUserByAccount(username) != null) {
+
+    }
+
+    fun initAdmin() {
+        val id = globalConfigService[GlobalConfigKeys.ADMIN_ID]?.toLongOrNull()
+
+        val (enabled, username, password, email) = properties.admin
+
+        var user: UserTable? = null
+
+
+        if (id == null || (userService.getUserById(id))?.apply { user = this } == null) {
+            globalConfigService[GlobalConfigKeys.ADMIN_ID] = userService.saveUser(
+                UserTable(
+                    account = username,
+                    password = passwordEncoder.encode(password),
+                    email = email,
+                    status = if (enabled) 1 else 2
+                )
+            ).id.toString()
             return
         }
-        password = passwordEncoder.encode(password)
-        userService.addUser(UserTable(account = username, password = password, email = email))
+
+        user?.let {
+            val isAdminNotEnabled = if (enabled) it.status != 1 else false
+            if (!passwordEncoder.matches(
+                    password,
+                    it.password
+                ) || it.email != email || it.account != username || isAdminNotEnabled
+            ) {
+                it.account = username
+                it.password = passwordEncoder.encode(password)
+                it.email = email
+                it.status = if (enabled) 1 else 2
+                userService.saveUser(it)
+            }
+        }
+
+
     }
 
     fun recordServerStartNumber() {

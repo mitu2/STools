@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 @UIScope
 class WebDocConfigView @Autowired constructor(
 
-): KComposite() {
+) : KComposite() {
 
 
 }

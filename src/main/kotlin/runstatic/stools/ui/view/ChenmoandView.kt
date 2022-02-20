@@ -3,7 +3,6 @@ package runstatic.stools.ui.view
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.formlayout.FormLayout
-import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route

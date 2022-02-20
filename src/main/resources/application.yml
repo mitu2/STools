@@ -31,8 +31,8 @@ logging:
 stools:
   admin:
     enabled: true
-    username: chenmoand
-    password: chenmoand
+    username: root
+    password: root
     email: chenmoand@outlook.com
   work-folder: ${user.home}/.STools
   vaadin-base-url: /ui

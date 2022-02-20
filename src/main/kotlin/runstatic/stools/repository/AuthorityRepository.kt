@@ -12,7 +12,8 @@ import runstatic.stools.entity.table.AuthorityTable
 @Repository
 interface AuthorityRepository : JpaRepositoryImplementation<AuthorityTable, Long> {
 
-    @Query("""FROM AuthorityTable AS at
+    @Query(
+        """FROM AuthorityTable AS at
         LEFT JOIN UserAuthorityTable AS urt 
         ON urt.authorityId = at.id
         AND urt.userId = :userId

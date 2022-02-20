@@ -2,7 +2,6 @@ package runstatic.stools.entity.table
 
 import runstatic.stools.entity.support.BaseTable
 import runstatic.stools.entity.view.Authority
-import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table

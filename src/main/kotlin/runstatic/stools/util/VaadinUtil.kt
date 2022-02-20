@@ -37,9 +37,9 @@ fun HasComponents.pageLayout(
 ): PageLayout = PageLayout(className, initCallback).also { this + it }
 
 
-operator fun <C: HasComponents> C.plus(component: Component) = apply { add(component) }
+operator fun <C : HasComponents> C.plus(component: Component) = apply { add(component) }
 
-operator fun <C: HasComponents> C.plus(text: String) = apply { add(text) }
+operator fun <C : HasComponents> C.plus(text: String) = apply { add(text) }
 
 
 fun Button.pointer() {

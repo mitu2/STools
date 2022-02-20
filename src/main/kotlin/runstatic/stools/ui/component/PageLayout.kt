@@ -23,13 +23,12 @@ class PageLayout(
 
     init {
         setId("app")
-        if(className != null) {
+        if (className != null) {
             addClassName(className)
         }
         initCallback(main)
         add(PageFooter())
     }
-
 
 
 }

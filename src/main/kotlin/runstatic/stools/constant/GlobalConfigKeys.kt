@@ -12,4 +12,6 @@ object GlobalConfigKeys {
 
     const val RUN_NUMBERS = "RUN_NUMBER"
 
+    const val ADMIN_ID = "ADMIN_ID"
+
 }

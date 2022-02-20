@@ -2,7 +2,6 @@ package runstatic.stools.configuration.webdoc
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.Resource
-import org.springframework.lang.Nullable
 import org.springframework.stereotype.Component
 import org.springframework.util.AntPathMatcher
 import org.springframework.web.servlet.resource.ResourceResolver
@@ -43,7 +42,7 @@ class WebDocResourceResolver @Autowired constructor(
         val group = params["group"] ?: terminate()
         val artifactId = params["artifactId"] ?: terminate()
         var version = params["version"]
-        if(version.isNullOrBlank()) {
+        if (version.isNullOrBlank()) {
             version = webDocService.getLatestVersion(type, group, artifactId)
         }
         val pathSplit = request.requestURI.split("/${group}:${artifactId}:${version}", "/${group}:${artifactId}")

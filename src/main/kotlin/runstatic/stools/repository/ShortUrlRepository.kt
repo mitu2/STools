@@ -9,7 +9,7 @@ import runstatic.stools.entity.table.ShortUrlTable
  * @author chenmoand
  */
 @Repository
-interface ShortUrlRepository: JpaRepositoryImplementation<ShortUrlTable, Long> {
+interface ShortUrlRepository : JpaRepositoryImplementation<ShortUrlTable, Long> {
 
     fun findByRouter(router: String): ShortUrlTable?
 

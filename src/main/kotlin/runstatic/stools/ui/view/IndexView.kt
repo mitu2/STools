@@ -7,14 +7,10 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.router.RouteAlias
-import com.vaadin.flow.server.PWA
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
-import runstatic.stools.logging.info
 import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.util.pageLayout
-import java.util.*
-import kotlin.concurrent.schedule
 
 /**
  *

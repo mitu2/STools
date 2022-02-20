@@ -2,14 +2,11 @@ package runstatic.stools.configuration.security
 
 import com.vaadin.flow.server.VaadinServletRequest
 import com.vaadin.flow.server.VaadinServletResponse
-import org.apache.commons.fileupload.servlet.ServletRequestContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.web.savedrequest.DefaultSavedRequest
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache
 import org.springframework.security.web.savedrequest.SavedRequest
 import org.springframework.stereotype.Component
-import org.springframework.web.context.request.RequestContextHolder
-import org.springframework.web.context.request.ServletRequestAttributes
 import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.ui.view.admin.LoginView

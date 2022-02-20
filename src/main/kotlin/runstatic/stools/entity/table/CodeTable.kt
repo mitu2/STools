@@ -1,9 +1,8 @@
 package runstatic.stools.entity.table
 
 import org.hibernate.annotations.ColumnDefault
-import runstatic.stools.entity.view.Code
 import runstatic.stools.entity.support.BaseTable
-import java.time.LocalDateTime
+import runstatic.stools.entity.view.Code
 import javax.persistence.*
 
 /**
