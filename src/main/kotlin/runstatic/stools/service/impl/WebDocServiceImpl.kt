@@ -72,7 +72,8 @@ class WebDocServiceImpl @Autowired constructor(
         val jarPath = "${sToolsProperties.workFolder}/web-doc/${reqPath}"
         val file = File(jarPath)
         with(file.parentFile) {
-            !exists() && mkdir()
+            // note: use mkdir() bug
+            !exists() && mkdirs()
         }
         if (REQ_CACHE.contains(reqPath)) {
             terminate(HttpStatus.RESET_CONTENT)
