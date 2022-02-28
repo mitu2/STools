@@ -19,7 +19,8 @@ class WebDocConfiguration @Autowired constructor(
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler(*WebDocResourceResolver.PATH_PATTERNS)
-            .resourceChain(true)
+            // note: fix cache bug
+            .resourceChain(false)
             .addResolver(webDocResourceResolver)
         logger.info { "load WebDocResourceResolver" }
     }
