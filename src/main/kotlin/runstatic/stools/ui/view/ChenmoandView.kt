@@ -40,18 +40,13 @@ class ChenmoandView : KComposite() {
                     textField(fieldState.label) {
                         value = fieldState.value
                         isReadOnly = true
-                        suffixComponent = button("Open", VaadinIcon.EYE.create()) {
+                        suffixComponent = button("See", VaadinIcon.EYE.create()) {
                             pointer()
                             inputRight()
                             onLeftClick { open(fieldState.url) }
                         }
                     }
                 }
-                textField("QQ Group") {
-                    value = "558504614"
-                    isReadOnly = true
-                }
-
             }
         }
     }

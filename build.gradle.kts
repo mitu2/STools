@@ -44,7 +44,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.session:spring-session-core:2.6.1")
-    implementation("com.vaadin:vaadin-spring-boot-starter:22.0.2")
+    implementation("com.vaadin:vaadin-spring-boot-starter:22.0.4")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("mysql:mysql-connector-java:8.0.25")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -58,6 +58,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.zxing/javase
     implementation("com.google.zxing:javase:3.4.1")
     implementation("io.springfox:springfox-boot-starter:3.0.0")
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
     // https://mvnrepository.com/artifact/com.github.mvysny.karibudsl/karibu-dsl
     implementation("com.github.mvysny.karibudsl:karibu-dsl:1.1.1")
 //    implementation("org.springframework.security:spring-security-config")

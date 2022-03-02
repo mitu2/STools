@@ -5,12 +5,14 @@ import com.vaadin.flow.server.ServiceInitEvent
 import com.vaadin.flow.server.UIInitEvent
 import com.vaadin.flow.server.VaadinServiceInitListener
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.ui.view.admin.LoginView
 import runstatic.stools.util.SecurityUtils
 
-@Component
+//@Component
+@Deprecated(
+    message = "See runstatic.stools.filter.LoginFilter",
+)
 class ConfigureUIServiceInitListener @Autowired constructor(
     private val properties: SToolsProperties
 ) : VaadinServiceInitListener {
@@ -32,7 +34,7 @@ class ConfigureUIServiceInitListener @Autowired constructor(
         val locationPath: String = event.location.path ?: ""
         if (locationPath.startsWith("admin") && !SecurityUtils.isUserLoggedIn()) {
             // @see https://vaadin.com/learn/tutorials/securing-your-app-with-spring-security/setting-up-spring-security
-             event.rerouteTo(LoginView::class.java)
+            event.rerouteTo(LoginView::class.java)
         }
     }
 }

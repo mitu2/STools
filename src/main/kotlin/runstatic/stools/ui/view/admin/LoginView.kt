@@ -2,6 +2,7 @@ package runstatic.stools.ui.view.admin
 
 import com.github.mvysny.karibudsl.v10.KComposite
 import com.github.mvysny.karibudsl.v10.flexLayout
+import com.github.mvysny.kaributools.currentViewLocation
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.login.LoginI18n
 import com.vaadin.flow.component.login.LoginOverlay
@@ -59,11 +60,15 @@ class LoginView @Autowired constructor(
 
     fun login(username: String, password: String) {
         try {
+            // TODO: replace request#login(username, password)
             val authentication: Authentication = authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken(username, password))
             SecurityContextHolder.getContext().authentication = authentication
             loginForm.close()
-            UI.getCurrent().navigate(requestCache.resolveRedirectUrl())
+
+            val location = UI.getCurrent().currentViewLocation
+            val from: String = location.queryParameters?.parameters?.get("from")?.get(0) ?: "/"
+            UI.getCurrent().page.setLocation(from)
         } catch (ex: AuthenticationException) {
             loginForm.isError = true
         }
