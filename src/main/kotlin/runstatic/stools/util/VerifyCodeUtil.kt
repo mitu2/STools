@@ -4,7 +4,6 @@ import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 /**
@@ -20,12 +19,13 @@ object VerifyCodeUtil {
         code: String = RandomStringUtil.randomString(4, 6)
     ): String {
         val graphics = image.graphics as Graphics2D
-        graphics.color = Color.WHITE //设置画笔颜色-验证码背景色
+        //设置画笔颜色-验证码背景色
+        graphics.color = Color.WHITE
         graphics.fillRect(0, 0, width, height) //填充背景
         graphics.font = Font("微软雅黑", Font.BOLD, 40)
         //数字和字母的组合
         var x = 10 //旋转原点的 x 坐标
-        val random = Random()
+        val random = ThreadLocalRandom.current()
         for (chr in code) {
             graphics.color = getRandomColor()
             //设置字体旋转角度
@@ -65,7 +65,8 @@ object VerifyCodeUtil {
         val ran = ThreadLocalRandom.current()
         return Color(
             ran.nextInt(256),
-            ran.nextInt(256), ran.nextInt(256)
+            ran.nextInt(256),
+            ran.nextInt(256)
         )
     }
 

@@ -50,14 +50,4 @@ class LoginFilter : Filter {
     }
 
 
-    @Bean
-    fun register(filter: LoginFilter): FilterRegistrationBean<LoginFilter> {
-        val registration: FilterRegistrationBean<LoginFilter> = FilterRegistrationBean<LoginFilter>()
-        registration.filter = filter
-        registration.addUrlPatterns("/*")
-        registration.order = Ordered.HIGHEST_PRECEDENCE
-        return registration
-
-    }
-
 }

@@ -14,11 +14,11 @@ import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.context.SecurityContextHolder
 import runstatic.stools.configuration.security.CustomRequestCache
 import runstatic.stools.util.pageLayout
+import javax.servlet.ServletException
 
 
 /**
@@ -31,7 +31,6 @@ import runstatic.stools.util.pageLayout
 @UIScope
 class LoginView @Autowired constructor(
     private val authenticationManager: AuthenticationManager,
-    private val requestCache: CustomRequestCache,
 ) : KComposite() {
 
     private val loginForm = LoginOverlay().apply {
@@ -60,18 +59,18 @@ class LoginView @Autowired constructor(
 
     fun login(username: String, password: String) {
         try {
-            // TODO: replace request#login(username, password)
-            val authentication: Authentication = authenticationManager
+            SecurityContextHolder.getContext().authentication = authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken(username, password))
-            SecurityContextHolder.getContext().authentication = authentication
-            loginForm.close()
-
-            val location = UI.getCurrent().currentViewLocation
-            val from: String = location.queryParameters?.parameters?.get("from")?.get(0) ?: "/"
+            val from: String = UI.getCurrent()
+                .currentViewLocation
+                .queryParameters?.parameters?.get("from")?.get(0) ?: "/"
             UI.getCurrent().page.setLocation(from)
         } catch (ex: AuthenticationException) {
             loginForm.isError = true
+        } catch (ex : ServletException) {
+            loginForm.isError = true
         }
+
     }
 
 

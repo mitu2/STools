@@ -16,6 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.*
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
+import org.springframework.security.web.context.SecurityContextPersistenceFilter
+import runstatic.stools.configuration.SToolsProperties
+import runstatic.stools.filter.LoginFilter
+import runstatic.stools.ui.view.admin.LoginView
 import runstatic.stools.util.SecurityUtils
 import javax.sql.DataSource
 
@@ -29,7 +33,9 @@ import javax.sql.DataSource
 class SecurityConfiguration @Autowired constructor(
     builder: Jackson2ObjectMapperBuilder,
     private val dataSource: DataSource,
-    private val requestCache: CustomRequestCache
+    private val loginFilter: LoginFilter,
+    private val requestCache: CustomRequestCache,
+    private val properties: SToolsProperties
 ) : WebSecurityConfigurerAdapter() {
 
     private val mapper: ObjectMapper = builder.createXmlMapper(false).build()
@@ -74,6 +80,8 @@ class SecurityConfiguration @Autowired constructor(
 
     override fun configure(http: HttpSecurity): Unit = http.run {
 
+        http.addFilterAfter(loginFilter, SecurityContextPersistenceFilter::class.java)
+
         http.headers()
             // .contentTypeOptions()
             // .disable()
@@ -87,14 +95,14 @@ class SecurityConfiguration @Autowired constructor(
             .antMatchers(HttpMethod.GET).permitAll()
             .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
             .anyRequest().authenticated()
-//            .and().formLogin().loginPage(LOGIN_URL).permitAll()
-//            .loginProcessingUrl(LOGIN_PROCESSING_URL)
+            .and().formLogin().loginPage(properties.vaadinBaseUrl + LoginView.ROUTE).permitAll()
+            .loginProcessingUrl(properties.vaadinBaseUrl)
 //            .failureUrl(LOGIN_FAILURE_URL) // Configure logout
 //            .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL)
 
     }
 
-    @Bean(name = ["myAuthenticationManager"])
+    @Bean
     @Throws(Exception::class)
     override fun authenticationManagerBean(): AuthenticationManager = super.authenticationManagerBean()
 
