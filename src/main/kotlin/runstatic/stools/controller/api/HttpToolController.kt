@@ -31,7 +31,6 @@ class HttpToolController @Autowired constructor(
         if (cycle == null || cycle <= 0) {
             viewName = "redirect:${param.to}"
         } else {
-
             viewName = "redirect:redirect"
             model["cycle"] = cycle - 1
             model["to"] = param.to
