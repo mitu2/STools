@@ -19,6 +19,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class WebDocServiceImpl @Autowired constructor(
@@ -75,26 +76,23 @@ class WebDocServiceImpl @Autowired constructor(
             // note: use mkdir() bug
             !exists() && mkdirs()
         }
-        if (REQ_CACHE.contains(reqPath)) {
-            terminate(HttpStatus.RESET_CONTENT)
-        }
         if (!file.exists()) {
             try {
-                REQ_CACHE.add(reqPath)
-                val url = "${resourceUrl}/${reqPath}"
-                restTemplate.execute(url, HttpMethod.GET, {}, { resp ->
-                    resp.body.use {
-                        file.createNewFile()
-                        val fileOutputStream = FileOutputStream(file)
-                        it.copyTo(fileOutputStream)
-                        fileOutputStream.close()
-                    }
-                })
+                synchronized(REQ_CACHE_MAP.computeIfAbsent(reqPath) { PathLockObject(it) }) {
+                    restTemplate.execute("${resourceUrl}/${reqPath}", HttpMethod.GET, {}, { resp ->
+                        resp.body.use {
+                            file.createNewFile()
+                            val fileOutputStream = FileOutputStream(file)
+                            it.copyTo(fileOutputStream)
+                            fileOutputStream.close()
+                        }
+                    })
+                }
             } catch (e: RestClientException) {
                 logger.debug(e.message, e)
                 terminate()
             } finally {
-                REQ_CACHE.remove(reqPath)
+                REQ_CACHE_MAP.remove(reqPath)
             }
         }
         return with(FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}"))) {
@@ -107,7 +105,9 @@ class WebDocServiceImpl @Autowired constructor(
 
 
     companion object {
-        val REQ_CACHE: MutableList<String> = Collections.synchronizedList(arrayListOf<String>())
+        val REQ_CACHE_MAP: ConcurrentHashMap<String, PathLockObject> = ConcurrentHashMap()
     }
+
+    data class PathLockObject(val path: String)
 
 }
