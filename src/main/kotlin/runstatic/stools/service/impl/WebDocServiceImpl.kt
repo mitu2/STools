@@ -18,7 +18,6 @@ import runstatic.stools.service.exception.terminate
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
@@ -76,23 +75,26 @@ class WebDocServiceImpl @Autowired constructor(
             // note: use mkdir() bug
             !exists() && mkdirs()
         }
-        if (!file.exists()) {
+        if (!file.exists() || REQ_CACHE_MAP[reqPath] != null) {
             try {
                 synchronized(REQ_CACHE_MAP.computeIfAbsent(reqPath) { PathLockObject(it) }) {
                     restTemplate.execute("${resourceUrl}/${reqPath}", HttpMethod.GET, {}, { resp ->
-                        resp.body.use {
-                            file.createNewFile()
-                            val fileOutputStream = FileOutputStream(file)
-                            it.copyTo(fileOutputStream)
-                            fileOutputStream.close()
+                        try {
+                            resp.body.use {
+                                file.createNewFile()
+                                val fileOutputStream = FileOutputStream(file)
+                                it.copyTo(fileOutputStream)
+                                fileOutputStream.close()
+                            }
+                        } finally {
+                            REQ_CACHE_MAP.remove(reqPath)
                         }
                     })
                 }
             } catch (e: RestClientException) {
                 logger.debug(e.message, e)
-                terminate()
-            } finally {
                 REQ_CACHE_MAP.remove(reqPath)
+                terminate()
             }
         }
         return with(FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}"))) {
