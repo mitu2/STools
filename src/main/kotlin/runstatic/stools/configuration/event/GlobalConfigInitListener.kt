@@ -1,6 +1,5 @@
 package runstatic.stools.configuration.event
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.math.NumberUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -15,6 +14,8 @@ import runstatic.stools.logging.info
 import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.service.GlobalConfigService
 import runstatic.stools.service.UserService
+import runstatic.stools.service.get
+import runstatic.stools.service.set
 
 /**
  *
@@ -33,32 +34,29 @@ class GlobalConfigInitListener @Autowired constructor(
 
     private val logger = useSlf4jLogger()
 
-    private val mapper: ObjectMapper = builder.createXmlMapper(false).build()
-
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        doFirstEnableServer()
+        setFirstEnableServer()
         recordServerStartNumber()
-        initAdmin()
+        loadAdminAccount()
     }
 
-    fun doFirstEnableServer() {
-        val isFirst = globalConfigService.getValue(GlobalConfigKeys.IS_FIRST, "true").toBoolean()
+    fun setFirstEnableServer() {
+        val isFirst: Boolean = globalConfigService[GlobalConfigKeys.IS_FIRST] ?: true
         if (isFirst) {
-            globalConfigService[GlobalConfigKeys.IS_FIRST] = "false"
+            globalConfigService[GlobalConfigKeys.IS_FIRST] = false
         }
 
     }
 
-    fun initAdmin() {
-        val id = globalConfigService[GlobalConfigKeys.ADMIN_ID]?.toLongOrNull()
+    fun loadAdminAccount() {
+        val id: Long? = globalConfigService[GlobalConfigKeys.ADMIN_ID]
 
         val (enabled, username, password, email) = properties.admin
+        val idIsNullCond: Boolean = id == null
+        val user: UserTable? = if(idIsNullCond) null else userService.getUserById(id!!)
 
-        var user: UserTable? = null
-
-
-        if (id == null || (userService.getUserById(id))?.apply { user = this } == null) {
+        if (idIsNullCond || user == null) {
             globalConfigService[GlobalConfigKeys.ADMIN_ID] = userService.saveUser(
                 UserTable(
                     account = username,
@@ -66,11 +64,11 @@ class GlobalConfigInitListener @Autowired constructor(
                     email = email,
                     status = if (enabled) 1 else 2
                 )
-            ).id.toString()
+            ).id
             return
         }
 
-        user?.let {
+        user.let {
             val isAdminNotEnabled = if (enabled) it.status != 1 else false
             if (!passwordEncoder.matches(
                     password,

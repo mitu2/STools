@@ -26,7 +26,7 @@ class WebDocServiceImpl @Autowired constructor(
     private val sToolsProperties: SToolsProperties,
 ) : WebDocService {
 
-    private val logger = useSlf4jLogger();
+    private val logger = useSlf4jLogger()
 
     private fun getResourceUrl(type: String) =
         sToolsProperties.webDocResources[type] ?: terminate(HttpStatus.BAD_REQUEST) {
@@ -40,10 +40,12 @@ class WebDocServiceImpl @Autowired constructor(
             val document = Jsoup.connect(url).get()
             return document.select("metadata > versioning > latest").html()
         } catch (e: HttpStatusException) {
+            logger.debug(e.message, e)
             terminate(HttpStatus.valueOf(e.statusCode)) {
                 message = e.message ?: "Error"
             }
         } catch (e: Exception) {
+            logger.debug(e.message, e)
             terminate {
                 message = e.message ?: "Error"
             }
@@ -78,30 +80,29 @@ class WebDocServiceImpl @Autowired constructor(
         if (!file.exists() || REQ_CACHE_MAP[reqPath] != null) {
             try {
                 synchronized(REQ_CACHE_MAP.computeIfAbsent(reqPath) { PathLockObject(it) }) {
+                    if (file.exists()) {
+                        return@synchronized
+                    }
                     restTemplate.execute("${resourceUrl}/${reqPath}", HttpMethod.GET, {}, { resp ->
-                        try {
-                            resp.body.use {
-                                file.createNewFile()
-                                val fileOutputStream = FileOutputStream(file)
-                                it.copyTo(fileOutputStream)
-                                fileOutputStream.close()
-                            }
-                        } finally {
-                            REQ_CACHE_MAP.remove(reqPath)
+                        resp.body.use {
+                            file.createNewFile()
+                            val fileOutputStream = FileOutputStream(file)
+                            it.copyTo(fileOutputStream)
+                            fileOutputStream.close()
                         }
                     })
                 }
             } catch (e: RestClientException) {
                 logger.debug(e.message, e)
-                REQ_CACHE_MAP.remove(reqPath)
                 terminate()
+            } finally {
+                REQ_CACHE_MAP.remove(reqPath)
             }
         }
-        return with(FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}"))) {
+        return FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}")).apply {
             if (!exists()) {
                 terminate(HttpStatus.NOT_FOUND)
             }
-            this
         }
     }
 
