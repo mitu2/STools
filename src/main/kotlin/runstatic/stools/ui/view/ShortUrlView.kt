@@ -143,6 +143,7 @@ class ShortUrlView @Autowired constructor(
 
         @Suppress("HttpUrlsUsage")
         const val DEFAULT_PROTOCOL = "http://"
+
     }
 
 }

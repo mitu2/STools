@@ -18,7 +18,7 @@ class SToolsProperties {
 
     var workFolder: String = NOT_SET
 
-    var webDocResources = hashMapOf<String, String>()
+    var webDocResources = linkedMapOf<String, String>()
 
     var vaadinBaseUrl: String = "/"
 

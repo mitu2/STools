@@ -17,16 +17,16 @@ import runstatic.stools.util.pageLayout
  * @author chenmoand
  */
 
-@Route("")
-@RouteAlias.Container(
-    value = [
-        RouteAlias("index"),
-        RouteAlias("index.html"),
-    ]
-)
-@PageTitle("Project Stools Readme - static.run")
-@SpringComponent
-@UIScope
+//@Route("")
+//@RouteAlias.Container(
+//    value = [
+//        RouteAlias("index"),
+//        RouteAlias("index.html"),
+//    ]
+//)
+//@PageTitle("Project Stools Readme - static.run")
+//@SpringComponent
+//@UIScope
 // @PWA(name = "Github Project Stools", shortName = "Stools")
 class IndexView : KComposite() {
 

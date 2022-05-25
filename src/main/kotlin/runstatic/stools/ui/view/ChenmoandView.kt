@@ -6,6 +6,7 @@ import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import runstatic.stools.util.inputRight
@@ -17,7 +18,14 @@ import runstatic.stools.util.pointer
  *
  * @author chenmoand
  */
-@Route("chenmoand")
+@Route("")
+@RouteAlias.Container(
+    value = [
+        RouteAlias("index"),
+        RouteAlias("index.html"),
+        RouteAlias("chenmoand")
+    ]
+)
 @CssImport("./css/chenmoand.css")
 @PageTitle("Author Chenmoand - static.run")
 @SpringComponent
