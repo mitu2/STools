@@ -139,8 +139,10 @@ class WebDocParseView @Autowired constructor(
 
 
     private fun onFocusVersion() {
-        if(cacheMavenConfig != null) {
-            if((cacheMavenConfig!!.repository == repository) && (cacheMavenConfig!!.groupId == groupId) && (cacheMavenConfig!!.artifactId == artifactId)) {
+        val letCacheMavenConfig = cacheMavenConfig
+
+        if(letCacheMavenConfig != null) {
+            if((letCacheMavenConfig.repository == repository) && (letCacheMavenConfig.groupId == groupId) && (letCacheMavenConfig.artifactId == artifactId)) {
                 return
             }
         }
