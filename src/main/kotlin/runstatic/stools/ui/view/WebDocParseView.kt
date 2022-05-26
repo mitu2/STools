@@ -5,6 +5,7 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.select.Select
@@ -16,11 +17,13 @@ import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.logging.useSlf4jLogger
+import runstatic.stools.service.WebDocService
+import runstatic.stools.ui.entity.MavenConfig
 import runstatic.stools.util.VaadinProp
 import runstatic.stools.util.inputRight
 import runstatic.stools.util.pageLayout
 import runstatic.stools.util.pointer
-import java.util.LinkedList
+import java.util.*
 
 /**
  *
@@ -31,7 +34,8 @@ import java.util.LinkedList
 @SpringComponent
 @UIScope
 class WebDocParseView @Autowired constructor(
-    private val properties: SToolsProperties
+    private val properties: SToolsProperties,
+    private val webDocService: WebDocService,
 ) : KComposite() {
 
     private val logger = useSlf4jLogger()
@@ -59,16 +63,25 @@ class WebDocParseView @Autowired constructor(
 
     private val versionSelect = Select<String>().apply {
         label = "version"
+        isReadOnly = true
+        pointer()
         setItems(mutableListOf(LATEST_VERSION))
+        addFocusListener {
+            onFocusVersion()
+        }
     }
 
-    private val resultField: TextField = TextField("结果地址").apply {
+    @Volatile
+    private var cacheMavenConfig: MavenConfig? = null
+
+
+    private val resultField: TextField = TextField("地址").apply {
         isReadOnly = true
         suffixComponent = Button("打开", VaadinIcon.OPTION.create()).apply {
             pointer()
             inputRight()
             addClickListener {
-                if(value.isNotBlank()) {
+                if (value.isNotBlank()) {
                     UI.getCurrent().page.executeJs("window.open($0, '_blank')", value)
                 }
             }
@@ -81,7 +94,6 @@ class WebDocParseView @Autowired constructor(
     private var artifactId by VaadinProp("", artifactIdInput)
     private var version by VaadinProp(LATEST_VERSION, versionSelect)
     private var result by VaadinProp("", resultField)
-
 
 
     private val root = ui {
@@ -114,7 +126,7 @@ class WebDocParseView @Autowired constructor(
 
     private fun makeWebDocUrl() {
         var letResult = "${properties.baseUrl}/web-doc/${repository}/${groupId}:${artifactId}"
-        if(version != LATEST_VERSION) {
+        if (version != LATEST_VERSION) {
             letResult += ":$version"
         }
         result = letResult
@@ -123,6 +135,40 @@ class WebDocParseView @Autowired constructor(
 
     companion object {
         const val LATEST_VERSION = "latest"
+    }
+
+
+    private fun onFocusVersion() {
+        if(cacheMavenConfig != null) {
+            if((cacheMavenConfig!!.repository == repository) && (cacheMavenConfig!!.groupId == groupId) && (cacheMavenConfig!!.artifactId == artifactId)) {
+                return
+            }
+        }
+
+        if (groupId.isNotBlank() && artifactId.isNotBlank()) {
+            try {
+                val versions = webDocService.getMavenMetaData(repository, groupId, artifactId)
+                    .select("metadata > versioning > versions > version")
+                    .map {
+                        it.html()
+                    }.toTypedArray()
+                cacheMavenConfig = MavenConfig(repository, groupId, artifactId, versions)
+                if (versions.isNotEmpty()) {
+                    versionSelect.setItems(LATEST_VERSION, *versions)
+                    version = LATEST_VERSION
+                    versionSelect.isReadOnly = false
+                }
+
+            } catch (e: Exception) {
+                Notification.show("获得版本列表异常, 请重试或者检查groupId和artifactId", 3000, Notification.Position.TOP_CENTER)
+                logger.debug(e.message, e)
+            }
+        } else {
+            versionSelect.setItems(mutableListOf(LATEST_VERSION))
+            version = LATEST_VERSION
+            versionSelect.isReadOnly = true
+            Notification.show("请先输入groupId和artifactId", 3000, Notification.Position.TOP_CENTER)
+        }
     }
 
 

@@ -2,6 +2,7 @@ package runstatic.stools.service.impl
 
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.FileUrlResource
 import org.springframework.core.io.Resource
@@ -12,6 +13,7 @@ import org.springframework.util.ResourceUtils
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import runstatic.stools.configuration.SToolsProperties
+import runstatic.stools.logging.debug
 import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.service.WebDocService
 import runstatic.stools.service.exception.terminate
@@ -33,12 +35,16 @@ class WebDocServiceImpl @Autowired constructor(
             message = "Not support type: $type, Please use ${sToolsProperties.webDocResources.keys}"
         }
 
-    override fun getLatestVersion(type: String, group: String, artifactId: String): String {
+    override fun getMavenMetaData(type: String, group: String, artifactId: String): Document {
         val resourceUrl = getResourceUrl(type)
         val url = "${resourceUrl}/${group.replace(".", "/")}/${artifactId}/maven-metadata.xml"
+        logger.debug { "try get versionList, request: $url" }
+        return Jsoup.connect(url).get()
+    }
+
+    override fun getLatestVersion(type: String, group: String, artifactId: String): String {
         try {
-            val document = Jsoup.connect(url).get()
-            return document.select("metadata > versioning > latest").html()
+            return getMavenMetaData(type, group, artifactId).select("metadata > versioning > latest").html()
         } catch (e: HttpStatusException) {
             logger.debug(e.message, e)
             terminate(HttpStatus.valueOf(e.statusCode)) {
