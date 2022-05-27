@@ -169,6 +169,7 @@ class WebDocParseView @Autowired constructor(
             versionSelect.setItems(mutableListOf(LATEST_VERSION))
             version = LATEST_VERSION
             versionSelect.isReadOnly = true
+            cacheMavenConfig = null
             Notification.show("请先输入groupId和artifactId", 3000, Notification.Position.TOP_CENTER)
         }
     }
