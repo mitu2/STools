@@ -7,6 +7,8 @@ import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.page.AppShellConfigurator
+import com.vaadin.flow.server.AppShellSettings
 
 /**
  *
@@ -17,9 +19,13 @@ import com.vaadin.flow.component.html.Div
 class PageLayout(
     className: String? = null,
     initCallback: Div.() -> Unit = {}
-) : Component(), HasComponents, HasStyle {
+) : Component(), HasComponents, HasStyle, AppShellConfigurator {
 
     private val main = div("main")
+
+    override fun configurePage(settings: AppShellSettings) {
+        settings.addFavIcon("icon", "favicon.ico", "16x16")
+    }
 
     init {
         setId("app")
