@@ -13,11 +13,13 @@ import runstatic.stools.entity.table.AuthorityTable
 interface AuthorityRepository : JpaRepositoryImplementation<AuthorityTable, Long> {
 
     @Query(
-        """FROM AuthorityTable AS at
-        LEFT JOIN UserAuthorityTable AS urt 
-        ON urt.authorityId = at.id
-        AND urt.userId = :userId
-        WHERE urt.validPeriod IS NULL 
+        """
+        FROM AuthorityTable AS at
+            LEFT JOIN UserAuthorityTable AS urt 
+            ON urt.authorityId = at.id
+            AND urt.userId = :userId
+        WHERE 
+            urt.validPeriod IS NULL 
             OR urt.validPeriod < CURRENT_DATE 
     """
     )

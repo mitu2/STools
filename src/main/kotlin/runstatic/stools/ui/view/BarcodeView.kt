@@ -36,8 +36,6 @@ class BarcodeView @Autowired constructor(
 
     private lateinit var result: Image
 
-    private val contentErr = Notification("请输入内容后再点击制作", 3000, Notification.Position.TOP_CENTER)
-
     private val root = ui {
         pageLayout {
             flexLayout {
@@ -81,8 +79,8 @@ class BarcodeView @Autowired constructor(
                 result = image {
                     style["margin"] = "0 auto"
                 }
-                add(contentErr)
             }
+
         }
     }
 

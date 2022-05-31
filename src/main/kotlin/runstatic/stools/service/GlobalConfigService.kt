@@ -18,7 +18,6 @@ interface GlobalConfigService {
 
     fun setValue(key: String, value: String?)
 
-
     val mapper: ObjectMapper
 
 }
