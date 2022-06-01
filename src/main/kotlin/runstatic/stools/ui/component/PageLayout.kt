@@ -24,7 +24,7 @@ class PageLayout(
     private val main = div("main")
 
     override fun configurePage(settings: AppShellSettings) {
-        settings.addFavIcon("icon", "/favicon.ico", "16x16")
+        settings.addFavIcon("icon", "/icon/favicon.ico", "16x16")
     }
 
     init {
