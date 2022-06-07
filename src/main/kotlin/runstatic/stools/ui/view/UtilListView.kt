@@ -6,42 +6,32 @@ import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
+import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.ui.entity.TextFieldState
 import runstatic.stools.util.inputRight
 import runstatic.stools.util.pageLayout
 import runstatic.stools.util.pointer
 
-
 /**
  *
  * @author chenmoand
  */
-@Route("")
-@RouteAlias.Container(
-    value = [
-        RouteAlias("index"),
-        RouteAlias("index.html"),
-        RouteAlias("chenmoand")
-    ]
-)
-@CssImport("./css/chenmoand.css")
-@PageTitle("Author Chenmoand - static.run")
+@Route("util-list")
+@PageTitle("工具列表 - static.run")
+@CssImport("./css/util-list.css")
 @SpringComponent
 @UIScope
-class ChenmoandView : KComposite() {
-
+class UtilListView @Autowired constructor() : KComposite() {
 
     private val root = ui {
         pageLayout {
-            addClassName("welcome")
-            h3("你好, Hello World!")
-            p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
+            addClassName("app")
+            h3("哇卡卡卡的小工具")
+            p("希望能帮到你哦!")
             formLayout {
-                width = "95%"
-                style["margin"] = "auto"
+                className = "url-list"
                 responsiveSteps = listOf(
                     FormLayout.ResponsiveStep("0", 1)
                 )
@@ -68,17 +58,14 @@ class ChenmoandView : KComposite() {
         }
     }
 
-
-
-
     companion object {
-
         val FINAL_TEXT_FIELD_STATES = listOf(
-            TextFieldState("Github", "https://github.com/mitu2"),
-            TextFieldState("Blog", "https://blog.static.run"),
-            TextFieldState("Email", "chenmoand@outlook.com", "mailto:chenmoand@outlook.com")
-        )
+            TextFieldState("二维码工具", "https://static.run/ui/barcode"),
+            TextFieldState("JSON格式化工具", "https://static.run/ui/json-format"),
+            TextFieldState("短网址工具", "https://static.run/ui/short-url"),
+            TextFieldState("Doc工具", "https://static.run/ui/web-doc-parse")
 
+        )
     }
 
 }

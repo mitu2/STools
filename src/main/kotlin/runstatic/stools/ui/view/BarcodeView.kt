@@ -2,7 +2,9 @@ package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
 import com.google.zxing.BarcodeFormat
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.ButtonVariant
+import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -25,6 +27,7 @@ import runstatic.stools.util.pointer
 @PageTitle("条形码/二维码一键生成 - static.run")
 @UIScope
 @SpringComponent
+@JsModule("./lib/copytoclipboard.js")
 class BarcodeView @Autowired constructor(
     private val properties: SToolsProperties
 ) : KComposite() {
@@ -78,6 +81,9 @@ class BarcodeView @Autowired constructor(
                 }
                 result = image {
                     style["margin"] = "0 auto"
+                    onLeftClick {
+                        UI.getCurrent().page.executeJs("window.copyToClipboard($0)", src)
+                    }
                 }
             }
 
@@ -95,8 +101,8 @@ class BarcodeView @Autowired constructor(
         }
         result.src =
             "${properties.baseUrl}/api/barcode?text=${content}&width=${imageWith}&height=${imageHeight}&type=${format}"
-        result.width = "${imageHeight}px"
-        result.height = "${imageWith}px"
+        result.width = "${imageWith}px"
+        result.height = "${imageHeight}px"
     }
 
 }
