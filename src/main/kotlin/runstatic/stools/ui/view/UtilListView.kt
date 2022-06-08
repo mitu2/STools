@@ -61,7 +61,7 @@ class UtilListView @Autowired constructor() : KComposite() {
     companion object {
         val FINAL_TEXT_FIELD_STATES = listOf(
             TextFieldState("二维码工具", "https://static.run/ui/barcode"),
-            TextFieldState("JSON格式化工具", "https://static.run/ui/json-format"),
+            TextFieldState("JSON格式化工具", "https://static.run/ui/json-format-util"),
             TextFieldState("短网址工具", "https://static.run/ui/short-url"),
             TextFieldState("Doc工具", "https://static.run/ui/web-doc-parse")
 
