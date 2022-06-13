@@ -76,7 +76,9 @@ class ChenmoandView : KComposite() {
         val FINAL_TEXT_FIELD_STATES = listOf(
             TextFieldState("Github", "https://github.com/mitu2"),
             TextFieldState("Blog", "https://blog.static.run"),
-            TextFieldState("Email", "chenmoand@outlook.com", "mailto:chenmoand@outlook.com")
+            TextFieldState("Email", "chenmoand@static.run", "mailto:chenmoand@static.run"),
+            TextFieldState("Tools", "https://static.run/ui/util-list")
+
         )
 
     }

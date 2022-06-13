@@ -156,7 +156,7 @@ class WebDocParseView @Autowired constructor(
                     }.toTypedArray()
                 cacheMavenConfig = MavenConfig(repository, groupId, artifactId, versions)
                 if (versions.isNotEmpty()) {
-                    versionSelect.setItems(LATEST_VERSION, *versions)
+                    versionSelect.setItems(LATEST_VERSION, *versions.reversedArray())
                     version = LATEST_VERSION
                     versionSelect.isReadOnly = false
                 }

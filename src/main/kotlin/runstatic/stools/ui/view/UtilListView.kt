@@ -64,7 +64,6 @@ class UtilListView @Autowired constructor() : KComposite() {
             TextFieldState("JSON格式化工具", "https://static.run/ui/json-format-util"),
             TextFieldState("短网址工具", "https://static.run/ui/short-url"),
             TextFieldState("Doc工具", "https://static.run/ui/web-doc-parse")
-
         )
     }
 
