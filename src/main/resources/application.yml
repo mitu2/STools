@@ -28,6 +28,7 @@ vaadin:
 logging:
   file:
     path: ${stools.work-folder}/logs
+
 stools:
   admin:
     enabled: true

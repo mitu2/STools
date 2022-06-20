@@ -35,6 +35,7 @@ class ChenmoandView : KComposite() {
 
 
     private val root = ui {
+
         pageLayout {
             addClassName("welcome")
             h3("你好, Hello World!")

@@ -41,17 +41,17 @@ class SecurityConfiguration @Autowired constructor(
     private val mapper: ObjectMapper = builder.createXmlMapper(false).build()
 
 
-    @Bean
-    fun jdbcTokenRepositoryImpl(): JdbcTokenRepositoryImpl {
-        val jdbcTokenRepositoryImpl = JdbcTokenRepositoryImpl()
-        jdbcTokenRepositoryImpl.setDataSource(dataSource)
-        return jdbcTokenRepositoryImpl
-    }
+//    @Bean
+//    fun jdbcTokenRepositoryImpl(): JdbcTokenRepositoryImpl {
+//        val jdbcTokenRepositoryImpl = JdbcTokenRepositoryImpl()
+//        jdbcTokenRepositoryImpl.setDataSource(dataSource)
+//        return jdbcTokenRepositoryImpl
+//    }
 
     @Bean
     @Suppress("DEPRECATION")
     fun passwordEncoder(): PasswordEncoder {
-        val encoders = hashMapOf(
+        val encoders = mapOf(
             "bcrypt" to BCryptPasswordEncoder(),
             "noop" to NoOpPasswordEncoder.getInstance(),
             "pbkdf2" to Pbkdf2PasswordEncoder(),
