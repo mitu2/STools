@@ -12,14 +12,17 @@ import runstatic.stools.entity.table.AuthorityTable
 @Repository
 interface AuthorityRepository : JpaRepositoryImplementation<AuthorityTable, Long> {
 
-    @Query("""
+    @Query(
+        """
         FROM AuthorityTable AS at
-        LEFT JOIN UserAuthorityTable AS urt 
-        ON urt.authorityId = at.id
-        AND urt.userId = :userId
-        WHERE urt.validPeriod is null 
-            or urt.validPeriod < current_date 
-    """)
+            LEFT JOIN UserAuthorityTable AS urt 
+            ON urt.authorityId = at.id
+            AND urt.userId = :userId
+        WHERE 
+            urt.validPeriod IS NULL 
+            OR urt.validPeriod < CURRENT_DATE 
+    """
+    )
     fun findByUserId(userId: Long): List<AuthorityTable>
 
 }

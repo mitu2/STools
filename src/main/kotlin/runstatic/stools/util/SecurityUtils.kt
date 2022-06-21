@@ -1,10 +1,10 @@
 package runstatic.stools.util
 
-import javax.servlet.http.HttpServletRequest
-import com.vaadin.flow.shared.ApplicationConstants
 import com.vaadin.flow.server.HandlerHelper
-import org.springframework.security.core.context.SecurityContextHolder
+import com.vaadin.flow.shared.ApplicationConstants
 import org.springframework.security.authentication.AnonymousAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import javax.servlet.http.HttpServletRequest
 
 object SecurityUtils {
 
@@ -29,10 +29,10 @@ object SecurityUtils {
      * Tests if some user is authenticated. As Spring Security always will create an [AnonymousAuthenticationToken]
      * we have to ignore those tokens explicitly.
      */
-    val isUserLoggedIn: Boolean
-        get() {
-            val authentication = SecurityContextHolder.getContext().authentication
-            return (authentication != null && authentication !is AnonymousAuthenticationToken
-                    && authentication.isAuthenticated)
-        }
+    fun isUserLoggedIn(): Boolean {
+        val authentication = SecurityContextHolder.getContext().authentication
+        return (authentication != null && authentication !is AnonymousAuthenticationToken
+                && authentication.isAuthenticated)
+    }
+
 }

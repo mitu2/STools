@@ -8,8 +8,10 @@ import runstatic.stools.entity.table.UserTable
  */
 interface UserService {
 
-    fun addUser(userTable: UserTable): UserTable
+    fun saveUser(userTable: UserTable): UserTable
 
     fun getUserByAccount(account: String): UserTable?
+
+    fun getUserById(id: Long): UserTable?
 
 }

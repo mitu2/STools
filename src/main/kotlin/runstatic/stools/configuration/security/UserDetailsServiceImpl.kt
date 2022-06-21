@@ -28,7 +28,7 @@ class UserDetailsServiceImpl @Autowired constructor(
             throw UsernameNotFoundException("username must not blank!")
         }
         val entity: UserTable =
-            userService.getUserByAccount(username) ?: throw UsernameNotFoundException("Not obtained by username!")
+            userService.getUserByAccount(username) ?: throw UsernameNotFoundException("not obtained by username!")
 
         return object : UserDetails {
 
@@ -50,7 +50,7 @@ class UserDetailsServiceImpl @Autowired constructor(
 
             override fun isAccountNonExpired(): Boolean = true
 
-            override fun isAccountNonLocked(): Boolean = entity.status == 2
+            override fun isAccountNonLocked(): Boolean = entity.status != 2
 
             override fun isCredentialsNonExpired(): Boolean = true
 

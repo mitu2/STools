@@ -3,12 +3,13 @@ package runstatic.stools.ui.view
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.formlayout.FormLayout
-import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
+import runstatic.stools.ui.entity.TextFieldState
 import runstatic.stools.util.inputRight
 import runstatic.stools.util.pageLayout
 import runstatic.stools.util.pointer
@@ -18,7 +19,14 @@ import runstatic.stools.util.pointer
  *
  * @author chenmoand
  */
-@Route("chenmoand")
+@Route("")
+@RouteAlias.Container(
+    value = [
+        RouteAlias("index"),
+        RouteAlias("index.html"),
+        RouteAlias("chenmoand")
+    ]
+)
 @CssImport("./css/chenmoand.css")
 @PageTitle("Author Chenmoand - static.run")
 @SpringComponent
@@ -27,6 +35,7 @@ class ChenmoandView : KComposite() {
 
 
     private val root = ui {
+
         pageLayout {
             addClassName("welcome")
             h3("你好, Hello World!")
@@ -41,18 +50,13 @@ class ChenmoandView : KComposite() {
                     textField(fieldState.label) {
                         value = fieldState.value
                         isReadOnly = true
-                        suffixComponent = button("Open", VaadinIcon.EYE.create()) {
+                        suffixComponent = button("See", VaadinIcon.EYE.create()) {
                             pointer()
                             inputRight()
                             onLeftClick { open(fieldState.url) }
                         }
                     }
                 }
-                textField("QQ Group") {
-                    value = "558504614"
-                    isReadOnly = true
-                }
-
             }
         }
     }
@@ -66,14 +70,16 @@ class ChenmoandView : KComposite() {
     }
 
 
-    data class TextFieldState(var label: String, var value: String, var url: String = value)
+
 
     companion object {
 
         val FINAL_TEXT_FIELD_STATES = listOf(
             TextFieldState("Github", "https://github.com/mitu2"),
             TextFieldState("Blog", "https://blog.static.run"),
-            TextFieldState("Email", "chenmoand@outlook.com", "mailto:chenmoand@outlook.com")
+            TextFieldState("Email", "chenmoand@static.run", "mailto:chenmoand@static.run"),
+            TextFieldState("Tools", "https://static.run/ui/util-list")
+
         )
 
     }

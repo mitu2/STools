@@ -127,7 +127,7 @@ class ShortUrlView @Autowired constructor(
     }
 
     fun makeShotUrl() {
-        if(hostAndPath.isNullOrBlank()) {
+        if (hostAndPath.isNullOrBlank()) {
             Notification.show("请输入正常的链接", 3000, Notification.Position.TOP_CENTER)
             return
         }
@@ -143,6 +143,7 @@ class ShortUrlView @Autowired constructor(
 
         @Suppress("HttpUrlsUsage")
         const val DEFAULT_PROTOCOL = "http://"
+
     }
 
 }

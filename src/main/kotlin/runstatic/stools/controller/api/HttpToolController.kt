@@ -31,19 +31,18 @@ class HttpToolController @Autowired constructor(
         if (cycle == null || cycle <= 0) {
             viewName = "redirect:${param.to}"
         } else {
-
             viewName = "redirect:redirect"
             model["cycle"] = cycle - 1
             model["to"] = param.to
         }
     }
 
-    data class RedirectParam(
+    class RedirectParam(
         @field:Range(min = 0, max = 15)
-        var cycle: Int? = 0,
-        @field:NotBlank
+        val cycle: Int? = 0,
         @field:URL
-        var to: String
+        @field:NotBlank
+        val to: String
     )
 
 }

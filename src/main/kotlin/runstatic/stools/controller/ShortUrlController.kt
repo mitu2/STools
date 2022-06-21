@@ -17,7 +17,7 @@ class ShortUrlController @Autowired constructor(
 
     @GetMapping(path = ["s/{router}"])
     fun redirectByRouter(@PathVariable router: String): String {
-        val url = shortUrlService.findShortUrlByRouter(router)?.url ?: "/404"
+        val url = shortUrlService.getShortUrlByRouter(router)?.url ?: "/404"
         return "redirect:$url"
     }
 

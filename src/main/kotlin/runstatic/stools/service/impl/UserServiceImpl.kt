@@ -1,7 +1,6 @@
 package runstatic.stools.service.impl
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import runstatic.stools.entity.table.UserTable
@@ -15,9 +14,11 @@ class UserServiceImpl @Autowired constructor(
 
 
     @Transactional
-    override fun addUser(userTable: UserTable): UserTable = userRepository.save(userTable)
+    override fun saveUser(userTable: UserTable): UserTable = userRepository.save(userTable)
 
-    @Cacheable(cacheNames = ["user:account"])
+    //    @Cacheable(cacheNames = ["user:account"])
     override fun getUserByAccount(account: String): UserTable? = userRepository.findByAccount(account)
+
+    override fun getUserById(id: Long): UserTable? = userRepository.getById(id)
 
 }

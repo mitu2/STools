@@ -1,32 +1,45 @@
-package runstatic.stools.ui.view
+package runstatic.stools.ui.view.admin
 
 import com.github.mvysny.karibudsl.v10.KComposite
 import com.github.mvysny.karibudsl.v10.flexLayout
-import com.vaadin.flow.component.login.LoginForm
+import com.github.mvysny.kaributools.currentViewLocation
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.login.LoginI18n
+import com.vaadin.flow.component.login.LoginOverlay
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
-import runstatic.stools.ui.component.PageFooter
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.AuthenticationException
+import org.springframework.security.core.context.SecurityContextHolder
+import runstatic.stools.configuration.security.CustomRequestCache
 import runstatic.stools.util.pageLayout
+import javax.servlet.ServletException
 
 
 /**
  *
  * @author chenmoand
  */
-@Route("login")
+@Route(LoginView.ROUTE)
 @PageTitle("登录页 - static.run")
 @SpringComponent
 @UIScope
 class LoginView @Autowired constructor(
-
+    private val authenticationManager: AuthenticationManager,
 ) : KComposite() {
 
-    private val loginForm = LoginForm().apply {
+    private val loginForm = LoginOverlay().apply {
+        isOpened = true
+        setTitle("登陆页")
+        description = "STools Login Page"
+        addLoginListener {
+            login(it.username, it.password)
+        }
     }
 
     private val root = ui {
@@ -44,7 +57,26 @@ class LoginView @Autowired constructor(
     }
 
 
+    fun login(username: String, password: String) {
+        try {
+            SecurityContextHolder.getContext().authentication = authenticationManager
+                .authenticate(UsernamePasswordAuthenticationToken(username, password))
+            val from: String = UI.getCurrent()
+                .currentViewLocation
+                .queryParameters?.parameters?.get("from")?.get(0) ?: "/"
+            UI.getCurrent().page.setLocation(from)
+        } catch (ex: AuthenticationException) {
+            loginForm.isError = true
+        } catch (ex : ServletException) {
+            loginForm.isError = true
+        }
+
+    }
+
+
     companion object {
+
+        const val ROUTE = "login"
 
         private var i18n = LoginI18n.createDefault()
 
@@ -66,5 +98,6 @@ class LoginView @Autowired constructor(
         }
 
     }
+
 
 }

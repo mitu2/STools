@@ -2,7 +2,9 @@ package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
 import com.google.zxing.BarcodeFormat
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.ButtonVariant
+import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -25,6 +27,7 @@ import runstatic.stools.util.pointer
 @PageTitle("条形码/二维码一键生成 - static.run")
 @UIScope
 @SpringComponent
+@JsModule("./lib/copytoclipboard.js")
 class BarcodeView @Autowired constructor(
     private val properties: SToolsProperties
 ) : KComposite() {
@@ -35,8 +38,6 @@ class BarcodeView @Autowired constructor(
     private var imageHeight: Int = 240
 
     private lateinit var result: Image
-
-    private val contentErr = Notification("请输入内容后再点击制作", 3000, Notification.Position.TOP_CENTER)
 
     private val root = ui {
         pageLayout {
@@ -80,9 +81,12 @@ class BarcodeView @Autowired constructor(
                 }
                 result = image {
                     style["margin"] = "0 auto"
+                    onLeftClick {
+                        UI.getCurrent().page.executeJs("window.copyToClipboard($0)", src)
+                    }
                 }
-                add(contentErr)
             }
+
         }
     }
 
@@ -91,13 +95,14 @@ class BarcodeView @Autowired constructor(
             Notification.show("请输入内容后再点击制作", 3000, Notification.Position.TOP_CENTER)
             return
         }
-        if(imageWith <= 0 || imageHeight <= 0) {
+        if (imageWith <= 0 || imageHeight <= 0) {
             Notification.show("请输入正确的宽或高,范围是(20-4096)", 3000, Notification.Position.TOP_CENTER)
             return
         }
-        result.src = "${properties.baseUrl}/api/barcode?text=${content}&width=${imageWith}&height=${imageHeight}&type=${format}"
-        result.width = "${imageHeight}px"
-        result.height = "${imageWith}px"
+        result.src =
+            "${properties.baseUrl}/api/barcode?text=${content}&width=${imageWith}&height=${imageHeight}&type=${format}"
+        result.width = "${imageWith}px"
+        result.height = "${imageHeight}px"
     }
 
 }

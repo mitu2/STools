@@ -8,7 +8,7 @@ import runstatic.stools.entity.table.ShortUrlTable
  */
 interface ShortUrlService {
 
-    fun findShortUrlByRouter(router: String): ShortUrlTable?
+    fun getShortUrlByRouter(router: String): ShortUrlTable?
 
     fun randomShortUrl(url: String): String
 

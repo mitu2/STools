@@ -2,6 +2,7 @@ package runstatic.stools.util
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Div
@@ -12,7 +13,6 @@ import kotlin.reflect.KProperty
  *
  * @author chenmoand
  */
-
 class VaadinProp<T : Any>(
     initValue: T,
     private val component: HasValue<*, T>
@@ -37,12 +37,12 @@ fun HasComponents.pageLayout(
 ): PageLayout = PageLayout(className, initCallback).also { this + it }
 
 
-operator fun <C: HasComponents> C.plus(component: Component) = apply { add(component) }
+operator fun <C : HasComponents> C.plus(component: Component) = apply { add(component) }
 
-operator fun <C: HasComponents> C.plus(text: String) = apply { add(text) }
+operator fun <C : HasComponents> C.plus(text: String) = apply { add(text) }
 
 
-fun Button.pointer() {
+fun HasStyle.pointer() {
     style["cursor"] = "pointer"
 }
 

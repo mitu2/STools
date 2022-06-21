@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 import runstatic.stools.entity.table.ShortUrlTable
 import runstatic.stools.repository.ShortUrlRepository
 import runstatic.stools.service.ShortUrlService
-import runstatic.stools.util.RandomUtil
+import runstatic.stools.util.RandomStringUtil
 
 @Service
 class ShortUrlServiceImpl @Autowired constructor(
@@ -15,14 +15,14 @@ class ShortUrlServiceImpl @Autowired constructor(
 ) : ShortUrlService {
 
     @Cacheable(cacheNames = ["shortUrl:router"])
-    override fun findShortUrlByRouter(router: String) = shortUrlRepository.findByRouter(router)
+    override fun getShortUrlByRouter(router: String) = shortUrlRepository.findByRouter(router)
 
 
     @Transactional
     override fun randomShortUrl(url: String): String {
         val entity = ShortUrlTable(
             url = url,
-            router = RandomUtil.randomString(),
+            router = RandomStringUtil.randomString(),
         )
         return shortUrlRepository.save(entity).router
     }

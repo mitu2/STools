@@ -1,5 +1,6 @@
 package runstatic.stools.service.exception
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import org.springframework.http.HttpStatus
 import runstatic.stools.constant.TerminateCode
 import runstatic.stools.entity.support.BaseEntity
@@ -17,9 +18,10 @@ class ServiceNotCompletedException(
 
 data class ServiceNotCompletedInfo(
     var code: Int = TerminateCode.NOT_STATED,
-    var message: String = DEFAULT_MESSAGE,
     var path: String = DEFAULT_PATH,
-    var timestamp: LocalDateTime = LocalDateTime.now()
+    var timestamp: LocalDateTime = LocalDateTime.now(),
+    @get:JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    var message: String = DEFAULT_MESSAGE
 ) : BaseEntity() {
 
     companion object {

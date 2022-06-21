@@ -3,6 +3,7 @@ package runstatic.stools.configuration
 import com.vaadin.flow.spring.annotation.EnableVaadin
 import org.springframework.context.annotation.Configuration
 
+
 /**
  *
  * @author chenmoand
@@ -10,4 +11,5 @@ import org.springframework.context.annotation.Configuration
 @EnableVaadin
 @Configuration
 class VaadinConfiguration {
+
 }
