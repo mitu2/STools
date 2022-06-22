@@ -1,21 +1,21 @@
 package runstatic.stools.service.impl
 
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.FileUrlResource
 import org.springframework.core.io.Resource
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.util.ResourceUtils
-import org.springframework.web.client.RestClientException
-import org.springframework.web.client.RestTemplate
 import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.logging.debug
 import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.service.WebDocService
+import runstatic.stools.service.exception.ServiceNotCompletedException
 import runstatic.stools.service.exception.terminate
 import java.io.File
 import java.io.FileOutputStream
@@ -24,11 +24,11 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class WebDocServiceImpl @Autowired constructor(
-    private val restTemplate: RestTemplate,
     private val sToolsProperties: SToolsProperties,
 ) : WebDocService {
 
     private val logger = useSlf4jLogger()
+    private val client = OkHttpClient()
 
     private fun getResourceUrl(type: String) =
         sToolsProperties.webDocResources[type] ?: terminate(HttpStatus.BAD_REQUEST) {
@@ -45,6 +45,8 @@ class WebDocServiceImpl @Autowired constructor(
     override fun getLatestVersion(type: String, group: String, artifactId: String): String {
         try {
             return getMavenMetaData(type, group, artifactId).select("metadata > versioning > latest").html()
+        } catch (e: ServiceNotCompletedException) {
+            throw e
         } catch (e: HttpStatusException) {
             logger.debug(e.message, e)
             terminate(HttpStatus.valueOf(e.statusCode)) {
@@ -83,40 +85,49 @@ class WebDocServiceImpl @Autowired constructor(
             // note: use mkdir() bug
             !exists() && mkdirs()
         }
+
         if (!file.exists() || REQ_CACHE_MAP[reqPath] != null) {
             try {
-                synchronized(REQ_CACHE_MAP.computeIfAbsent(reqPath) { PathLockObject(it) }) {
+                synchronized(REQ_CACHE_MAP.computeIfAbsent(reqPath) { Any() }) {
                     if (file.exists()) {
                         return@synchronized
                     }
-                    restTemplate.execute("${resourceUrl}/${reqPath}", HttpMethod.GET, {}, { resp ->
-                        resp.body.use {
+                    // note:
+                    client.newCall(
+                        Request.Builder()
+                            .get()
+                            .url("${resourceUrl}/${reqPath}")
+                            .build()
+                    ).execute().body?.use {
+                        it.byteStream().use { inputStream ->
                             file.createNewFile()
                             val fileOutputStream = FileOutputStream(file)
-                            it.copyTo(fileOutputStream)
+                            inputStream.copyTo(fileOutputStream)
                             fileOutputStream.close()
                         }
-                    })
+                    } ?: terminate(HttpStatus.NOT_FOUND)
                 }
-            } catch (e: RestClientException) {
+            } catch (e: Exception) {
                 logger.debug(e.message, e)
                 terminate()
             } finally {
                 REQ_CACHE_MAP.remove(reqPath)
             }
         }
-        return FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}")).apply {
-            if (!exists()) {
-                terminate(HttpStatus.NOT_FOUND)
+
+        return FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}"))
+            .apply {
+                if (!exists()) {
+                    terminate(HttpStatus.NOT_FOUND)
+                }
             }
-        }
     }
 
 
     companion object {
-        val REQ_CACHE_MAP: ConcurrentHashMap<String, PathLockObject> = ConcurrentHashMap()
+        val REQ_CACHE_MAP: ConcurrentHashMap<String, Any> = ConcurrentHashMap()
     }
 
-    data class PathLockObject(val path: String)
 
 }
+

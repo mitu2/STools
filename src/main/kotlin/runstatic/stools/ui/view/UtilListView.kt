@@ -50,7 +50,7 @@ class UtilListView @Autowired constructor() : KComposite() {
         }
     }
 
-    fun open(url: String, type: String = "_blank") {
+    fun open(url: String, type: String = "_self") {
         root.ui.ifPresent { ui ->
             ui.access {
                 ui.page.open(url, type)

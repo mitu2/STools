@@ -23,7 +23,7 @@ internal class WebDocServiceImplTest {
 
     @Test
     fun testGetMavenLatestVersion() {
-        val latestVersion = webDocServiceImpl.getLatestVersion("spring","org.springframework", "spring-aop")
+        val latestVersion = webDocServiceImpl.getLatestVersion("maven","org.springframework", "spring-aop")
         logger.info { latestVersion }
     }
 
