@@ -42,6 +42,7 @@ class WebDocServiceImpl @Autowired constructor(
         return Jsoup.connect(url).get()
     }
 
+    // @Cacheable(cacheNames = ["maven:last:version"], key = "#p0 + ':' + #p1 + ':' + #p2")
     override fun getLatestVersion(type: String, group: String, artifactId: String): String {
         try {
             return getMavenMetaData(type, group, artifactId).select("metadata > versioning > latest").html()
@@ -61,20 +62,12 @@ class WebDocServiceImpl @Autowired constructor(
     }
 
     override fun getDocInputStream(
-        type: String,
-        group: String,
-        artifactId: String,
-        version: String,
-        path: String
+        type: String, group: String, artifactId: String, version: String, path: String
     ): InputStream = getDocResource(type, group, artifactId, version, path).inputStream
 
 
     override fun getDocResource(
-        type: String,
-        group: String,
-        artifactId: String,
-        version: String,
-        path: String
+        type: String, group: String, artifactId: String, version: String, path: String
     ): Resource {
         val resourceUrl = getResourceUrl(type)
         val groupPath = group.replace(".", "/")
@@ -94,10 +87,7 @@ class WebDocServiceImpl @Autowired constructor(
                     }
                     // note:
                     client.newCall(
-                        Request.Builder()
-                            .get()
-                            .url("${resourceUrl}/${reqPath}")
-                            .build()
+                        Request.Builder().get().url("${resourceUrl}/${reqPath}").build()
                     ).execute().body?.use {
                         it.byteStream().use { inputStream ->
                             file.createNewFile()
@@ -115,12 +105,11 @@ class WebDocServiceImpl @Autowired constructor(
             }
         }
 
-        return FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}"))
-            .apply {
-                if (!exists()) {
-                    terminate(HttpStatus.NOT_FOUND)
-                }
+        return FileUrlResource(ResourceUtils.getURL("jar:file:${jarPath}!/${path}")).apply {
+            if (!exists()) {
+                terminate(HttpStatus.NOT_FOUND)
             }
+        }
     }
 
 

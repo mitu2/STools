@@ -41,18 +41,39 @@ class SecurityConfiguration @Autowired constructor(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
 
-        http.addFilterAfter(loginFilter, SecurityContextHolderFilter::class.java)
+        http
+            .addFilterAfter(loginFilter, SecurityContextHolderFilter::class.java)
+            .headers {
+                it.frameOptions().disable()
+            }.csrf {
+                it.disable()
+            }.requestCache {
+                it.requestCache(requestCache)
+            }.authorizeRequests {
+                it.antMatchers(HttpMethod.GET)
+                    .permitAll()
+                    .antMatchers(
+                        "/VAADIN/**",
+                        "/favicon.ico",
+                        "/robots.txt",
+                        "/manifest.webmanifest",
+                        "/sw.js",
+                        "/offline-page.html",
+                        "/frontend/**",
+                        "/webjars/**",
+                        "/frontend-es5/**",
+                        "/frontend-es6/**",
+                        "/web-doc/**"
+                    )
+                    .permitAll()
+                    .requestMatchers(SecurityUtils::isFrameworkInternalRequest)
+                    .permitAll()
+            }.formLogin {
+                it.loginPage(properties.vaadinBaseUrl + LoginView.ROUTE)
+                    .loginProcessingUrl(properties.vaadinBaseUrl)
+                    .permitAll()
 
-        http.headers()
-            // .contentTypeOptions()
-            // .disable()
-            .frameOptions().disable()
-
-        http.csrf().disable().requestCache().requestCache(requestCache).and().requestMatchers().and()
-            .authorizeRequests().antMatchers(HttpMethod.GET).permitAll()
-            .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll().anyRequest().authenticated().and()
-            .formLogin().loginPage(properties.vaadinBaseUrl + LoginView.ROUTE).permitAll()
-            .loginProcessingUrl(properties.vaadinBaseUrl)
+            }
 //            .failureUrl(LOGIN_FAILURE_URL) // Configure logout
 //            .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL)
 
@@ -60,20 +81,7 @@ class SecurityConfiguration @Autowired constructor(
     }
 
     @Bean
-    fun ignoringCustomizer() = WebSecurityCustomizer { web: WebSecurity ->
-        web.ignoring().antMatchers(
-            "/VAADIN/**",
-            "/favicon.ico",
-            "/robots.txt",
-            "/manifest.webmanifest",
-            "/sw.js",
-            "/offline-page.html",
-            "/frontend/**",
-            "/webjars/**",
-            "/frontend-es5/**",
-            "/frontend-es6/**",
-            "/web-doc/**"
-        )
+    fun webSecurityCustomizer() = WebSecurityCustomizer { web: WebSecurity ->
     }
 
     @Bean
