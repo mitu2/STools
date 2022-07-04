@@ -2,6 +2,8 @@ package runstatic.stools.service.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.CachePut
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -19,20 +21,17 @@ class GlobalConfigServiceImpl @Autowired constructor(
         builder.createXmlMapper(false).build()
     }
 
+    @Cacheable("config")
     override fun getEntityByKey(key: String): GlobalConfigTable? = globalConfigRepository.findByKey(key)
 
-    override fun getEntityById(id: Int): GlobalConfigTable? = globalConfigRepository.getById(id)
+
+    @Cacheable("config")
+    override fun getEntityById(id: Int): GlobalConfigTable? = globalConfigRepository.findById(id).orElse(null)
 
     override fun getValue(key: String, defaultValue: String?): String? = getEntityByKey(key)?.value ?: defaultValue
 
-    @Transactional
-    override fun setValue(key: String, value: String?) {
-        val entity = globalConfigRepository.findByKey(key)?.apply {
-            this.value = value
-        } ?: GlobalConfigTable(
-            key = key, value = value
-        )
-        globalConfigRepository.save(entity)
-    }
+    @CachePut("config")
+    override fun saveConfig(entity: GlobalConfigTable) = globalConfigRepository.save(entity)
+
 
 }

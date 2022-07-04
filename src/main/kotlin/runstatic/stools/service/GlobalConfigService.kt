@@ -3,6 +3,7 @@ package runstatic.stools.service
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import runstatic.stools.entity.table.GlobalConfigTable
+import javax.transaction.Transactional
 
 /**
  *
@@ -10,22 +11,31 @@ import runstatic.stools.entity.table.GlobalConfigTable
  */
 interface GlobalConfigService {
 
+    val mapper: ObjectMapper
+
     fun getEntityByKey(key: String): GlobalConfigTable?
 
     fun getEntityById(id: Int): GlobalConfigTable?
 
-    fun getValue(key: String, defaultValue: String? = null): String?
+    fun getValue(key: String, defaultValue: String? = null): String? = getEntityByKey(key)?.value ?: defaultValue
 
-    fun setValue(key: String, value: String?)
+    @Transactional
+    fun setValue(key: String, value: String?) {
+        val entity = getEntityByKey(key)?.also {
+            it.value = value
+        } ?: GlobalConfigTable(
+            key = key, value = value
+        )
+        saveConfig(entity)
+    }
 
-    val mapper: ObjectMapper
-
+    fun saveConfig(entity: GlobalConfigTable): GlobalConfigTable
 }
 
 operator fun GlobalConfigService.set(key: String, value: String?) = setValue(key, value)
 
 operator fun GlobalConfigService.set(key: String, value: Any?) {
-    if(value == null) {
+    if (value == null) {
         setValue(key, null)
     }
     setValue(key, mapper.writeValueAsString(value))

@@ -6,6 +6,7 @@ import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.io.FileUrlResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
@@ -42,7 +43,7 @@ class WebDocServiceImpl @Autowired constructor(
         return Jsoup.connect(url).get()
     }
 
-    // @Cacheable(cacheNames = ["maven:last:version"], key = "#p0 + ':' + #p1 + ':' + #p2")
+    @Cacheable(cacheNames = ["maven:last:version"], key = "#p0 + ':' + #p1 + ':' + #p2")
     override fun getLatestVersion(type: String, group: String, artifactId: String): String {
         try {
             return getMavenMetaData(type, group, artifactId).select("metadata > versioning > latest").html()

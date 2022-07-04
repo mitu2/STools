@@ -3,6 +3,10 @@ package runstatic.stools.service.impl
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cache.support.AbstractCacheManager
+import runstatic.stools.SToolsApplication
 import runstatic.stools.logging.info
 import runstatic.stools.logging.useSlf4jLogger
 import java.net.URLConnection
@@ -13,11 +17,13 @@ import java.nio.file.Paths
  *
  * @author chenmoand
  */
-@SpringBootTest
+@SpringBootTest(classes = [SToolsApplication::class])
+@EnableCaching
 internal class WebDocServiceImplTest {
 
     @Autowired
     lateinit var webDocServiceImpl: WebDocServiceImpl
+
 
     val logger = useSlf4jLogger()
 
@@ -33,4 +39,12 @@ internal class WebDocServiceImplTest {
         logger.info(Files.probeContentType(Paths.get("css/style.css")))
         logger.info(Files.probeContentType(Paths.get("index.html")))
     }
+
+    @Test
+    fun testCacheGetMavenLatestVersion() {
+        logger.info(webDocServiceImpl.getLatestVersion("maven","org.springframework", "spring-aop"))
+        logger.info(webDocServiceImpl.getLatestVersion("maven","org.springframework", "spring-aop"))
+        logger.info(webDocServiceImpl.getLatestVersion("maven","org.springframework", "spring-aop"))
+    }
+
 }
