@@ -22,10 +22,10 @@ class PageFooter : Component(), HasComponents, HasStyle {
         addClassName("footer")
         div("footer-inner") {
             div("copyright") {
-                anchor("https://github.com/mitu2/STools", "Project STools") {
+                anchor("https://github.com/mitu2/STools", "STools") {
                     setTarget("_blank")
                 }
-                text(" © 2021 沉默")
+                text(" © 2021-2022 沉默")
             }
             div {
                 className = "footer-item-inline"
