@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
+import org.springframework.web.servlet.support.RequestContextUtils
+import runstatic.stools.logging.info
 import runstatic.stools.logging.useSlf4jLogger
+import runstatic.stools.util.HttpRequestUtil
 import javax.annotation.security.PermitAll
+import javax.servlet.http.HttpServletRequest
 import javax.validation.constraints.NotBlank
 
 /**
@@ -44,5 +48,14 @@ class HttpToolController @Autowired constructor(
         @field:NotBlank
         val to: String
     )
+
+    @RequestMapping("ping")
+    fun ping(request: HttpServletRequest): String {
+        log.info {
+            "http ping ip: " + HttpRequestUtil.getClientIP(request)
+        }
+        return "pong"
+    }
+
 
 }
