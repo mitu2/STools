@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import javax.annotation.security.PermitAll
 import javax.imageio.ImageIO
+import javax.servlet.http.HttpServletResponse
 import javax.validation.constraints.NotBlank
 
 /**
@@ -23,9 +24,10 @@ import javax.validation.constraints.NotBlank
 class VerifyCodeController {
 
     @GetMapping(produces = ["image/png"])
-    fun generate(@Validated param: VerifyCodeParam): ByteArray {
+    fun generate(@Validated param: VerifyCodeParam, response: HttpServletResponse): ByteArray {
         val image = BufferedImage(param.width, param.height, BufferedImage.TYPE_INT_RGB)
         VerifyCodeUtil.drawCodeToImage(image, code = param.code)
+        response.addHeader("Verify-Code", param.code)
         return ByteArrayOutputStream().apply {
             ImageIO.write(image, "png", this)
         }.toByteArray()

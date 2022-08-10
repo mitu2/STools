@@ -14,7 +14,7 @@ object HttpRequestUtil {
             "X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP",
             "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"
         )
-        if (ArrayUtils.isNotEmpty(otherHeaderNames)) {
+        if (otherHeaderNames.isNotEmpty()) {
             headers = ArrayUtils.addAll(headers, *otherHeaderNames)
         }
         return getClientIPByHeader(request, *headers)
@@ -42,7 +42,9 @@ object HttpRequestUtil {
         // 多级反向代理检测
         var ip = ip
         if (ip != null && ip.indexOf(",") > 0) {
-            val ips = ip.trim { it <= ' ' }.split(",".toRegex()).dropLastWhile { it.isEmpty() }
+            val ips = ip.trim { it <= ' ' }
+                .split(",".toRegex())
+                .dropLastWhile { it.isEmpty() }
                 .toTypedArray()
             for (subIp in ips) {
                 if (!isUnknown(subIp)) {

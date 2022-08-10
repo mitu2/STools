@@ -1,4 +1,6 @@
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
   profiles:
     active: dev
   pid:
@@ -9,6 +11,9 @@ spring:
         - classpath:sql/*.sql
       mode: NEVER
       continue-on-error: true
+  datasource:
+    hikari:
+      transaction-isolation: TRANSACTION_READ_COMMITTED
 server:
   port: 8001
   compression:
