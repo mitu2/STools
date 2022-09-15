@@ -28,7 +28,7 @@ import runstatic.stools.util.pointer
     ]
 )
 @CssImport("./css/chenmoand.css")
-@PageTitle("Author Chenmoand - static.run")
+@PageTitle("Coder`s Chenmoand Website - static.run")
 @SpringComponent
 @UIScope
 class ChenmoandView : KComposite() {
