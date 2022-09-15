@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("com.vaadin") version "22.0.4"
+    id("com.vaadin") version "23.2.0"
     kotlin("jvm") version "1.7.0"
     kotlin("plugin.spring") version "1.5.31"
     kotlin("plugin.jpa") version "1.5.31"
@@ -29,9 +29,11 @@ repositories {
     mavenCentral()
 }
 
-extra["vaadinVersion"] = "22.0.4"
-extra["log4j2.version"] = "2.17.1"
-extra["zxingVersion"] = "3.5.0"
+ext {
+    this["vaadinVersion"] = "23.2.0"
+    this["log4j2.version"] = "2.17.1"
+    this["zxingVersion"] = "3.5.0"
+}
 
 
 dependencies {
@@ -46,7 +48,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.session:spring-session-core")
-    implementation("com.vaadin:vaadin-spring-boot-starter:22.0.4")
+    implementation("com.vaadin:vaadin-spring-boot-starter:${property("vaadinVersion")}")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("mysql:mysql-connector-java:8.0.29")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

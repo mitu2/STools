@@ -18,15 +18,6 @@ server:
   port: 8001
   compression:
     enabled: true
-springfox:
-  documentation:
-    swagger-ui:
-      base-url: /
-      enabled: true
-    swagger:
-      v2:
-        path: /swagger/v2/docs
-        enabled: true
 vaadin:
   pnpm-enabled: false
   urlMapping: ${stools.vaadin-base-url}/*

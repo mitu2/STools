@@ -72,7 +72,7 @@ class WebDocServiceImpl @Autowired constructor(
     ): Resource {
         val resourceUrl = getResourceUrl(type)
         val groupPath = group.replace(".", "/")
-        val reqPath = "${groupPath}/${artifactId}/${version}/${artifactId}-${version}-javadoc.jar";
+        val reqPath = "${groupPath}/${artifactId}/${version}/${artifactId}-${version}-javadoc.jar"
         val jarPath = "${sToolsProperties.workFolder}/web-doc/${reqPath}"
         val file = File(jarPath)
         with(file.parentFile) {

@@ -21,7 +21,7 @@ class WebDocResourceResolver @Autowired constructor(
     private val webDocService: WebDocService
 ) : ResourceResolver {
 
-    private val logger = useSlf4jLogger();
+    private val logger = useSlf4jLogger()
 
     override fun resolveResource(
         request: HttpServletRequest?,

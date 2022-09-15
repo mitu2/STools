@@ -41,7 +41,7 @@ class ShortUrlView @Autowired constructor(
 
     private val protocolSelect = Select<String>().apply {
         setItems(*PROTOCOLS)
-        style["width"] = "105px";
+        style["width"] = "105px"
         style["margin-left"] = "-5px"
     }
 
