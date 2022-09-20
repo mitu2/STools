@@ -28,7 +28,7 @@ import runstatic.stools.util.pageLayout
  *
  * @author chenmoand
  */
-@Route("barcode/:mode")
+@Route("barcode/:mode?")
 @PageTitle("条形码/二维码一键生成 - static.run")
 @UIScope
 @SpringComponent
