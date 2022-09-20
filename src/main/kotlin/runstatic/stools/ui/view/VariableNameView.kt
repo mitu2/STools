@@ -11,6 +11,7 @@ import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
+import runstatic.stools.ui.stye.css
 import runstatic.stools.util.VariableNameTool
 import runstatic.stools.util.pageLayout
 
@@ -26,7 +27,21 @@ class VariableNameView @Autowired constructor(
 
 ) : KComposite() {
 
+    companion object {
+        private fun FlexLayout.mainStyle() = css {
+            flexWrap = FlexLayout.FlexWrap.WRAP
+            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+            setFlexDirection(FlexLayout.FlexDirection.COLUMN)
+            alignContent = FlexLayout.ContentAlignment.CENTER
+            alignItems = FlexComponent.Alignment.BASELINE
+        }
 
+        private fun KFormLayout.contentStyle() = css {
+            width = "400px"
+            style["margin"] = "0 auto"
+        }
+
+    }
 
     private val bigCamelCaseField = TextField("大驼峰").apply {
         isReadOnly = true
@@ -51,15 +66,10 @@ class VariableNameView @Autowired constructor(
     private val root = ui {
         pageLayout {
             flexLayout {
-                flexWrap = FlexLayout.FlexWrap.WRAP
-                justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-                setFlexDirection(FlexLayout.FlexDirection.COLUMN)
-                alignContent = FlexLayout.ContentAlignment.CENTER
-                alignItems = FlexComponent.Alignment.BASELINE
+                mainStyle()
                 h3("变量名格式化工具")
                 formLayout {
-                    width = "400px"
-                    style["margin"] = "0 auto"
+                    contentStyle()
                     textField("VariableName") {
                         isRequired = true
                         placeholder = "请输入一个单词或者句子"
@@ -78,7 +88,7 @@ class VariableNameView @Autowired constructor(
     }
 
     private fun formatVariableName(value: String?) {
-        if(value.isNullOrBlank()) {
+        if (value.isNullOrBlank()) {
             return
         }
         VariableNameTool(value).apply {

@@ -10,9 +10,9 @@ import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import runstatic.stools.ui.entity.TextFieldState
-import runstatic.stools.util.inputRight
+import runstatic.stools.ui.stye.inputRightStyle
+import runstatic.stools.ui.stye.pointerStyle
 import runstatic.stools.util.pageLayout
-import runstatic.stools.util.pointer
 
 
 /**
@@ -51,8 +51,8 @@ class ChenmoandView : KComposite() {
                         value = fieldState.value
                         isReadOnly = true
                         suffixComponent = button("See", VaadinIcon.EYE.create()) {
-                            pointer()
-                            inputRight()
+                            pointerStyle()
+                            inputRightStyle()
                             onLeftClick { open(fieldState.url) }
                         }
                     }
@@ -79,7 +79,6 @@ class ChenmoandView : KComposite() {
             TextFieldState("Blog", "https://blog.static.run"),
             TextFieldState("Email", "chenmoand@static.run", "mailto:chenmoand@static.run"),
             TextFieldState("Tools", "https://static.run/ui/util-list")
-
         )
 
     }

@@ -42,14 +42,6 @@ operator fun <C : HasComponents> C.plus(component: Component) = apply { add(comp
 operator fun <C : HasComponents> C.plus(text: String) = apply { add(text) }
 
 
-fun HasStyle.pointer() {
-    style["cursor"] = "pointer"
-}
-
-fun Button.inputRight() {
-    style["margin"] = "0 -5px 0 0"
-}
-
 
 
 

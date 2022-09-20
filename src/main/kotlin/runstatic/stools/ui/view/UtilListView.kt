@@ -10,9 +10,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.ui.entity.TextFieldState
-import runstatic.stools.util.inputRight
+import runstatic.stools.ui.stye.inputRightStyle
+import runstatic.stools.ui.stye.pointerStyle
 import runstatic.stools.util.pageLayout
-import runstatic.stools.util.pointer
 
 /**
  *
@@ -40,8 +40,8 @@ class UtilListView @Autowired constructor() : KComposite() {
                         value = fieldState.value
                         isReadOnly = true
                         suffixComponent = button("See", VaadinIcon.EYE.create()) {
-                            pointer()
-                            inputRight()
+                            pointerStyle()
+                            inputRightStyle()
                             onLeftClick { open(fieldState.url) }
                         }
                     }

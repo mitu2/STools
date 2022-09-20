@@ -19,10 +19,10 @@ import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.service.WebDocService
 import runstatic.stools.ui.entity.MavenConfig
+import runstatic.stools.ui.stye.inputRightStyle
+import runstatic.stools.ui.stye.pointerStyle
 import runstatic.stools.util.VaadinProp
-import runstatic.stools.util.inputRight
 import runstatic.stools.util.pageLayout
-import runstatic.stools.util.pointer
 import java.util.*
 
 /**
@@ -64,7 +64,7 @@ class WebDocParseView @Autowired constructor(
     private val versionSelect = Select<String>().apply {
         label = "version"
         isReadOnly = true
-        pointer()
+        pointerStyle()
         setItems(mutableListOf(LATEST_VERSION))
         addFocusListener {
             onFocusVersion()
@@ -78,8 +78,8 @@ class WebDocParseView @Autowired constructor(
     private val resultField: TextField = TextField("地址").apply {
         isReadOnly = true
         suffixComponent = Button("打开", VaadinIcon.OPTION.create()).apply {
-            pointer()
-            inputRight()
+            pointerStyle()
+            inputRightStyle()
             addClickListener {
                 if (value.isNotBlank()) {
                     UI.getCurrent().page.executeJs("window.open($0, '_blank')", value)
@@ -113,7 +113,7 @@ class WebDocParseView @Autowired constructor(
                     add(versionSelect)
                     add(resultField)
                     button("生成") {
-                        pointer()
+                        pointerStyle()
                         addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             makeWebDocUrl()

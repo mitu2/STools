@@ -18,9 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import runstatic.stools.logging.debug
 import runstatic.stools.logging.useSlf4jLogger
+import runstatic.stools.ui.stye.pointerStyle
 import runstatic.stools.util.VaadinProp
 import runstatic.stools.util.pageLayout
-import runstatic.stools.util.pointer
 
 /**
  *
@@ -83,13 +83,13 @@ class JsonFormatView @Autowired constructor(
                 formLayout {
                     add(jsonKeyOptionField)
                     button("格式化") {
-                        pointer()
+                        pointerStyle()
                         onLeftClick {
                             formatJson()
                         }
                     }
                     button("转换") {
-                        pointer()
+                        pointerStyle()
                         onLeftClick {
                             transform()
                         }

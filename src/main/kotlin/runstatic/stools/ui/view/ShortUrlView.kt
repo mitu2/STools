@@ -18,10 +18,11 @@ import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.service.ShortUrlService
+import runstatic.stools.ui.stye.css
+import runstatic.stools.ui.stye.inputRightStyle
+import runstatic.stools.ui.stye.pointerStyle
 import runstatic.stools.util.VaadinProp
-import runstatic.stools.util.inputRight
 import runstatic.stools.util.pageLayout
-import runstatic.stools.util.pointer
 
 /**
  *
@@ -39,10 +40,23 @@ class ShortUrlView @Autowired constructor(
 
     // private val logger = useSlf4jLogger()
 
+    companion object {
+        @Suppress("HttpUrlsUsage")
+        val PROTOCOLS = arrayOf("http://", "https://")
+
+        @Suppress("HttpUrlsUsage")
+        const val DEFAULT_PROTOCOL = "http://"
+
+        private fun Select<String>.protocolStyle() = css {
+            style["width"] = "105px"
+            style["margin-left"] = "-5px"
+        }
+    }
+
+
     private val protocolSelect = Select<String>().apply {
         setItems(*PROTOCOLS)
-        style["width"] = "105px"
-        style["margin-left"] = "-5px"
+
     }
 
     private val hostAndPathField: TextField = TextField("网址").apply {
@@ -61,8 +75,7 @@ class ShortUrlView @Autowired constructor(
     private val resultField: TextField = TextField("结果").apply {
         isReadOnly = true
         suffixComponent = Button("复制", VaadinIcon.COPY.create()).apply {
-            pointer()
-            inputRight()
+            inputRightStyle().pointerStyle()
             addClickListener {
                 UI.getCurrent().page.executeJs("window.copyToClipboard($0)", value)
             }
@@ -88,7 +101,7 @@ class ShortUrlView @Autowired constructor(
                     add(hostAndPathField)
                     add(resultField)
                     button("制作") {
-                        pointer()
+                        pointerStyle()
                         addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             makeShotUrl()
@@ -136,14 +149,5 @@ class ShortUrlView @Autowired constructor(
         result = "${properties.baseUrl}/s/$router"
     }
 
-    companion object {
-
-        @Suppress("HttpUrlsUsage")
-        val PROTOCOLS = arrayOf("http://", "https://")
-
-        @Suppress("HttpUrlsUsage")
-        const val DEFAULT_PROTOCOL = "http://"
-
-    }
 
 }
