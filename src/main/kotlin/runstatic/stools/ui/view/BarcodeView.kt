@@ -1,8 +1,8 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.removeFromParent
 import com.google.zxing.BarcodeFormat
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dependency.JsModule
@@ -11,17 +11,22 @@ import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.notification.Notification
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
+import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.Tabs
 import com.vaadin.flow.component.tabs.TabsVariant
+import com.vaadin.flow.component.upload.Upload
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer
 import com.vaadin.flow.router.*
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.configuration.SToolsProperties
-import runstatic.stools.ui.component.PageLayout
 import runstatic.stools.ui.stye.css
+import runstatic.stools.ui.stye.hideStyle
 import runstatic.stools.ui.stye.pointerStyle
-import runstatic.stools.util.pageLayout
+import runstatic.stools.ui.stye.showStyle
+import runstatic.stools.ui.util.pageLayout
+import runstatic.stools.ui.util.updateDOM
 
 
 /**
@@ -44,6 +49,26 @@ class BarcodeView @Autowired constructor(
     private var contentDiv: Div = Div()
     private lateinit var result: Image
     private var mode: Mode = Mode.ENCODE
+    private val encodeTab = Tab("Encode")
+    private val decodeTab = Tab("Decode")
+    private val tabs = Tabs().apply {
+        tabsStyle()
+        add(encodeTab)
+        add(decodeTab)
+        addSelectedChangeListener {
+            if (it.selectedTab != null) {
+                ui.ifPresent { currentUi ->
+                    currentUi.navigate(
+                        BarcodeView::class.java,
+                        RouteParameters(RouteParam("mode", it.selectedTab.label.lowercase()))
+                    )
+                }
+            }
+        }
+    }
+
+    private val imageBuffer = MemoryBuffer()
+
 
     enum class Mode {
         DECODE, ENCODE;
@@ -51,15 +76,20 @@ class BarcodeView @Autowired constructor(
         companion object {
             fun parseMode(txt: String) = valueOf(txt.uppercase())
         }
+
     }
 
     override fun beforeEnter(event: BeforeEnterEvent) {
-        val modeParam = event.routeParameters.get("mode").orElse(Mode.ENCODE.name)
         try {
+            val modeParam = event.routeParameters.get("mode").orElse(Mode.ENCODE.name)
             mode = Mode.parseMode(modeParam)
-            contentDiv.removeAll()
-            contentDiv.run {
-                if (Mode.ENCODE == mode) encodePage() else decodePage()
+            tabs.selectedTab = if(Mode.ENCODE == mode) encodeTab else decodeTab
+            contentDiv.updateDOM {
+                if (Mode.ENCODE == mode) {
+                    encodePage()
+                } else {
+                    decodePage()
+                }
             }
         } catch (e: Throwable) {
             event.forwardTo(BarcodeView::class.java, RouteParameters(RouteParam("mode", "encode")))
@@ -67,59 +97,15 @@ class BarcodeView @Autowired constructor(
     }
 
 
-    companion object {
-        private fun FlexLayout.mainStyle() = css {
-            flexWrap = FlexLayout.FlexWrap.WRAP
-            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-            setFlexDirection(FlexLayout.FlexDirection.COLUMN)
-            alignContent = FlexLayout.ContentAlignment.CENTER
-            alignItems = FlexComponent.Alignment.BASELINE
-        }
-
-        private fun Tabs.tabsStyle() = css {
-            width = "400px"
-            addThemeVariants(TabsVariant.LUMO_CENTERED)
-        }
-
-        private fun KFormLayout.formStyle() = css {
-            width = "400px"
-            style["margin"] = "0 auto"
-        }
-
-    }
 
     init {
         ui {
             pageLayout {
                 flexLayout {
                     mainStyle()
-                    tabs {
-                        tabsStyle()
-                        tab("Encode") {
-                            pointerStyle()
-                            if (Mode.ENCODE == mode) {
-                                isSelected = true
-                            }
-                        }
-                        tab("Decode") {
-                            pointerStyle()
-                            if (Mode.DECODE == mode) {
-                                isSelected = true
-                            }
-                        }
-                        addSelectedChangeListener {
-                            if (it.selectedTab != null) {
-                                ui.ifPresent { currentUi ->
-                                    currentUi.navigate(
-                                        BarcodeView::class.java,
-                                        RouteParameters(RouteParam("mode", it.selectedTab.label.lowercase()))
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    add(tabs)
                     contentDiv.run {
-                        if (Mode.ENCODE == mode) encodePage() else decodePage()
+                        encodePage()
                     }
                     add(contentDiv)
                 }
@@ -128,13 +114,37 @@ class BarcodeView @Autowired constructor(
     }
 
 
-    private fun Div.initPageContent() {
-        if (Mode.ENCODE == mode) encodePage() else decodePage()
-    }
+
 
     private fun Div.decodePage() {
         formLayout {
             formStyle()
+            val radioButtonGroup = radioButtonGroup<String>("Image Source Type") {
+                setItems("Upload", "Input")
+                value = "Upload"
+            }
+            val upload = upload(imageBuffer) {
+                uploadStyle()
+                setAcceptedFileTypes("image/*")
+                addSucceededListener {
+                    // TODO: 暂时先close
+                    imageBuffer.inputStream.close()
+                }
+                addFailedListener {
+                    Notification.show(it.reason.message, 3000, Notification.Position.TOP_CENTER)
+                }
+
+                addFileRejectedListener {
+                    Notification.show(it.errorMessage, 3000, Notification.Position.TOP_CENTER)
+                }
+            }
+            radioButtonGroup.addValueChangeListener {
+                if(it.value == "Upload") {
+                    upload.showStyle()
+                } else {
+                    upload.hideStyle()
+                }
+            }
             text("建设中")
         }
     }
@@ -195,5 +205,29 @@ class BarcodeView @Autowired constructor(
         result.height = "${imageHeight}px"
     }
 
+    companion object {
+        private fun FlexLayout.mainStyle() = css {
+            flexWrap = FlexLayout.FlexWrap.WRAP
+            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+            setFlexDirection(FlexLayout.FlexDirection.COLUMN)
+            alignContent = FlexLayout.ContentAlignment.CENTER
+            alignItems = FlexComponent.Alignment.BASELINE
+        }
+
+        private fun Tabs.tabsStyle() = css {
+            width = "400px"
+            addThemeVariants(TabsVariant.LUMO_CENTERED)
+        }
+
+        private fun KFormLayout.formStyle() = css {
+            width = "400px"
+            style["margin"] = "0 auto"
+        }
+
+        private fun HasStyle.uploadStyle() {
+            style["margin-top"] = "10px"
+        }
+
+    }
 
 }

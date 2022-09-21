@@ -21,8 +21,8 @@ import runstatic.stools.service.WebDocService
 import runstatic.stools.ui.entity.MavenConfig
 import runstatic.stools.ui.stye.inputRightStyle
 import runstatic.stools.ui.stye.pointerStyle
-import runstatic.stools.util.VaadinProp
-import runstatic.stools.util.pageLayout
+import runstatic.stools.ui.util.VaadinProp
+import runstatic.stools.ui.util.pageLayout
 import java.util.*
 
 /**

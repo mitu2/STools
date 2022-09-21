@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.ui.entity.TextFieldState
 import runstatic.stools.ui.stye.inputRightStyle
 import runstatic.stools.ui.stye.pointerStyle
-import runstatic.stools.util.pageLayout
+import runstatic.stools.ui.util.pageLayout
 
 /**
  *

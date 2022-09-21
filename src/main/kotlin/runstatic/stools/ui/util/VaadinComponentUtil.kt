@@ -1,10 +1,8 @@
-package runstatic.stools.util
+package runstatic.stools.ui.util
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Div
 import runstatic.stools.ui.component.PageLayout
 import kotlin.reflect.KProperty
@@ -40,6 +38,11 @@ fun HasComponents.pageLayout(
 operator fun <C : HasComponents> C.plus(component: Component) = apply { add(component) }
 
 operator fun <C : HasComponents> C.plus(text: String) = apply { add(text) }
+
+fun <T: HasComponents> T.updateDOM(block: T.() -> Unit) {
+    removeAll()
+    block()
+}
 
 
 

@@ -12,7 +12,7 @@ import com.vaadin.flow.spring.annotation.UIScope
 import runstatic.stools.ui.entity.TextFieldState
 import runstatic.stools.ui.stye.inputRightStyle
 import runstatic.stools.ui.stye.pointerStyle
-import runstatic.stools.util.pageLayout
+import runstatic.stools.ui.util.pageLayout
 
 
 /**

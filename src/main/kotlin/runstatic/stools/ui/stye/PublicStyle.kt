@@ -14,3 +14,13 @@ fun HasStyle.pointerStyle() = css {
 fun Button.inputRightStyle() = css {
     style["margin"] = "0 -5px 0 0"
 }
+
+fun HasStyle.showStyle() = css {
+    if (style["display"] == "none") {
+        style.remove("display")
+    }
+}
+
+fun HasStyle.hideStyle() = css {
+    style["display"] = "none"
+}

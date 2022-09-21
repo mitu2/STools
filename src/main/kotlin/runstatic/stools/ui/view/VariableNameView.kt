@@ -1,8 +1,6 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
-import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.textfield.TextField
@@ -12,8 +10,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.ui.stye.css
+import runstatic.stools.ui.util.pageLayout
 import runstatic.stools.util.VariableNameTool
-import runstatic.stools.util.pageLayout
 
 /**
  *

@@ -19,8 +19,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import runstatic.stools.logging.debug
 import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.ui.stye.pointerStyle
-import runstatic.stools.util.VaadinProp
-import runstatic.stools.util.pageLayout
+import runstatic.stools.ui.util.VaadinProp
+import runstatic.stools.ui.util.pageLayout
 
 /**
  *
