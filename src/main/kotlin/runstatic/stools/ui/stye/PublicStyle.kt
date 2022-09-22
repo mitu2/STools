@@ -24,3 +24,7 @@ fun HasStyle.showStyle() = css {
 fun HasStyle.hideStyle() = css {
     style["display"] = "none"
 }
+
+fun HasStyle.marginZeroStyle() = css {
+    style["margin"] = "0px auto"
+}

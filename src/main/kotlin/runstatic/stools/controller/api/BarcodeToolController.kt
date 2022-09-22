@@ -35,7 +35,7 @@ class BarcodeToolController {
             .encode(
                 param.text, param.type, param.width, param.height,
                 /* @see https://stackoverflow.com/questions/14019012/how-to-remove-white-space-on-side-qr-code-using-zxing */
-                mapOf(EncodeHintType.MARGIN to 0)
+                mapOf(EncodeHintType.MARGIN to 0, EncodeHintType.CHARACTER_SET to "UTF-8")
             )
         return ByteArrayOutputStream().apply {
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", this)
