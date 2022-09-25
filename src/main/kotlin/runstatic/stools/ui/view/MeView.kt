@@ -3,6 +3,7 @@ package runstatic.stools.ui.view
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.formlayout.FormLayout
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
@@ -10,8 +11,8 @@ import com.vaadin.flow.router.RouteAlias
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import runstatic.stools.ui.entity.TextFieldState
-import runstatic.stools.ui.stye.inputRightStyle
-import runstatic.stools.ui.stye.pointerStyle
+import runstatic.stools.ui.stye.*
+import runstatic.stools.ui.stye.MeStyle.baseStyle
 import runstatic.stools.ui.util.pageLayout
 
 
@@ -24,28 +25,22 @@ import runstatic.stools.ui.util.pageLayout
     value = [
         RouteAlias("index"),
         RouteAlias("index.html"),
-        RouteAlias("chenmoand")
+        RouteAlias("chenmoand"),
+        RouteAlias("me")
     ]
 )
-@CssImport("./css/chenmoand.css")
 @PageTitle("Coder`s Chenmoand Website - static.run")
 @SpringComponent
 @UIScope
-class ChenmoandView : KComposite() {
-
+class MeView : KComposite() {
 
     private val root = ui {
-
         pageLayout {
-            addClassName("welcome")
+            mainStyle()
             h3("你好, Hello World!")
             p("欢迎你来的本站, 我是沉默, 一名菜鸟程序猿!")
             formLayout {
-                width = "95%"
-                style["margin"] = "auto"
-                responsiveSteps = listOf(
-                    FormLayout.ResponsiveStep("0", 1)
-                )
+                baseStyle()
                 for (fieldState in FINAL_TEXT_FIELD_STATES) {
                     textField(fieldState.label) {
                         value = fieldState.value
@@ -71,7 +66,6 @@ class ChenmoandView : KComposite() {
 
 
 
-
     companion object {
 
         val FINAL_TEXT_FIELD_STATES = listOf(
@@ -80,6 +74,13 @@ class ChenmoandView : KComposite() {
             TextFieldState("Email", "chenmoand@static.run", "mailto:chenmoand@static.run"),
             TextFieldState("Tools", "https://static.run/ui/util-list")
         )
+
+
+        fun Div.mainStyle() = css {
+            marginZeroStyle()
+            textAlignCenterStyle()
+            width = "400px"
+        }
 
     }
 

@@ -28,3 +28,7 @@ fun HasStyle.hideStyle() = css {
 fun HasStyle.marginZeroStyle() = css {
     style["margin"] = "0px auto"
 }
+
+fun HasStyle.textAlignCenterStyle() = css {
+    style["text-align"] = "center"
+}

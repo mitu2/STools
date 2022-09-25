@@ -8,9 +8,7 @@ import com.google.zxing.MultiFormatReader
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.ButtonVariant
-import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.notification.Notification
@@ -28,10 +26,13 @@ import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.configuration.SToolsProperties
+import runstatic.stools.logging.useSlf4jLogger
 import runstatic.stools.ui.stye.*
 import runstatic.stools.ui.util.pageLayout
 import runstatic.stools.ui.util.updateDOM
 import java.awt.image.BufferedImage
+import java.net.URL
+import java.util.*
 import javax.imageio.ImageIO
 
 
@@ -43,7 +44,6 @@ import javax.imageio.ImageIO
 @PageTitle("条形码/二维码一键生成 - static.run")
 @UIScope
 @SpringComponent
-@JsModule("./lib/copytoclipboard.js")
 class BarcodeView @Autowired constructor(
     private val properties: SToolsProperties
 ) : KComposite(), BeforeEnterObserver {
@@ -162,6 +162,9 @@ class BarcodeView @Autowired constructor(
                 textAreaStyle().hideStyle()
                 placeholder = "请输入一个Url或者base64"
                 valueChangeMode = ValueChangeMode.ON_CHANGE
+                addValueChangeListener {
+                    urlSourceImage = it.value
+                }
             }
 
             radioButtonGroup.addValueChangeListener {
@@ -189,20 +192,40 @@ class BarcodeView @Autowired constructor(
         }
     }
 
+    private fun getBufferedImageByUrlOrBase64(): BufferedImage? {
+        if (urlSourceImage.isBlank()) {
+            return null
+        }
+        if (urlSourceImage.startsWith("http")) {
+            return try {
+                ImageIO.read(URL(urlSourceImage))
+            } catch (e: Throwable) {
+                logger.debug(e.message, e)
+                null
+            }
+        }
+        return try {
+            ImageIO.read(
+                Base64.getDecoder().decode(urlSourceImage.replace("data:image/(jpeg|png|gif);base64,".toRegex(), ""))
+                    .inputStream()
+            )
+        } catch (e: Throwable) {
+            logger.debug(e.message, e)
+            null
+        }
+    }
+
+
     private fun decodeBarcode(result: TextArea) {
         val formatReader = MultiFormatReader()
-        val localBufferedImage = bufferedImage
-        if (isUploadSourceImage) {
-            if (localBufferedImage == null) {
-                result.value = "❌请先上传文件"
-                return
-            }
-            val binaryBitmap = BinaryBitmap(HybridBinarizer(BufferedImageLuminanceSource(bufferedImage)))
-            val decodeResult = formatReader.decode(binaryBitmap, mapOf(DecodeHintType.CHARACTER_SET to "UTF-8"))
-            result.value = decodeResult.text
+        val localBufferedImage = if (isUploadSourceImage) bufferedImage else getBufferedImageByUrlOrBase64()
+        if (localBufferedImage == null) {
+            result.value = "❌图片错误"
             return
         }
-        result.value = "❌暂未支持"
+        val binaryBitmap = BinaryBitmap(HybridBinarizer(BufferedImageLuminanceSource(localBufferedImage)))
+        val decodeResult = formatReader.decode(binaryBitmap, mapOf(DecodeHintType.CHARACTER_SET to "UTF-8"))
+        result.value = decodeResult.text
     }
 
     private fun Div.encodePage() {
@@ -233,10 +256,10 @@ class BarcodeView @Autowired constructor(
                 onLeftClick { encodeBarcode() }
             }
         }
-        result = image {
-            style["margin"] = "0 auto"
-            onLeftClick {
-                UI.getCurrent().page.executeJs("window.copyToClipboard($0)", src)
+        div {
+            marginZeroStyle().textAlignCenterStyle()
+            result = image {
+                resultImageStyle()
             }
         }
     }
@@ -258,6 +281,9 @@ class BarcodeView @Autowired constructor(
     }
 
     companion object {
+        private val logger = BarcodeView.useSlf4jLogger()
+        private const val PAGE_MAX_WIDTH = "400px"
+
         private fun FlexLayout.mainStyle() = css {
             flexWrap = FlexLayout.FlexWrap.WRAP
             justifyContentMode = FlexComponent.JustifyContentMode.CENTER
@@ -267,13 +293,13 @@ class BarcodeView @Autowired constructor(
         }
 
         private fun Tabs.tabsStyle() = css {
-            width = "400px"
+            width = PAGE_MAX_WIDTH
             addThemeVariants(TabsVariant.LUMO_CENTERED)
         }
 
         private fun KFormLayout.formStyle() = css {
-            width = "400px"
-            style["margin"] = "0 auto"
+            width = PAGE_MAX_WIDTH
+            marginZeroStyle()
         }
 
         private fun HasStyle.uploadStyle() = css {
@@ -287,6 +313,10 @@ class BarcodeView @Autowired constructor(
             setWidthFull()
         }
 
+        private fun Image.resultImageStyle() = css {
+            maxHeight = "400px"
+            maxWidth = PAGE_MAX_WIDTH
+        }
 
     }
 
