@@ -17,7 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  * @version 0.1
  */
 @Configuration
-// @EnableWebMvc
 class WebMvcConfiguration @Autowired constructor(
     private val properties: SToolsProperties,
 ) : WebMvcConfigurer {

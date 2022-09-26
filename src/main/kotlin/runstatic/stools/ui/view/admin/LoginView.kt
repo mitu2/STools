@@ -66,7 +66,7 @@ class LoginView @Autowired constructor(
             UI.getCurrent().page.setLocation(from)
         } catch (ex: AuthenticationException) {
             loginForm.isError = true
-        } catch (ex : ServletException) {
+        } catch (ex: ServletException) {
             loginForm.isError = true
         }
 

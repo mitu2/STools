@@ -26,9 +26,26 @@ fun HasStyle.hideStyle() = css {
 }
 
 fun HasStyle.marginZeroStyle() = css {
-    style["margin"] = "0px auto"
+    margin = "0px auto"
 }
 
 fun HasStyle.textAlignCenterStyle() = css {
     style["text-align"] = "center"
 }
+
+fun  HasStyle.paddingZeroStyle() = css {
+    padding = "0px"
+}
+
+var HasStyle.margin: String?
+    get() = style["margin"]
+    set(value) {
+        style["margin"] = value
+    }
+
+
+var HasStyle.padding: String?
+    get() = style["padding"]
+    set(value) {
+        style["value"] = value
+    }

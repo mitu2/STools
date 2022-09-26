@@ -38,8 +38,6 @@ class WebDocParseView @Autowired constructor(
     private val webDocService: WebDocService,
 ) : KComposite() {
 
-    private val logger = useSlf4jLogger()
-
     private val repositoryKeys = LinkedList(properties.webDocResources.keys)
 
     private val repositorySelect = Select<String>().apply {
@@ -82,7 +80,7 @@ class WebDocParseView @Autowired constructor(
             inputRightStyle()
             addClickListener {
                 if (value.isNotBlank()) {
-                    UI.getCurrent().page.executeJs("window.open($0, '_blank')", value)
+                    UI.getCurrent().page.open(value)
                 }
             }
         }
@@ -133,16 +131,11 @@ class WebDocParseView @Autowired constructor(
     }
 
 
-    companion object {
-        const val LATEST_VERSION = "latest"
-    }
-
-
     private fun onFocusVersion() {
         val letCacheMavenConfig = cacheMavenConfig
 
-        if(letCacheMavenConfig != null) {
-            if((letCacheMavenConfig.repository == repository) && (letCacheMavenConfig.groupId == groupId) && (letCacheMavenConfig.artifactId == artifactId)) {
+        if (letCacheMavenConfig != null) {
+            if ((letCacheMavenConfig.repository == repository) && (letCacheMavenConfig.groupId == groupId) && (letCacheMavenConfig.artifactId == artifactId)) {
                 return
             }
         }
@@ -162,7 +155,11 @@ class WebDocParseView @Autowired constructor(
                 }
 
             } catch (e: Exception) {
-                Notification.show("获得版本列表异常, 请重试或者检查groupId和artifactId", 3000, Notification.Position.TOP_CENTER)
+                Notification.show(
+                    "获得版本列表异常, 请重试或者检查groupId和artifactId",
+                    3000,
+                    Notification.Position.TOP_CENTER
+                )
                 logger.debug(e.message, e)
             }
         } else {
@@ -172,6 +169,11 @@ class WebDocParseView @Autowired constructor(
             cacheMavenConfig = null
             Notification.show("请先输入groupId和artifactId", 3000, Notification.Position.TOP_CENTER)
         }
+    }
+
+    companion object {
+        const val LATEST_VERSION = "latest"
+        private val logger = WebDocParseView.useSlf4jLogger()
     }
 
 

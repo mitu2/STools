@@ -10,6 +10,4 @@ import org.springframework.context.annotation.Configuration
  */
 @EnableVaadin
 @Configuration
-class VaadinConfiguration {
-
-}
+class VaadinConfiguration

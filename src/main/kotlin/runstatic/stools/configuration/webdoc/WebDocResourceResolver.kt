@@ -21,8 +21,6 @@ class WebDocResourceResolver @Autowired constructor(
     private val webDocService: WebDocService
 ) : ResourceResolver {
 
-    private val logger = useSlf4jLogger()
-
     override fun resolveResource(
         request: HttpServletRequest?,
         requestPath: String,
@@ -71,6 +69,7 @@ class WebDocResourceResolver @Autowired constructor(
     ): String? = chain.resolveUrlPath(resourcePath, locations)
 
     companion object {
+        private val logger = WebDocResourceResolver.useSlf4jLogger()
         private const val PATTERN_1 = "/web-doc/{type}/{group}:{artifactId}:{version}/**"
         private const val PATTERN_2 = "/web-doc/{type}/{group}:{artifactId}/**"
         private val PATH_MATCHER = AntPathMatcher()

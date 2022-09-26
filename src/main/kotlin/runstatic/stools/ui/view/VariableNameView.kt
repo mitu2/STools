@@ -10,6 +10,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.ui.stye.css
+import runstatic.stools.ui.stye.marginZeroStyle
 import runstatic.stools.ui.util.pageLayout
 import runstatic.stools.util.VariableNameTool
 
@@ -25,21 +26,6 @@ class VariableNameView @Autowired constructor(
 
 ) : KComposite() {
 
-    companion object {
-        private fun FlexLayout.mainStyle() = css {
-            flexWrap = FlexLayout.FlexWrap.WRAP
-            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-            setFlexDirection(FlexLayout.FlexDirection.COLUMN)
-            alignContent = FlexLayout.ContentAlignment.CENTER
-            alignItems = FlexComponent.Alignment.BASELINE
-        }
-
-        private fun KFormLayout.contentStyle() = css {
-            width = "400px"
-            style["margin"] = "0 auto"
-        }
-
-    }
 
     private val bigCamelCaseField = TextField("大驼峰").apply {
         isReadOnly = true
@@ -98,5 +84,19 @@ class VariableNameView @Autowired constructor(
         }
     }
 
+    companion object {
+        private fun FlexLayout.mainStyle() = css {
+            flexWrap = FlexLayout.FlexWrap.WRAP
+            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+            setFlexDirection(FlexLayout.FlexDirection.COLUMN)
+            alignContent = FlexLayout.ContentAlignment.CENTER
+            alignItems = FlexComponent.Alignment.BASELINE
+        }
 
+        private fun KFormLayout.contentStyle() = css {
+            width = "400px"
+            marginZeroStyle()
+        }
+
+    }
 }
