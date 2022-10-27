@@ -34,7 +34,6 @@ class GlobalConfigInitListener @Autowired constructor(
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         setFirstEnableServer()
         recordServerStartNumber()
-        loadAdminAccount()
     }
 
     fun setFirstEnableServer() {
@@ -45,6 +44,7 @@ class GlobalConfigInitListener @Autowired constructor(
 
     }
 
+    @Deprecated(message = "function move UserDetailsServiceImpl")
     fun loadAdminAccount() {
         val id: Long? = globalConfigService[GlobalConfigKeys.ADMIN_ID]
 

@@ -3,10 +3,13 @@ package runstatic.stools.configuration.security
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.entity.table.UserTable
 import runstatic.stools.service.AuthorityService
 import runstatic.stools.service.UserService
@@ -18,7 +21,9 @@ import runstatic.stools.service.UserService
 @Service
 class UserDetailsServiceImpl @Autowired constructor(
     private val userService: UserService,
-    private val authorityService: AuthorityService
+    private val authorityService: AuthorityService,
+    private val properties: SToolsProperties,
+    private val passwordEncoder: PasswordEncoder,
 ) : UserDetailsService {
 
 
@@ -27,6 +32,11 @@ class UserDetailsServiceImpl @Autowired constructor(
         if (username.isNullOrBlank()) {
             throw UsernameNotFoundException("username must not blank!")
         }
+        val adminProperties = properties.admin
+        if (adminProperties.enabled && adminProperties.username == username) {
+            return User(adminProperties.username, passwordEncoder.encode(adminProperties.password), emptyList())
+        }
+
         val entity: UserTable =
             userService.getUserByAccount(username) ?: throw UsernameNotFoundException("not obtained by username!")
 
