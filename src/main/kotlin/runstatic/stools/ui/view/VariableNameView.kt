@@ -27,24 +27,15 @@ class VariableNameView @Autowired constructor(
 ) : KComposite() {
 
 
-    private val bigCamelCaseField = TextField("大驼峰").apply {
-        isReadOnly = true
-    }
+    private val bigCamelCaseField = createTextField("大驼峰")
+    private val littleCamelCaseField = createTextField("小驼峰")
+    private val allUpperCaseField = createTextField("常量")
+    private val horizontalLineCaseField = createTextField("`-`分割")
+    private val underscoreCaseField = createTextField("`_`分割")
 
-    private val littleCamelCaseField = TextField("小驼峰").apply {
+    private fun createTextField(label: String) = TextField(label).apply {
         isReadOnly = true
-    }
-
-    private val allUpperCaseField = TextField("常量").apply {
-        isReadOnly = true
-    }
-
-    private val horizontalLineCaseField = TextField("`-`分割").apply {
-        isReadOnly = true
-    }
-
-    private val underscoreCaseField = TextField("`_`分割").apply {
-        isReadOnly = true
+        isAutoselect = true
     }
 
     private val root = ui {
