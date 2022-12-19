@@ -6,7 +6,6 @@ import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.io.FileUrlResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
@@ -21,6 +20,8 @@ import runstatic.stools.service.exception.terminate
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.lang.ref.WeakReference
+import java.util.WeakHashMap
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
@@ -30,6 +31,7 @@ class WebDocServiceImpl @Autowired constructor(
 
     private val logger = useSlf4jLogger()
     private val client = OkHttpClient()
+    private val cacheVersionMap = WeakHashMap<String, String>()
 
     private fun getResourceUrl(type: String) =
         sToolsProperties.webDocResources[type] ?: terminate(HttpStatus.BAD_REQUEST) {
@@ -43,10 +45,11 @@ class WebDocServiceImpl @Autowired constructor(
         return Jsoup.connect(url).get()
     }
 
-    @Cacheable(cacheNames = ["maven:last:version"], key = "#p0 + ':' + #p1 + ':' + #p2")
     override fun getLatestVersion(type: String, group: String, artifactId: String): String {
         try {
-            return getMavenMetaData(type, group, artifactId).select("metadata > versioning > latest").html()
+            return cacheVersionMap.computeIfAbsent("$type:$group:$artifactId") {
+                getMavenMetaData(type, group, artifactId).select("metadata > versioning > latest").html()
+            }
         } catch (e: ServiceNotCompletedException) {
             throw e
         } catch (e: HttpStatusException) {

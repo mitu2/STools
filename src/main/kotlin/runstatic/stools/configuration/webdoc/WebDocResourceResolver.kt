@@ -31,11 +31,8 @@ class WebDocResourceResolver @Autowired constructor(
             return chain.resolveResource(null, requestPath, locations)
         }
 
-        val params = try {
-            PATH_MATCHER.extractUriTemplateVariables(PATTERN_1, request.requestURI)
-        } catch (e: IllegalStateException) {
-            PATH_MATCHER.extractUriTemplateVariables(PATTERN_2, request.requestURI)
-        }
+        val params = getParams(request)
+
         val type = params["type"] ?: terminate()
         val group = params["group"] ?: terminate()
         val artifactId = params["artifactId"] ?: terminate()
@@ -61,6 +58,13 @@ class WebDocResourceResolver @Autowired constructor(
             null
         }
     }
+
+    private fun getParams(request: HttpServletRequest): MutableMap<String, String> =
+        try {
+            PATH_MATCHER.extractUriTemplateVariables(PATTERN_1, request.requestURI)
+        } catch (e: IllegalStateException) {
+            PATH_MATCHER.extractUriTemplateVariables(PATTERN_2, request.requestURI)
+        }
 
     override fun resolveUrlPath(
         resourcePath: String,

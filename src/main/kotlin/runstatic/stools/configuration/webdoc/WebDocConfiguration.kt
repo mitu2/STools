@@ -12,19 +12,20 @@ import runstatic.stools.logging.useSlf4jLogger
  */
 @Configuration
 class WebDocConfiguration @Autowired constructor(
-    private val webDocResourceResolver: WebDocResourceResolver
+    private val webDocResourceResolver: WebDocResourceResolver,
 ) : WebMvcConfigurer {
-
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler(*WebDocResourceResolver.PATH_PATTERNS)
             // note: fix cache bug
             .resourceChain(false)
             .addResolver(webDocResourceResolver)
+
         logger.info { "load WebDocResourceResolver" }
     }
 
     companion object {
         private val logger = WebDocConfiguration.useSlf4jLogger()
     }
+
 }
