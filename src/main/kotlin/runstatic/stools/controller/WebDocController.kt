@@ -28,7 +28,11 @@ class WebDocController @Autowired constructor(
     fun safeDocLatestHtml(
         @PathVariable type: String, @PathVariable group: String,
         @PathVariable artifactId: String
-    ) = "redirect:/web-doc/${type}/${group}:${artifactId}:${webDocService.getLatestVersion(type, group, artifactId)}/index.html"
-
+    ): String {
+        if (artifactId.contains(":")) {
+            return "redirect:/web-doc/${type}/${group}:${artifactId}/index.html"
+        }
+        return "redirect:/web-doc/${type}/${group}:${artifactId}:${webDocService.getLatestVersion(type, group, artifactId)}/index.html"
+    }
 
 }
