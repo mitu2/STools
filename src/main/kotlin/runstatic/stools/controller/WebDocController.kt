@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import runstatic.stools.service.WebDocService
 
 
 /**
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping
  */
 @Controller
 @RequestMapping(path = ["web-doc"])
-class WebDocController @Autowired constructor() {
+class WebDocController @Autowired constructor(
+    private val webDocService: WebDocService
+) {
 
     @RequestMapping(path = ["{type}/{group}:{artifactId}:{version}"])
     fun safeDocHtml(
@@ -25,7 +28,11 @@ class WebDocController @Autowired constructor() {
     fun safeDocLatestHtml(
         @PathVariable type: String, @PathVariable group: String,
         @PathVariable artifactId: String
-    ) = "redirect:/web-doc/${type}/${group}:${artifactId}/index.html"
-
+    ): String {
+        if (artifactId.contains(":")) {
+            return "redirect:/web-doc/${type}/${group}:${artifactId}/index.html"
+        }
+        return "redirect:/web-doc/${type}/${group}:${artifactId}:${webDocService.getLatestVersion(type, group, artifactId)}/index.html"
+    }
 
 }

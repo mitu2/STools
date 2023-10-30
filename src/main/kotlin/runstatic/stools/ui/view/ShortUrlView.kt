@@ -18,10 +18,9 @@ import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
 import runstatic.stools.configuration.SToolsProperties
 import runstatic.stools.service.ShortUrlService
-import runstatic.stools.util.VaadinProp
-import runstatic.stools.util.inputRight
-import runstatic.stools.util.pageLayout
-import runstatic.stools.util.pointer
+import runstatic.stools.ui.stye.*
+import runstatic.stools.ui.util.VaadinProp
+import runstatic.stools.ui.util.pageLayout
 
 /**
  *
@@ -37,12 +36,9 @@ class ShortUrlView @Autowired constructor(
     private val properties: SToolsProperties
 ) : KComposite() {
 
-    // private val logger = useSlf4jLogger()
-
     private val protocolSelect = Select<String>().apply {
         setItems(*PROTOCOLS)
-        style["width"] = "105px";
-        style["margin-left"] = "-5px"
+        protocolStyle()
     }
 
     private val hostAndPathField: TextField = TextField("网址").apply {
@@ -50,9 +46,7 @@ class ShortUrlView @Autowired constructor(
         placeholder = "请在此输入一个的网址"
         isClearButtonVisible = true
         isAutoselect = true
-        prefixComponent = FlexLayout().apply {
-            add(protocolSelect)
-        }
+        prefixComponent = protocolSelect
         addValueChangeListener {
             formatHostAndPath(it.value)
         }
@@ -61,8 +55,7 @@ class ShortUrlView @Autowired constructor(
     private val resultField: TextField = TextField("结果").apply {
         isReadOnly = true
         suffixComponent = Button("复制", VaadinIcon.COPY.create()).apply {
-            pointer()
-            inputRight()
+            inputRightStyle().pointerStyle()
             addClickListener {
                 UI.getCurrent().page.executeJs("window.copyToClipboard($0)", value)
             }
@@ -84,11 +77,11 @@ class ShortUrlView @Autowired constructor(
                 alignItems = FlexComponent.Alignment.BASELINE
                 formLayout {
                     width = "400px"
-                    style["margin"] = "0 auto"
+                    marginZeroStyle()
                     add(hostAndPathField)
                     add(resultField)
                     button("制作") {
-                        pointer()
+                        pointerStyle()
                         addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_CONTRAST)
                         onLeftClick {
                             makeShotUrl()
@@ -99,22 +92,10 @@ class ShortUrlView @Autowired constructor(
         }
     }
 
-    init {
-        // add select inner style
-        protocolSelect.element.executeJs(
-            """this.shadowRoot
-                .querySelector('vaadin-select-text-field')
-                .style['padding'] = '0px'
-            """.trimIndent()
-        )
-    }
-
     fun formatHostAndPath(value: String?) {
-
         if (value.isNullOrBlank()) {
             return
         }
-
         for (_protocol in PROTOCOLS) {
             val letUrl = value.lowercase()
             if (letUrl.startsWith(_protocol)) {
@@ -137,13 +118,17 @@ class ShortUrlView @Autowired constructor(
     }
 
     companion object {
-
         @Suppress("HttpUrlsUsage")
         val PROTOCOLS = arrayOf("http://", "https://")
 
         @Suppress("HttpUrlsUsage")
         const val DEFAULT_PROTOCOL = "http://"
 
+        private fun Select<String>.protocolStyle() = css {
+            width = "105px"
+            style["margin-left"] = "-5px"
+            paddingZeroStyle()
+        }
     }
 
 }

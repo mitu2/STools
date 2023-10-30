@@ -21,8 +21,6 @@ class WebDocResourceResolver @Autowired constructor(
     private val webDocService: WebDocService
 ) : ResourceResolver {
 
-    private val logger = useSlf4jLogger();
-
     override fun resolveResource(
         request: HttpServletRequest?,
         requestPath: String,
@@ -33,11 +31,8 @@ class WebDocResourceResolver @Autowired constructor(
             return chain.resolveResource(null, requestPath, locations)
         }
 
-        val params = try {
-            PATH_MATCHER.extractUriTemplateVariables(PATTERN_1, request.requestURI)
-        } catch (e: IllegalStateException) {
-            PATH_MATCHER.extractUriTemplateVariables(PATTERN_2, request.requestURI)
-        }
+        val params = getParams(request)
+
         val type = params["type"] ?: terminate()
         val group = params["group"] ?: terminate()
         val artifactId = params["artifactId"] ?: terminate()
@@ -64,6 +59,13 @@ class WebDocResourceResolver @Autowired constructor(
         }
     }
 
+    private fun getParams(request: HttpServletRequest): MutableMap<String, String> =
+        try {
+            PATH_MATCHER.extractUriTemplateVariables(PATTERN_1, request.requestURI)
+        } catch (e: IllegalStateException) {
+            PATH_MATCHER.extractUriTemplateVariables(PATTERN_2, request.requestURI)
+        }
+
     override fun resolveUrlPath(
         resourcePath: String,
         locations: MutableList<out Resource>,
@@ -71,6 +73,7 @@ class WebDocResourceResolver @Autowired constructor(
     ): String? = chain.resolveUrlPath(resourcePath, locations)
 
     companion object {
+        private val logger = WebDocResourceResolver.useSlf4jLogger()
         private const val PATTERN_1 = "/web-doc/{type}/{group}:{artifactId}:{version}/**"
         private const val PATTERN_2 = "/web-doc/{type}/{group}:{artifactId}/**"
         private val PATH_MATCHER = AntPathMatcher()

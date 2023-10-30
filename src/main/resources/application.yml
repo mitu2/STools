@@ -1,4 +1,6 @@
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
   profiles:
     active: dev
   pid:
@@ -9,26 +11,19 @@ spring:
         - classpath:sql/*.sql
       mode: NEVER
       continue-on-error: true
+  datasource:
+    hikari:
+      transaction-isolation: TRANSACTION_READ_COMMITTED
 server:
   port: 8001
   compression:
     enabled: true
-springfox:
-  documentation:
-    swagger-ui:
-      base-url: /
-      enabled: true
-    swagger:
-      v2:
-        path: /swagger/v2/docs
-        enabled: true
 vaadin:
   pnpm-enabled: false
   urlMapping: ${stools.vaadin-base-url}/*
 logging:
   file:
     path: ${stools.work-folder}/logs
-
 stools:
   admin:
     enabled: true

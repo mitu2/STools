@@ -14,7 +14,7 @@ class ShortUrlServiceImpl @Autowired constructor(
     private val shortUrlRepository: ShortUrlRepository
 ) : ShortUrlService {
 
-    @Cacheable(cacheNames = ["shortUrl:router"])
+    @Cacheable(cacheNames = ["shor-url:router"])
     override fun getShortUrlByRouter(router: String) = shortUrlRepository.findByRouter(router)
 
 

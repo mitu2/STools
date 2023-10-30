@@ -10,14 +10,13 @@ import runstatic.stools.logging.useSlf4jLogger
 class SToolsApplicationTests {
 
     @Autowired
-    lateinit var  passwordEncoder: PasswordEncoder
+    lateinit var passwordEncoder: PasswordEncoder
 
     val logger = useSlf4jLogger()
 
     @Test
     fun contextLoads() {
     }
-
 
 
     @Test

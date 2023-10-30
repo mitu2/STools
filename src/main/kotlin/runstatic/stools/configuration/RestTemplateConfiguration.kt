@@ -16,7 +16,6 @@ class RestTemplateConfiguration {
     @Bean
     fun restTemplate() = RestTemplate(OkHttp3ClientHttpRequestFactory(okhttpClient()))
 
-
     @Bean
     fun okhttpClient() = OkHttpClient
         .Builder()

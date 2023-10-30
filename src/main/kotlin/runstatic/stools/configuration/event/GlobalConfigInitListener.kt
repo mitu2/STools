@@ -23,22 +23,17 @@ import runstatic.stools.service.set
  */
 @Component
 class GlobalConfigInitListener @Autowired constructor(
-    builder: Jackson2ObjectMapperBuilder,
     private val globalConfigService: GlobalConfigService,
-//    private val jdbcTokenRepositoryImpl: JdbcTokenRepositoryImpl,
     private val properties: SToolsProperties,
     private val userService: UserService,
     private val passwordEncoder: PasswordEncoder,
-//    private val buildProperties: BuildProperties
 ) : ApplicationListener<ApplicationReadyEvent> {
 
     private val logger = useSlf4jLogger()
 
-
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         setFirstEnableServer()
         recordServerStartNumber()
-        loadAdminAccount()
     }
 
     fun setFirstEnableServer() {
@@ -49,6 +44,7 @@ class GlobalConfigInitListener @Autowired constructor(
 
     }
 
+    @Deprecated(message = "function move UserDetailsServiceImpl")
     fun loadAdminAccount() {
         val id: Long? = globalConfigService[GlobalConfigKeys.ADMIN_ID]
 

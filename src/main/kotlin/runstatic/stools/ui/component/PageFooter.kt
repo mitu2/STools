@@ -22,14 +22,14 @@ class PageFooter : Component(), HasComponents, HasStyle {
         addClassName("footer")
         div("footer-inner") {
             div("copyright") {
-                anchor("https://github.com/mitu2/STools", "Project STools") {
+                anchor("https://github.com/mitu2/STools", "STools") {
                     setTarget("_blank")
                 }
-                text(" © 2021 沉默")
+                text(" © 2021-2023 沉默")
             }
             div {
                 className = "footer-item-inline"
-                anchor("https://beian.miit.gov.cn", "冀ICP备2021022987号") {
+                anchor("https://beian.miit.gov.cn", "冀ICP备2021022987号-1") {
                     setTarget("_blank")
                 }
             }

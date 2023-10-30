@@ -16,8 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.context.SecurityContextHolder
-import runstatic.stools.configuration.security.CustomRequestCache
-import runstatic.stools.util.pageLayout
+import runstatic.stools.ui.util.pageLayout
 import javax.servlet.ServletException
 
 
@@ -67,7 +66,7 @@ class LoginView @Autowired constructor(
             UI.getCurrent().page.setLocation(from)
         } catch (ex: AuthenticationException) {
             loginForm.isError = true
-        } catch (ex : ServletException) {
+        } catch (ex: ServletException) {
             loginForm.isError = true
         }
 

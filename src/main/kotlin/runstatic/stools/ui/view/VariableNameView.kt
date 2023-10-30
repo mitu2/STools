@@ -1,8 +1,6 @@
 package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
-import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.dependency.JsModule
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.FlexLayout
 import com.vaadin.flow.component.textfield.TextField
@@ -11,8 +9,10 @@ import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
+import runstatic.stools.ui.stye.css
+import runstatic.stools.ui.stye.marginZeroStyle
+import runstatic.stools.ui.util.pageLayout
 import runstatic.stools.util.VariableNameTool
-import runstatic.stools.util.pageLayout
 
 /**
  *
@@ -27,39 +27,24 @@ class VariableNameView @Autowired constructor(
 ) : KComposite() {
 
 
+    private val bigCamelCaseField = createTextField("大驼峰")
+    private val littleCamelCaseField = createTextField("小驼峰")
+    private val allUpperCaseField = createTextField("常量")
+    private val horizontalLineCaseField = createTextField("`-`分割")
+    private val underscoreCaseField = createTextField("`_`分割")
 
-    private val bigCamelCaseField = TextField("大驼峰").apply {
+    private fun createTextField(label: String) = TextField(label).apply {
         isReadOnly = true
-    }
-
-    private val littleCamelCaseField = TextField("小驼峰").apply {
-        isReadOnly = true
-    }
-
-    private val allUpperCaseField = TextField("常量").apply {
-        isReadOnly = true
-    }
-
-    private val horizontalLineCaseField = TextField("`-`分割").apply {
-        isReadOnly = true
-    }
-
-    private val underscoreCaseField = TextField("`_`分割").apply {
-        isReadOnly = true
+        isAutoselect = true
     }
 
     private val root = ui {
         pageLayout {
             flexLayout {
-                flexWrap = FlexLayout.FlexWrap.WRAP
-                justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-                setFlexDirection(FlexLayout.FlexDirection.COLUMN)
-                alignContent = FlexLayout.ContentAlignment.CENTER
-                alignItems = FlexComponent.Alignment.BASELINE
+                mainStyle()
                 h3("变量名格式化工具")
                 formLayout {
-                    width = "400px"
-                    style["margin"] = "0 auto"
+                    contentStyle()
                     textField("VariableName") {
                         isRequired = true
                         placeholder = "请输入一个单词或者句子"
@@ -78,7 +63,7 @@ class VariableNameView @Autowired constructor(
     }
 
     private fun formatVariableName(value: String?) {
-        if(value.isNullOrBlank()) {
+        if (value.isNullOrBlank()) {
             return
         }
         VariableNameTool(value).apply {
@@ -90,5 +75,19 @@ class VariableNameView @Autowired constructor(
         }
     }
 
+    companion object {
+        private fun FlexLayout.mainStyle() = css {
+            flexWrap = FlexLayout.FlexWrap.WRAP
+            justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+            setFlexDirection(FlexLayout.FlexDirection.COLUMN)
+            alignContent = FlexLayout.ContentAlignment.CENTER
+            alignItems = FlexComponent.Alignment.BASELINE
+        }
 
+        private fun KFormLayout.contentStyle() = css {
+            width = "400px"
+            marginZeroStyle()
+        }
+
+    }
 }

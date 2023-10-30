@@ -2,17 +2,18 @@ package runstatic.stools.ui.view
 
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.spring.annotation.SpringComponent
 import com.vaadin.flow.spring.annotation.UIScope
 import org.springframework.beans.factory.annotation.Autowired
+import runstatic.stools.ui.entity.RouterState
 import runstatic.stools.ui.entity.TextFieldState
-import runstatic.stools.util.inputRight
-import runstatic.stools.util.pageLayout
-import runstatic.stools.util.pointer
+import runstatic.stools.ui.stye.MeStyle.baseStyle
+import runstatic.stools.ui.stye.inputRightStyle
+import runstatic.stools.ui.stye.pointerStyle
+import runstatic.stools.ui.util.pageLayout
 
 /**
  *
@@ -31,41 +32,26 @@ class UtilListView @Autowired constructor() : KComposite() {
             h3("哇卡卡卡的小工具")
             p("希望能帮到你哦!")
             formLayout {
-                className = "url-list"
-                responsiveSteps = listOf(
-                    FormLayout.ResponsiveStep("0", 1)
-                )
-                for (fieldState in FINAL_TEXT_FIELD_STATES) {
-                    textField(fieldState.label) {
-                        value = fieldState.value
-                        isReadOnly = true
-                        suffixComponent = button("See", VaadinIcon.EYE.create()) {
-                            pointer()
-                            inputRight()
-                            onLeftClick { open(fieldState.url) }
-                        }
+                baseStyle()
+                routers.forEach { router ->
+                    routerLink(null, router.label) {
+                        setRoute(router.target.java, router.params)
                     }
                 }
             }
         }
     }
 
-    fun open(url: String, type: String = "_blank") {
-        root.ui.ifPresent { ui ->
-            ui.access {
-                ui.page.open(url, type)
-            }
-        }
-    }
-
     companion object {
-        val FINAL_TEXT_FIELD_STATES = listOf(
-            TextFieldState("二维码工具", "https://static.run/ui/barcode"),
-            TextFieldState("JSON格式化工具", "https://static.run/ui/json-format-util"),
-            TextFieldState("短网址工具", "https://static.run/ui/short-url"),
-            TextFieldState("Doc工具", "https://static.run/ui/web-doc-parse"),
-            TextFieldState("变量名工具", "https://static.run/ui/variable-name-util")
+
+        private val routers = listOf(
+            RouterState("二维码", BarcodeView::class),
+            RouterState("JSON格式化", JsonFormatView::class),
+            RouterState("短网址", ShortUrlView::class),
+            RouterState("MavenJarDoc", WebDocParseView::class),
+            RouterState("变量名", VariableNameView::class),
         )
+
     }
 
 }

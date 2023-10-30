@@ -39,15 +39,14 @@ class SToolsProperties {
 
     @PostConstruct
     fun init() {
-        if(NOT_SET == baseUrl) {
+        if (NOT_SET == baseUrl) {
             baseUrl = DEFAULT_BASE_UTL
         }
-        if(NOT_SET == workFolder) {
+        if (NOT_SET == workFolder) {
             workFolder = environment.resolvePlaceholders("\${user.home}") + "/.STools"
         }
     }
 
-    
 
     companion object {
         const val NOT_SET = "__NOT_SET__"

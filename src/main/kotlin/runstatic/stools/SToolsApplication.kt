@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConf
 import org.springframework.boot.context.ApplicationPidFileWriter
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
+import org.springframework.cache.annotation.EnableCaching
 import runstatic.stools.configuration.SToolsProperties
 
 @SpringBootApplication(exclude = [ErrorMvcAutoConfiguration::class])
+@EnableCaching
 @EnableConfigurationProperties(SToolsProperties::class)
 class SToolsApplication
 
