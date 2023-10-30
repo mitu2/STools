@@ -29,7 +29,7 @@ import runstatic.stools.ui.util.pageLayout
         RouteAlias("me")
     ]
 )
-@PageTitle("Coder`s Chenmoand Website - static.run")
+@PageTitle("沉默程序猿")
 @SpringComponent
 @UIScope
 class MeView : KComposite() {
@@ -71,7 +71,7 @@ class MeView : KComposite() {
         val FINAL_TEXT_FIELD_STATES = listOf(
             TextFieldState("Github", "https://github.com/mitu2"),
             TextFieldState("Blog", "https://blog.static.run"),
-            TextFieldState("Email", "chenmoand@static.run", "mailto:chenmoand@static.run"),
+            TextFieldState("Email", "chenmoand@outlook.com", "mailto:chenmoand@outlook.com"),
             TextFieldState("Tools", "https://static.run/ui/util-list")
         )
 
