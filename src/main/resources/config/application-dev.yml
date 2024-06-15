@@ -28,5 +28,4 @@ logging:
   level:
     # root: warn
     web: debug
-    runstatic:
-      stools: debug
+    ink.metoo.stools: debug
