@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.Assert
 import ink.metoo.stools.SToolsApplication
-import runstatic.stools.service.GlobalConfigService
-import runstatic.stools.service.set
-import runstatic.stools.service.get
+import ink.metoo.stools.service.GlobalConfigService
+import ink.metoo.stools.service.set
+import ink.metoo.stools.service.get
 
 /**
  *

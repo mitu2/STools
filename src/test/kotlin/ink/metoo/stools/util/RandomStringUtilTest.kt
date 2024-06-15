@@ -2,7 +2,7 @@ package ink.metoo.stools.util
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import runstatic.stools.logging.useSlf4jLogger
+import ink.metoo.stools.logging.useSlf4jLogger
 import java.util.concurrent.CountDownLatch
 
 /**

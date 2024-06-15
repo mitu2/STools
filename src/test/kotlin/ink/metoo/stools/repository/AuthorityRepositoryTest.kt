@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.context.jdbc.SqlConfig
-import runstatic.stools.SToolsApplicationTests
+import ink.metoo.stools.SToolsApplicationTests
 
 /**
  *

@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.annotation.EnableCaching
 import ink.metoo.stools.SToolsApplication
-import runstatic.stools.logging.info
-import runstatic.stools.logging.useSlf4jLogger
+import ink.metoo.stools.logging.info
+import ink.metoo.stools.logging.useSlf4jLogger
 import java.net.URLConnection
 import java.nio.file.Files
 import java.nio.file.Paths
