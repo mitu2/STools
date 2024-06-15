@@ -1,5 +1,5 @@
 stools:
-  base-url: https://static.run
+  base-url: https://metoo.ink
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,7 +21,5 @@ vaadin:
     productionMode: true
 logging:
   level:
-    # root: warn
     web: debug
-    runstatic:
-      stools: info
+    ink.metoo.stools: info

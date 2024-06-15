@@ -12,7 +12,7 @@ stools:
     password: root
     email: chenmoand@outlook.com
   work-folder: ${user.home}/.STools
-  vaadin-base-url: /ui
+#  vaadin-base-url: /ui
   web-doc-resources:
     maven: ${stools.web-doc-resources.central}
     central: https://maven.aliyun.com/repository/central
