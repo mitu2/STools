@@ -27,7 +27,7 @@ import ink.metoo.stools.ui.util.pageLayout
         RouteAlias("index.html"),
     ]
 )
-@PageTitle("论我也一样的重要性")
+@PageTitle("沉默的代码工具")
 @SpringComponent
 @UIScope
 class MeView : KComposite() {
@@ -36,7 +36,7 @@ class MeView : KComposite() {
         pageLayout {
             mainStyle()
             h3("你好, Hello World!")
-            p("网站正在维护")
+            text("我是程序员沉默，网站正在建设中")
         }
     }
 
